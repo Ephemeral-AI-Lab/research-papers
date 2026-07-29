@@ -16,6 +16,11 @@ The initial experimental baseline is upstream `main` at `b22862550e0a7cb4fe61ce5
 
 Before modifying source code, read the repository’s `AGENTS.md` and `CLAUDE.md`. Work directly on its `main` as required by those rules; do not create branches or worktrees.
 
+## Established evidence constraints
+
+- The live website is useful for product framing, but it is **not** the frozen v1 interface contract. It currently advertises 8 management, 7 runtime, and 5 observability CLI operations; the initial source baseline contains 8, 10, and 8 respectively. Generate the paper’s CLI reference from the final tagged source and use `crates/sandbox-cli/src/projection/{manager,runtime,observability}.rs` as primary interface evidence.
+- Treat the “concurrency ceiling” as a workload- and runtime-dependent **useful-work** limit: added parallel attempts cease to help when conflict, retry, integration, verification, or resource costs grow faster than accepted progress. Do not claim a universal agent-count threshold, generic speedup, or that more agents always increase throughput.
+- The closest direct comparisons currently include CAID (asynchronous coding-agent integration), CoAgent and Claim Plane (coordination/control-plane approaches), SWE-MiniSandbox (isolated SWE workspaces), DeltaBox (filesystem and process-state checkpoint/rollback), and Shepherd (reversible traces). The paper’s bounded niche is a runtime integration protocol: private execution views over immutable shared history plus conflict-aware, atomic durable publication.
 ## Core research question
 
 How can a sandbox runtime raise the practical concurrency ceiling for coding agents by giving each agent a private, executable workspace over shared project history, then reconciling accepted changes through well-defined publication semantics?
