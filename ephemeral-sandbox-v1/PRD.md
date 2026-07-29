@@ -4,6 +4,7 @@
 **Paper folder:** `ephemeral-sandbox-v1/`  
 **Initial experimental baseline:** upstream `ephemeral-sandbox` `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5` (2026-07-29)  
 **Final paper freeze:** Pending — create an annotated tag after paper-specific fixes and benchmark completion; every run must record its exact commit.
+
 **Primary submission target:** arXiv `cs.OS`; consider `cs.SE` and `cs.AI` cross-lists only after the evaluation supports their relevance.
 
 ## 1. Product objective
@@ -124,7 +125,8 @@ Create and maintain the following under this folder:
 
 - `paper_story.md` — one-sentence thesis, reader, contribution, and section arc.
 - `project_inventory.md` — source paths, v1 snapshot, test locations, experiments, environment facts.
-- `claim_evidence_map.md` — every substantive claim mapped to code, measurement, or qualified limitation.`r`n- `cli_contract_matrix.md` — public command families mapped to runtime operations, state effects, and contract tests.
+- `claim_evidence_map.md` — every substantive claim mapped to code, measurement, or qualified limitation.
+- `cli_contract_matrix.md` — public command families mapped to runtime operations, state effects, and contract tests.
 - `main.tex`, `references.bib`, and a reproducible build command.
 - `figures/` — architecture diagram, workspace/publication state sequence, and evaluation figures generated from data.
 - `experiments/` — immutable run manifests, raw samples, analysis scripts, and result tables.
@@ -139,7 +141,8 @@ The paper is ready for arXiv submission only when all conditions hold:
 - Every design statement links to the final annotated paper tag or a documented architectural decision.
 - Every number is reproducible from retained raw data and scripts.
 - Evaluation distinguishes implementation tests, scripted demonstrations, and LLM-agent experiments.
-- Related-work citations are verified and describe differences without unsupported performance comparisons.`r`n- CLI behavior in the manuscript is cross-checked against source and the versioned CLI reference.
+- Related-work citations are verified and describe differences without unsupported performance comparisons.
+- CLI behavior in the manuscript is cross-checked against source and the versioned CLI reference.
 - Limitations include current network-policy boundaries and the Windows reflink failure.
 - The LaTeX source compiles in the arXiv-compatible environment and ships without undeclared generated dependencies.
 - A final skeptical pass finds no language implying security, performance, or generality beyond the evidence.
@@ -159,4 +162,5 @@ The paper is ready for arXiv submission only when all conditions hold:
 - [DeltaBox](https://arxiv.org/pdf/2605.22781)
 - [AgentBay](https://arxiv.org/html/2512.04367v1)
 - [Shepherd](https://arxiv.org/pdf/2605.10913)
-- [Ephemeral Sandbox architecture](https://ephemeral-sandbox.com/architecture)`r`n- [Ephemeral Sandbox CLI reference](https://ephemeral-sandbox.com/docs/cli)
+- [Ephemeral Sandbox architecture](https://ephemeral-sandbox.com/architecture)
+- [Ephemeral Sandbox CLI reference](https://ephemeral-sandbox.com/docs/cli)
