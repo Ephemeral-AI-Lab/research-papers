@@ -2,7 +2,8 @@
 
 **Status:** Draft — evidence-gated  
 **Paper folder:** `ephemeral-sandbox-v1/`  
-**System snapshot:** `ephemeral-sandbox` `main` at `2a43eb07767304a4c77ac019cedb2992b3335e35` (2026-07-20)  
+**Initial experimental baseline:** upstream `ephemeral-sandbox` `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5` (2026-07-29)  
+**Final paper freeze:** Pending — create an annotated tag after paper-specific fixes and benchmark completion; every run must record its exact commit.
 **Primary submission target:** arXiv `cs.OS`; consider `cs.SE` and `cs.AI` cross-lists only after the evaluation supports their relevance.
 
 ## 1. Product objective
@@ -19,12 +20,13 @@ Parallel coding agents need to make and execute changes without sharing mutable 
 
 ## 3. Scope
 
-The paper must document these v1 mechanisms, tied to the frozen source snapshot:
+The paper must document these v1 mechanisms, tied to the eventual final paper snapshot:
 
 - LayerStack: immutable base, published, and squash layers represented by an active manifest.
 - Lease acquisition over a manifest snapshot, with lease lifetime pinning the referenced layers.
 - OverlayFS workspaces whose lower layers are shared read-only and whose upper/work directories are private.
 - Persistent namespace holders and one-shot runners that enter the holder namespaces for commands and file operations.
+- The public CLI contract: separate management, runtime, and read-only observability clients; sandbox-scoped runtime operations; stable request identity; gateway discovery/authentication; JSON output and exit-status behavior; and catalog-derived help.
 - Capture and publication: changed-path validation, eligible text three-way merge, rejection of ineligible/binary conflicts, creation of one immutable published layer, and atomic manifest replacement.
 - Lease-aware squash/remount behavior, including fail-closed remount gating.
 - The implemented layered isolation model and its stated boundaries.
@@ -69,7 +71,7 @@ A successful reader should be able to answer:
 4. **Workspace execution** — OverlayFS projection, private writes, holder/runner namespaces.
 5. **Capture and publication** — optimistic validation, merge/reject policy, atomic manifest update.
 6. **Lifecycle and recovery** — cleanup, squash, and lease-aware remount.
-7. **Implementation** — v1 component map tied to source paths and the frozen SHA.
+7. **Implementation and CLI boundary** — v1 component map plus the management, runtime, and observability client contracts.
 8. **Evaluation** — correctness first; performance only after reproducible measurements.
 9. **Limitations and related work** — clear distinctions from DeltaBox, Shepherd, and AgentBay.
 10. **Conclusion** — bounded design contribution and open questions.
@@ -87,7 +89,8 @@ Run and record tests for:
 - non-overlapping concurrent publications;
 - overlapping changes that exercise merge, conflict rejection, and retry;
 - cleanup after destroy/failure and manifest integrity after interrupted paths;
-- lease-protected squash and remount behavior.
+- lease-protected squash and remount behavior;
+- CLI contract behavior: role separation, required sandbox scope, request correlation, JSON response/error envelopes, and exit-status classes.
 
 ### 7.2 Performance protocol
 
@@ -121,7 +124,7 @@ Create and maintain the following under this folder:
 
 - `paper_story.md` — one-sentence thesis, reader, contribution, and section arc.
 - `project_inventory.md` — source paths, v1 snapshot, test locations, experiments, environment facts.
-- `claim_evidence_map.md` — every substantive claim mapped to code, measurement, or qualified limitation.
+- `claim_evidence_map.md` — every substantive claim mapped to code, measurement, or qualified limitation.`r`n- `cli_contract_matrix.md` — public command families mapped to runtime operations, state effects, and contract tests.
 - `main.tex`, `references.bib`, and a reproducible build command.
 - `figures/` — architecture diagram, workspace/publication state sequence, and evaluation figures generated from data.
 - `experiments/` — immutable run manifests, raw samples, analysis scripts, and result tables.
@@ -133,10 +136,10 @@ Create and maintain the following under this folder:
 The paper is ready for arXiv submission only when all conditions hold:
 
 - The title, abstract, and conclusion make bounded, evidence-supported claims.
-- Every design statement links to the frozen v1 source snapshot or a documented architectural decision.
+- Every design statement links to the final annotated paper tag or a documented architectural decision.
 - Every number is reproducible from retained raw data and scripts.
 - Evaluation distinguishes implementation tests, scripted demonstrations, and LLM-agent experiments.
-- Related-work citations are verified and describe differences without unsupported performance comparisons.
+- Related-work citations are verified and describe differences without unsupported performance comparisons.`r`n- CLI behavior in the manuscript is cross-checked against source and the versioned CLI reference.
 - Limitations include current network-policy boundaries and the Windows reflink failure.
 - The LaTeX source compiles in the arXiv-compatible environment and ships without undeclared generated dependencies.
 - A final skeptical pass finds no language implying security, performance, or generality beyond the evidence.
@@ -156,4 +159,4 @@ The paper is ready for arXiv submission only when all conditions hold:
 - [DeltaBox](https://arxiv.org/pdf/2605.22781)
 - [AgentBay](https://arxiv.org/html/2512.04367v1)
 - [Shepherd](https://arxiv.org/pdf/2605.10913)
-- [Ephemeral Sandbox architecture](https://ephemeral-sandbox.com/architecture)
+- [Ephemeral Sandbox architecture](https://ephemeral-sandbox.com/architecture)`r`n- [Ephemeral Sandbox CLI reference](https://ephemeral-sandbox.com/docs/cli)
