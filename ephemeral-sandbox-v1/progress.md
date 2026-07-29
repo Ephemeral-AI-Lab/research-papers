@@ -9,9 +9,12 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 ## 1. Foundation
 
 - [x] Identify the paper’s primary contribution: leased, copy-on-write workspaces with conflict-aware atomic publication.
-- [x] Define the initial experimental baseline: upstream `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`.`r`n- [ ] Freeze the final paper snapshot with an annotated `paper-v1-freeze` tag after paper-specific fixes and benchmarks.
-- [x] Complete an initial design inventory and claim-boundary review.`r`n- [ ] Revalidate the design inventory against the final paper snapshot.
-- [x] Review initial related work: DeltaBox, Shepherd, and AgentBay.`r`n- [x] Review the CLI contract: separate management, runtime, and observability clients.
+- [x] Define the initial experimental baseline: upstream `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`.
+- [ ] Freeze the final paper snapshot with an annotated `paper-v1-freeze` tag after paper-specific fixes and benchmarks.
+- [x] Complete an initial design inventory and claim-boundary review.
+- [ ] Revalidate the design inventory against the final paper snapshot.
+- [x] Review initial related work: DeltaBox, Shepherd, and AgentBay.
+- [x] Review the CLI contract: separate management, runtime, and observability clients.
 - [x] Create the evidence-gated [PRD](PRD.md).
 - [ ] Create `paper_story.md` with the final thesis, reader, contribution, and section arc.
 - [ ] Create `project_inventory.md` with source paths, tests, experiments, environments, and known limitations.
@@ -23,8 +26,9 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 - [ ] Record OverlayFS workspace creation and private upper-layer behavior with source citations.
 - [ ] Record holder/runner namespace execution and the isolation boundary with source citations.
 - [ ] Record capture, validation, merge/reject policy, and atomic publication with source citations.
-- [ ] Record squash/remount and lease-safety behavior with source citations.`r`n- [ ] Create `cli_contract_matrix.md` for client roles, operations, scopes, JSON/error behavior, and source references.
-- [ ] Review all narrative claims against the frozen v1 source snapshot.
+- [ ] Record squash/remount and lease-safety behavior with source citations.
+- [ ] Create `cli_contract_matrix.md` for client roles, operations, scopes, JSON/error behavior, and source references.
+- [ ] Review all narrative claims against the final paper snapshot.
 
 ## 3. Correctness evaluation
 
@@ -34,7 +38,8 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 - [ ] Run and archive non-overlapping concurrent-publication tests.
 - [ ] Run and archive overlapping publication tests: merge, reject, and retry paths.
 - [ ] Run and archive cleanup/interrupted-path/manifest-integrity tests.
-- [ ] Run and archive lease-protected squash/remount tests.`r`n- [ ] Run and archive CLI contract tests for scope, request IDs, JSON envelopes, and exit statuses.
+- [ ] Run and archive lease-protected squash/remount tests.
+- [ ] Run and archive CLI contract tests for scope, request IDs, JSON envelopes, and exit statuses.
 
 ## 4. Performance evaluation
 
@@ -56,6 +61,7 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 - [ ] Write core sections: system model, design, implementation, and evaluation.
 - [ ] Write framing sections: abstract, introduction, related work, limitations, conclusion.
 - [ ] Create `ARTIFACTS.md` and archive code/data needed to reproduce every result.
+- [ ] Create `cli_contract_matrix.md` for command families, state effects, and contract-test evidence.
 
 ## 6. Submission readiness
 
@@ -73,4 +79,5 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 - Existing test source is not proof of a passing v1 test run; rerun and archive results.
 - The prior scripted ten-lane run predates v1 and has incomplete provenance; it is exploratory only.
 - The Windows Docker Desktop/WSL 2 reflink experiment failed with `errno=95`; do not make Windows reflink or performance claims.
-- The implemented isolation layers are not a formal security evaluation, and `rfc1918_egress=deny` is currently rejected.`r`n- The new `ephemeral-sandbox-v1` remote is empty until the GitHub credential receives the `workflow` scope required to push the exact upstream checkout.
+- The implemented isolation layers are not a formal security evaluation, and `rfc1918_egress=deny` is currently rejected.
+- The new `ephemeral-sandbox-v1` remote is empty until the GitHub credential receives the `workflow` scope required to push the exact upstream checkout.
