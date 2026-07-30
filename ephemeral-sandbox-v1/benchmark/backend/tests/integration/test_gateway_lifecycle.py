@@ -71,11 +71,8 @@ def roots(tmp_path: Path) -> BenchmarkRoots:
         path = binaries / name
         path.write_text("prebuilt executable")
         path.chmod(0o700)
-    tools = product / "dist/git"
-    tools.mkdir(parents=True)
-    for name in ("linux-arm64.tar", "linux-amd64.tar"):
-        (tools / name).write_bytes(b"archive")
     daemon = product / "dist" / "sandbox-daemon-linux-arm64"
+    daemon.parent.mkdir(parents=True)
     daemon.write_bytes(b"\x7fELFfake container executable")
     daemon.chmod(0o700)
     amd64_daemon = product / "dist" / "sandbox-daemon-linux-amd64"

@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-30  
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0 is reproducibly built and attested, while all frozen evaluation evidence remains pending.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested, the focused RQ3 Windows/Docker Desktop environment has passed strict CLI-only qualification, and all frozen evaluation measurements remain pending.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -47,22 +47,34 @@ Claim mapping, citation verification, provenance, and skeptical review are share
   environment preflight, expected table schemas, simulated previews, and an
   append-only experiment log.
 - [x] Paper PW0: scaffold, vocabulary, planning artifacts, and later PW3/PW4 evolution of Sections 7--9 are preserved; the declared build completed with an executed tool/version/hash attestation on 2026-07-30.
-- [ ] Paper PW1: execute [`lanes/prompts/pw1.md`](./lanes/prompts/pw1.md) to write Sections 2–3, Goals/Non-goals and System Model.
-- [ ] Paper PW2: write Sections 4–5, Workspace Execution and Capture/Publication.
-- [ ] Paper PW3: write Sections 6–7, Lifecycle/Recovery and Implementation/Interface, including the source-derived operational cost table.
+- [x] Paper PW1: Sections 2--3 now define Goals/Non-goals, the System Model, and four evidence-bounded invariants; the recorder-generated build and required PW1 checks pass.
+- [x] Paper PW2: Sections 4--5 now explain leased OverlayFS execution, implicit/explicit/sessionless paths, typed capture, current-head reconciliation, whole-changeset rejection, durable manifest publication, and the post-commit attribution/cleanup boundary; the recorder-generated build and required PW2 checks pass.
+- [x] Paper PW3: Sections 6–7 now cover Lifecycle/Recovery and Implementation/Interface, preserve the source-derived operational cost model, integrate four unchanged review-draft figures, and pass the recorded build and PDF inspection.
 - [ ] Paper PW4: write Section 8 methodology and Section 9 related-work/source limitations/future evolution after protocol lock.
 - [ ] Paper PW5: write results and measured failure analysis after evidence lock.
 - [ ] Paper PW6: rewrite Introduction, Conclusion, contributions, title, and Abstract.
 - [ ] Paper PW7: complete whole-paper verification, build, and packaging.
-- [ ] Experiment lane: create and review `experiment_inventory.md`.
+- [x] Experiment lane: create `experiment_inventory.md`.
+- [ ] Experiment lane: review and approve the focused RQ3 draft, implement the
+  `product_cli` benchmark cohort, and complete the five-sample exploratory
+  pilot defined by
+  [`plan/task-packets/exp1-cli-performance-campaign.md`](plan/task-packets/exp1-cli-performance-campaign.md).
 
-The next synchronization gate is **protocol lock**. Before final source freeze, create `experiment_inventory.md` (or an equivalent benchmark protocol) that fixes RQ1–RQ5, the accepted-work unit, workloads, baselines, worker grid, metrics, uncertainty method, seeds/repeats, integration/verification policy, and required runtime instrumentation.
+The next focused-experiment gate is **Gate 3: instrumentation and the
+five-sample exploratory pilot**. Before that pilot, the draft protocol must be
+reviewed and the paper-local benchmark must execute every sandbox operation
+through the released product CLIs. Protocol lock and source/benchmark freeze
+follow a passing pilot; `paper-good-pass` remains prohibited until then. The
+broader RQ1--RQ5 experiment lane still requires its own accepted-work,
+workload, baseline, fault, and useful-work decisions.
 
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
 ## 3. Correctness evaluation
 
-- [ ] Define reproducible environment, build/image digest, configuration, and random seeds.
+- [x] Define and qualify the focused RQ3 environment, product release, binary
+  and image digests, configuration, and seed. Broader RQ1/RQ2 correctness and
+  fault campaigns remain unexecuted.
 - [ ] Run and archive private-write isolation tests for simultaneous workspaces.
 - [ ] Run and archive three-namespace connectivity/isolation tests.
 - [ ] Run and archive non-overlapping concurrent-publication tests.
@@ -73,7 +85,17 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 
 ## 4. Performance evaluation
 
-- [ ] Choose and document a Linux cgroup-v2 test platform.
+- [x] Choose and document the final focused RQ3 platform: native Windows x64
+  host with Docker Desktop 29.0.1 providing a Linux AMD64 `overlayfs`,
+  cgroup-v2 engine and the pinned Ubuntu 24.04 sandbox image.
+- [ ] Implement and review a `product_cli` subprocess cohort for every paper
+  performance operation; the existing `direct_client` presets are ineligible.
+- [ ] Apply the deterministic `paper-100m` base to every measured cell and add
+  explicit manager-CLI sandbox-create-to-ready timing.
+- [ ] Run and archive a five-sample exploratory pilot over all 19 final cells;
+  keep its numbers out of paper tables.
+- [ ] Lock protocol `v1.0`, freeze product/benchmark/image/binary identities,
+  and run the 19-cell `paper-good-pass` only after every prior gate passes.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.
@@ -91,8 +113,10 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 
 - [x] Create arXiv-compatible `main.tex` and a reproducible local build command; execute it through the skill build recorder and retain the PDF, log, tool versions, and hashes.
 - [ ] Create verified `references.bib`; check that every citation supports its sentence.
-- [ ] Create a source-grounded architecture figure.
-- [ ] Create a workspace-to-publication sequence figure.
+- [x] Create a source-grounded architecture review draft; final visual repair is deferred to PW7.
+- [x] Create a workspace-to-publication sequence review draft; final visual repair is deferred to PW7.
+- [x] Create lifecycle and reconciliation review drafts; lifecycle is revalidated against Section 6 and final visual repair is deferred to PW7.
+- [ ] Complete PW7 submission-final figure normalization, topology review, label audit, and style-family decision.
 - [ ] Generate result figures/tables from archived measurement data.
 - [ ] Write core sections: system model, design, implementation, and evaluation.
 - [ ] Write framing sections: abstract, introduction, related work, limitations/future evolution, conclusion.
@@ -115,6 +139,15 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - Existing test source is not proof of a passing v1 test run; rerun and archive results.
 - The prior scripted ten-lane run predates v1 and has incomplete provenance; it is exploratory only.
 - The accepted-work unit, structured-team and exploratory-swarm workloads, matched baseline policy, and final experiment protocol are not yet locked.
+- The imported performance benchmark exposes only `direct_client`; no paper
+  performance preset may run until the released Windows manager, runtime, and
+  observability CLIs are integrated as the reviewed `product_cli` cohort.
+- Focused RQ3 timing is end-to-end native CLI subprocess latency, including
+  process launch and CLI-to-gateway transport. Product-reported internal timing
+  may be retained only as a separate secondary field.
+- The selected environment is already qualified. Do not reintroduce the
+  superseded native-Ubuntu-host, SSH, ext4-host, or CPython-host requirements;
+  Ubuntu 24.04 is the pinned sandbox image.
 - Attribution is best-effort after data publication rather than transactionally coupled to it; narrow the claim or strengthen and test the implementation before freeze.
 - Explicit/implicit protected-drop semantics and lease/substitution behavior across daemon restart need resolution.
 - The Windows Docker Desktop/WSL 2 reflink experiment failed with `errno=95`; do not make Windows reflink or performance claims.

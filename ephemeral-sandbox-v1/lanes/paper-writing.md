@@ -1,6 +1,6 @@
 # Lane 1: paper writing
 
-Status: **ready to start the evidence-bearing systems core**
+Status: **PW0--PW3 complete**
 
 This lane turns frozen or clearly provisional evidence into manuscript text. It can advance before performance and multi-agent results exist, but it must not convert hypotheses, test source, public product descriptions, or exploratory runs into demonstrated results.
 
@@ -61,10 +61,10 @@ The paper lane has eight phases. PW0–PW3 can start from baseline source eviden
 
 | Phase | Manuscript work | Status | Entry gate |
 |---|---|---|---|
-| PW0 | Scaffold and terminology | Ready | Story and skeleton available |
-| PW1 | Sections 2–3: goals/non-goals and system model | Ready | Baseline source inventory |
-| PW2 | Sections 4–5: workspace execution and publication | Ready | C1/C2 design evidence |
-| PW3 | Sections 6–7: lifecycle, implementation, and CLI | Ready | C3/C4 design evidence |
+| PW0 | Scaffold and terminology | Complete | Story and skeleton available |
+| PW1 | Sections 2–3: goals/non-goals and system model | Complete | Baseline source inventory |
+| PW2 | Sections 4–5: workspace execution and publication | Complete | C1/C2 design evidence |
+| PW3 | Sections 6–7: lifecycle, implementation, and CLI | Complete | C3/C4 design evidence |
 | PW4 | Section 8 methodology; Section 9 related work and source limitations | Partially ready | Protocol lock for Evaluation Methodology |
 | PW5 | Section 8 results and measured failure analysis | Blocked | Evidence lock |
 | PW6 | Sections 1 and 10; final framing synthesis | Blocked | PW5 complete |
@@ -320,17 +320,18 @@ The paper lane must not copy a number from a console, chat, exploratory notebook
 
 ## Completion checklist
 
-- [ ] Create `main.tex`, section files, and reproducible build command.
-- [ ] Draft System Model and Invariants.
-- [ ] Draft Goals, Non-goals, and Threat-model Boundary.
-- [ ] Draft LayerStack and Workspace-session Design.
-- [ ] Draft Capture and Publication.
-- [ ] Draft Lifecycle and Recovery.
-- [ ] Draft Operational Interface.
-- [ ] Draft Implementation.
+- [x] Create `main.tex`, section files, and reproducible build command.
+- [x] Draft System Model and Invariants.
+- [x] Draft Goals, Non-goals, and Threat-model Boundary.
+- [x] Draft LayerStack and Workspace-session Design.
+- [x] Draft Capture and Publication.
+- [x] Draft Lifecycle and Recovery.
+- [x] Draft Operational Interface.
+- [x] Draft Implementation.
 - [ ] Draft locked Evaluation Methodology.
 - [ ] Draft source-proven Limitations.
-- [ ] Create and verify concept figure specifications.
+- [x] Create and verify concept figure specifications; retain final visual
+  repair and submission acceptance for PW7.
 - [ ] Verify scholarly citations and sentence-level support.
 - [ ] Replace baseline source links with `paper-v1-freeze`.
 - [ ] Write Results from frozen artifacts.

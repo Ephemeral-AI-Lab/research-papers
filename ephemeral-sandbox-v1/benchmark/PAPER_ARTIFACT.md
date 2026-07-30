@@ -50,37 +50,48 @@ Generated fixtures, run workspaces, raw observations, and reports are written
 under `ephemeral-sandbox-v1/.benchmark-state/`. That directory is ignored by
 Git and must not be treated as benchmark source.
 
-## Install and validate on the Linux benchmark host
+## Prepare and validate on the qualified Windows host
 
-From `research-papers/ephemeral-sandbox-v1`:
+The selected host is native Windows x64. Docker Desktop supplies the Linux
+AMD64 engine and the pinned Ubuntu sandbox image; Ubuntu is not the host. The
+released native Windows gateway and manager/runtime/observability CLIs are the
+only permitted product access path.
 
-```sh
-python3.13 -m venv .venv
-. .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -e "./benchmark[test]"
+The benchmark requires Python 3.13 or newer for its own orchestration. Prepare
+its virtual environment and dependencies off-clock. No package installation,
+build, image pull, or source mutation may occur during a pilot or final
+campaign.
 
-sandbox-benchmark validate \
-  --test-repository-root "$PWD" \
-  --product-root /absolute/path/to/ephemeral-sandbox \
-  --product-bin-dir /absolute/path/to/ephemeral-sandbox/target/release \
+The current `paper-env-smoke` and `paper-good-pass` files still select
+`direct_client` and are therefore prohibited. After the `product_cli` cohort
+and presets pass the EXP1 implementation and review gates, the Windows command
+shape from `research-papers\ephemeral-sandbox-v1` is:
+
+```powershell
+$paper = 'C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1'
+$product = 'C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox'
+$productBin = "$product\target\windows-v0.1.4\bin"
+
+Set-Location -LiteralPath $paper
+py -3.13 -m venv .venv
+& .\.venv\Scripts\python.exe -m pip install -e '.\benchmark[test]'
+
+& .\.venv\Scripts\sandbox-benchmark.exe validate `
+  --test-repository-root $paper `
+  --product-root $product `
+  --product-bin-dir $productBin `
   --plan paper-env-smoke
 ```
 
-Validation checks the plan and the product catalog but does not establish
-performance. Run the smoke campaign before a measured campaign:
+Validation checks the plan and product catalog but does not establish
+performance. A campaign command must not be issued until the preset expands to
+`product_cli`, the exact released executables and image digest pass preflight,
+and the phase gate in
+[`../experiment_inventory.md`](../experiment_inventory.md) authorizes the run.
 
-```sh
-sandbox-benchmark run \
-  --test-repository-root "$PWD" \
-  --product-root /absolute/path/to/ephemeral-sandbox \
-  --product-bin-dir /absolute/path/to/ephemeral-sandbox/target/release \
-  --plan paper-env-smoke
-```
-
-The paper smoke and good-pass presets pin the selected Linux AMD64 Ubuntu image
-by digest. The final host must pull and independently inspect that exact digest
-before collecting numbers intended for the paper.
+The paper presets pin the selected Linux AMD64 Ubuntu image by digest. Docker
+Desktop must already contain and independently inspect that exact digest before
+any pilot or final measurement begins.
 
 ## Paper base workspace
 

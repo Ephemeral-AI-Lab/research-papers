@@ -31,7 +31,7 @@ class CatalogFamily(StrictModel):
 
 class CatalogArgument(StrictModel):
     name: str = Field(min_length=1)
-    kind: Literal["integer", "json_array", "path", "string"]
+    kind: Literal["float", "integer", "json_array", "path", "string"]
     required: bool
     help: str
     default: str | None

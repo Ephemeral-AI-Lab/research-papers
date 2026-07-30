@@ -23,6 +23,42 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
 - **2026-07-30 -- blockers:** Final native Ubuntu verification, live smoke,
   file-operation base-workspace policy, explicit sandbox-create timing, pilot
   duration, source/benchmark freeze, and protocol approval remain open.
+- **2026-07-30 -- environment-qualification continuation:** Exhausted bounded
+  local discovery for `eos-benchmark-ubuntu24`; no DNS, SSH, hosts-file,
+  Docker-context, Hyper-V, or eligible Multipass route exists. The only local
+  Multipass instance is Ubuntu 22.04 and remains ineligible.
+- **2026-07-30 -- final-host automation:** Added a reproducible Windows bundle
+  builder, hash-locked Linux CPython 3.13 dependency input/lock, off-clock host
+  staging script, strict network-free preflight, and an archival smoke
+  qualification wrapper with before/after leak comparison.
+- **2026-07-30 -- transfer readiness:** Generated and integrity-checked the
+  final-host transfer bundle at
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\ephemeral-sandbox-v1-20260730-ready-v2`.
+  The strict verifier also failed closed on WSL at the exact-hostname gate. No
+  benchmark run or measurement was performed.
+- **2026-07-30 -- CLI-only correction:** Replaced the direct-client environment
+  smoke with two independent product-CLI-controlled lifecycles. The final WSL
+  diagnostic completed 2/2 batches and 20 validated CLI calls with correctness
+  pass, empty CLI stderr, no gateway warnings/errors, and zero Docker resources
+  remaining for its unique gateway instance. This is automation evidence only;
+  the native-host gate remains unpassed.
+- **2026-07-30 -- handoff boundary:** Corrected the external action: SSH and new
+  provisioning are optional. Completion requires running the supplied handoff
+  on an existing eligible native host, or provisioning one only if none exists,
+  and returning an all-pass qualification artifact set.
+- **2026-07-30 -- host correction:** User clarification established native
+  Windows plus Docker Desktop as the final host. Ubuntu 24.04 is the sandbox
+  image. The earlier native-Ubuntu/SSH/CPython/ext4 handoff is superseded.
+- **2026-07-30 -- Windows package and qualifier:** Checksum-verified and staged
+  the official `v0.1.4` Windows AMD64 package under ignored product `target/`.
+  Added a PowerShell-only strict host/package/Docker/image qualifier using the
+  native gateway and manager/runtime/observability CLIs.
+- **2026-07-30 -- environment completion:** Accepted
+  `qualification-windows-docker-20260730-final-6`: native Windows/Docker
+  Desktop preflight pass, 2/2 independent batches, 20 validated product-CLI
+  calls, correctness pass, empty CLI stderr, zero warnings/failures, unchanged
+  EOS baseline, and zero resources remaining for the qualifier gateway. The
+  environment-only task is complete.
 
 ## PW0: manuscript scaffold and vocabulary
 
@@ -62,3 +98,89 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
 - **2026-07-30 -- started:** Loaded the complete `ai-research-writing-skill` instructions, full-paper workflow, artifact contract, section-writing method, task-management rules, and reference map. Created `plan/task-packets/pw1-foundations.md` with the bounded scope, pre-draft theses, paragraph roles, evidence IDs, rejection checks, validation plan, and acceptance criteria.
 - **2026-07-30 -- input audit:** Read all 21 required PW1 paper artifacts completely. Confirmed the paper checkout is clean on `agent/pw0-build-pw1-prompt`; confirmed the read-only source checkout is clean on `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`. No source, experiment, later-section, bibliography, or figure artifact was changed.
 - **2026-07-30 -- evidence boundary:** PW1 uses M0--M6, C1--C4, and D1--D9. C5 and measured useful-work or concurrency-ceiling language remain pending evaluation; source-derived wording remains provisional until `paper-v1-freeze`.
+- **2026-07-30 -- artifacts produced:** Drafted Sections 2 and 3 and completed the paragraph-level reverse outline in `plan/task-packets/pw1-foundations.md`. Updated only the authorized task, progress, machine-state, and build records; no claim-map or terminology correction was needed.
+- **2026-07-30 -- recorded build:** The skill recorder executed `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` with exit code 0 using Latexmk 4.88, pdfTeX 1.40.29, and BibTeX 0.99e from TeX Live 2026. It recorded input SHA-256 `8a9d0f97487ccf937efd82eb6a5726b2c7c8b5e3e31be1434945826a00731708`, PDF SHA-256 `ba4963d3d5f6352e1829946290265671599432e9984e301d5626de7316435327`, and build-log SHA-256 `719696c0aa0efb9fce4796efaab3cce5b27dd17563c4b60d7f4951b539aa7f30`.
+- **2026-07-30 -- verification:** The full-paper quality gate, citation-key check, JSON/mode/stage check, exact section-count/order check, Section 2/3 heading/label check, 115-target relative-link check, prohibited-claim review, PDF/log hash check, and Git whitespace check passed. The source checkout remains clean on `main` at the audited baseline. The build log has no errors, undefined citations/references, missing files, or overfull boxes; five pre-existing underfull boxes remain in the Section 7 cost table.
+- **2026-07-30 -- outcome:** PW1 is complete. Remaining scientific risks are the missing source freeze and frozen evaluation, best-effort post-commit attribution, unresolved explicit/implicit protected-drop policy, and untested lease/substitution behavior across daemon restart.
+
+## PW2: workspace execution and capture/publication
+
+- **2026-07-30 -- started:** Reloaded the complete `ai-research-writing-skill` instructions and the required workflow, artifact, section-writing, and task-management references. Created `plan/task-packets/pw2-workspace-publication.md` before manuscript drafting with the bounded scope, section theses, paragraph roles, evidence IDs, rejection checks, validation plan, and acceptance criteria.
+- **2026-07-30 -- input audit:** Read the authoritative PW2 lane contract, C1/C2 and D1--D8 evidence, canonical terminology, story/skeleton/inventory/interface records, Sections 2--5, and the relevant read-only baseline source for workspace creation, execution, capture, reconciliation, commit, attribution, and cleanup. No standalone `lanes/prompts/pw2.md` exists, so the task packet records the lane charter as authoritative.
+- **2026-07-30 -- worktree boundary:** Preserved the authorized PW1 record updates and unrelated pre-existing benchmark/experiment modifications. Recorded protected-file hashes before drafting; no source, benchmark, experiment, bibliography, figure, or non-target manuscript edit is authorized.
+- **2026-07-30 -- artifacts produced:** Drafted Sections 4 and 5 from C1/C2 and D1--D8 and completed their paragraph-level reverse outlines. The drafts distinguish implicit commands, explicit sessions, session and sessionless file paths, source and ignored publication routes, merge eligibility, the active-manifest visibility point, and post-commit attribution/cleanup boundaries.
+- **2026-07-30 -- recorded build:** The skill recorder executed `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` with exit code 0 using Latexmk 4.88, pdfTeX 1.40.29, and BibTeX 0.99e from TeX Live 2026. It recorded input SHA-256 `36877891dbce1e066589d8a295e436654ccb097970620003cdaf45871f74311b`, PDF SHA-256 `801ac91c302ae3ea7d5827d34dd4da09278e8f537409e3426fd4ff30c8ed36e7`, and build-log SHA-256 `9fc4261ab327472e004f4f62466bf2266218d1b17a66cc5b852ee5dbe7b23265`.
+- **2026-07-30 -- verification:** The full-paper quality gate, citation-key check, JSON/mode/stage check, exact section-count/order check, Section 4/5 heading/label check, 115-target relative-link check, prohibited-claim review, attested input/PDF/log hash check, protected-file hash review, and scoped and whole-worktree Git whitespace checks passed. The source checkout remains clean on `main` at the audited baseline. The build log has no errors, undefined citations/references, missing files, or overfull boxes; five pre-existing underfull boxes remain in the Section 7 cost table.
+- **2026-07-30 -- outcome:** PW2 is complete. Remaining scientific risks are the missing source freeze and frozen fault/resource evidence, best-effort post-commit attribution, nonuniform protected-drop entry-point policy, unvalidated worst-case text-diff resource behavior, and lifecycle/recovery outcomes deferred to PW3.
+
+## PW2.5: concept-figure prompt package
+
+- **2026-07-30 -- started:** Loaded the figure workflow, figure-specification contract, venue/style presets, canonical terminology, current figure plan, and Sections 3--6. Created `plan/task-packets/pw2-5-figure-prompts.md` before authoring prompt sources.
+- **2026-07-30 -- scope boundary:** This package creates prompts/specifications only. It does not generate images, edit manuscript inputs, refresh the PDF build, or treat a concept diagram as experimental evidence. Pre-existing paper, benchmark, and experiment changes remain untouched.
+- **2026-07-30 -- artifacts produced:** Created one shared Classic Academic × Modern Minimal style guide and four separate, self-contained prompt/spec files for the system architecture, publication sequence, lifecycle state machine, and reconciliation decision flow. Updated `figures/figure_plan.md` with direct links, distinct compositions, generation order, and asset status.
+- **2026-07-30 -- verification and outcome:** Confirmed all four prompts independently include style, palette, output, exact labels, and acceptance criteria. The 121-target relative-link check, full-paper quality gate, and scoped whitespace check pass. Prompt preparation is complete; image generation and visual QA remain pending, and the lifecycle asset is provisional until PW3.
+
+## PW2.5: concept-figure generation and review
+
+- **2026-07-30 -- started:** Loaded the image-generation and paper-figure workflows, created `plan/task-packets/pw2-5-figure-generation.md`, and delegated architecture, publication-sequence, and reconciliation assets to non-overlapping subagents. The lifecycle asset will use the next available agent slot.
+- **2026-07-30 -- review contract:** Every PNG must pass visual inspection for exact labels, final-width readability, semantic palette, shared/private and commit/post-commit boundaries, and unsupported-claim avoidance. Failed assets receive targeted regeneration or editing rather than automatic acceptance.
+- **2026-07-30 -- supplied assets:** The author supplied four PNGs, which were
+  moved to the expected `figures/concept/` paths. Generator/model/seed metadata
+  and label-placement maps were not supplied; prompt/spec sources remain the
+  available regeneration contract.
+- **2026-07-30 -- drafting-stage review:** Recorded hashes, dimensions,
+  strengths, topology/layout/resolution/style disparities, and the
+  concept-only evidence boundary in `figures/concept-figure-review.md`.
+  The author accepted all four files unchanged for the drafting manuscript and
+  deferred visual repair and normalization to PW7.
+- **2026-07-30 -- outcome:** Draft asset generation and review are complete;
+  submission-final visual acceptance remains open. Lifecycle/prose consistency
+  is carried into PW3.
+
+## PW3: lifecycle, recovery, implementation, and interface
+
+- **2026-07-30 -- started:** Loaded the full-paper, section-writing, figure,
+  task-management, and build contracts; created
+  `plan/task-packets/pw3-lifecycle-interface.md`; and passed the early
+  full-paper quality gate.
+- **2026-07-30 -- evidence audit:** Confirmed the read-only source checkout is
+  clean on `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`.
+  Audited explicit and implicit finalization, guarded destruction, holder-exit
+  reconciliation, bounded recovery artifacts, shutdown, remount, role-separated
+  client projections, request construction, output/help behavior, and the
+  existing cost model.
+- **2026-07-30 -- figure boundary:** PW3 will integrate the four author-supplied
+  PNGs without modifying their bytes. Recorded visual disparities are PW7 debt,
+  not hidden as passed final-quality gates.
+- **2026-07-30 -- artifacts produced:** Replaced the Section 6 placeholder with
+  the explicit/implicit lifecycle, partial-failure, holder-exit, recovery,
+  shutdown, remount, and lease-aware compaction account. Completed Section 7's
+  role-separated operational contract while preserving the source-derived cost
+  model. Added four evidence-bounded figure inclusions and one baseline CLI
+  contract table.
+- **2026-07-30 -- figure revalidation:** Passed the lifecycle image as a
+  qualified normal-path abstraction. Recorded its omitted holder-exit,
+  shutdown, and remount branches and shared cleanup-node ambiguity, plus all
+  architecture, publication, reconciliation, resolution, grayscale, and
+  style-family disparities, as PW7-only repair work. Rechecked all four hashes;
+  the PNG bytes remain unchanged.
+- **2026-07-30 -- recorded build:** The final recorder run executed
+  `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` with exit
+  code 0 using Latexmk 4.88, pdfTeX 1.40.29, and BibTeX 0.99e from TeX Live
+  2026. It recorded input SHA-256
+  `e31aa83e7db9c45cdf0c3c1f731fe66670fc6641dc20d755704a7673a552e18a`,
+  PDF SHA-256
+  `bf893a5ac17e396233232b18d552e77ddddfc2bcba50786d457fd58db71604eb`,
+  and build-log SHA-256
+  `39a836a6226fc9b8007dd23fda5deb9e2cd8bf3c453faf17539c9b356871e59f`.
+- **2026-07-30 -- verification:** The full-paper quality gate, citation-key
+  check, structure/label/figure/hash/link checks, source-baseline check, and
+  whitespace checks pass. The final log has no errors, emergency stops,
+  undefined citations/references, missing files, or overfull boxes; seven
+  underfull boxes remain in the two narrow Section 7 tables.
+- **2026-07-30 -- PDF inspection and outcome:** Rendered all 14 pages in color
+  and grayscale. Figures appear on pages 3, 6, 8, and 10; both Section 7
+  tables follow their introductions; no clipping, overlap, broken glyph, or
+  page-number defect was found. PW3 is complete. Submission-final figure
+  repair/waiver remains PW7, and scientific/source-freeze/evaluation blockers
+  remain open.

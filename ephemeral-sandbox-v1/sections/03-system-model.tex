@@ -56,6 +56,18 @@ Best-effort attribution, accounting, observability records, and later cleanup
 are outside that atomic data boundary and can have different persistence and
 failure behavior.
 
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figures/concept/fig_system_architecture.png}
+\caption{System architecture.  One active manifest selects the shared durable
+LayerStack history leased into session-private overlays.  The publication path
+summarizes capture, current-head reconciliation, accepted head advancement,
+and the later attribution/cleanup phase; the separate inset distinguishes
+sessionless file operations.  The diagram is explanatory rather than
+experimental evidence.}
+\label{fig:system-architecture}
+\end{figure}
+
 An \emph{orchestrator} is an external controller that selects work, invokes
 role-appropriate operations, and interprets outcomes; a \emph{worker} performs
 one or more coding tasks through those operations.  These roles do not imply

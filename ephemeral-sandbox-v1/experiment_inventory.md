@@ -36,18 +36,24 @@ charter in [`lanes/experiments.md`](lanes/experiments.md).
 | Item | Locked choice for this protocol |
 |---|---|
 | Product branch | `main` |
-| Product source baseline | `b22862550e0a7cb4fe61ce581831e9244cc492b5`; final clean commit/tag pending |
+| Product source baseline | clean `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`, annotated tag `v0.1.4` |
 | Upstream benchmark snapshot | `d45618733c8bfe75466947fdb9c47bea67f74b78` |
 | Paper-local benchmark | [`benchmark/`](benchmark/) plus documented paper-local changes |
-| Host | Ubuntu Server 24.04 LTS, Linux x86-64 |
-| Host minimum | 8 vCPU, 16 GiB RAM, 100 GiB local NVMe-backed ext4 |
-| Runtime | Docker Engine, cgroup v2 |
+| Computer name | `DESKTOP-OLP1ADS` |
+| Host | Native 64-bit Windows build 26200 |
+| Qualified host capacity | 48 logical CPUs, 137,438,953,472 bytes memory, NTFS |
+| Runtime | Docker Desktop 29.0.1; Linux AMD64 engine, `overlayfs`, cgroup v2 |
+| Product path | `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox` |
+| Paper path | `C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1` |
+| Environment qualifier | Native PowerShell; no Python dependency |
 | Sandbox image | `ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf` |
 | Sandbox resource profile | `standard`: 1 vCPU, 512 MiB memory maximum, 256 PIDs |
 | Network profile | `shared` |
-| Client cohort | `direct_client` |
-| Base workspace profile | `paper-100m` |
-| Base workspace | 4,000 deterministic files, 100 MiB logical content, maximum depth 100 |
+| Client cohort | `product_cli`; manager, runtime, and observability subprocesses |
+| Environment qualification workspace | Two tiny isolated fixtures inside the qualification artifact directory |
+| Canonical repo-backed workspace | `C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\workspace-base\ephemeral-sandbox-v0.1.4` |
+| Performance-only workspace profile | `paper-100m` (outside the environment task) |
+| Performance-only base workspace | 4,000 deterministic files, 100 MiB logical content, maximum depth 100 |
 | Generator ceiling | Maximum depth 499 |
 | Seed | `20260712` |
 | Operation concurrency | 1 and 5 |
@@ -59,8 +65,8 @@ charter in [`lanes/experiments.md`](lanes/experiments.md).
 | Retries | None |
 
 The image digest above was resolved from the Docker registry for
-`linux/amd64` on 2026-07-30. Phase 1 must independently pull and inspect the
-same digest on the final host before it is accepted.
+`linux/amd64` on 2026-07-30 and inspected through Docker Desktop during the
+accepted Windows qualification.
 
 ## Workspace construction
 
@@ -81,32 +87,49 @@ maximum depth:   100
 seed:            20260712
 ```
 
-The current benchmark schema applies the selected base-workspace profile
-directly to command and workspace-readiness cells. File-operation cells create
-their deterministic target files during untimed setup. Before protocol lock,
-we must either:
-
-1. extend file-operation cells to mount the same `paper-100m` base; or
-2. state in the paper that the 100 MiB base applies only to startup/command
-   cells and that file-operation rows use operation-specific clean fixtures.
-
-No final run may proceed while this boundary is ambiguous.
+The selected `paper-100m` base applies to every final measured cell, including
+file read, write, and edit. Operation-specific targets are created during
+untimed setup inside a fresh per-cell copy of that base. The current benchmark
+schema applies the selected profile only to command and workspace-readiness
+cells, so Phase 3 must extend the file-operation preparation path before any
+pilot or final run. Neither the product checkout, paper checkout, canonical
+repository-backed qualification workspace, nor a clean empty fixture is a
+substitute for the performance base.
 
 ## Measured operations and boundaries
 
 | Operation | Timed boundary | Untimed work |
 |---|---|---|
-| Workspace/session create | Concurrent internal no-op session requests until ready, against a prepared sandbox and base fixture | Base generation, sandbox creation, verification, teardown |
-| `exec_command` | One public command request against a prepared explicit session | Sandbox/session setup, result verification, teardown |
-| File read | One public `file_read` request over a prepared snapshot target | Target generation and content verification |
-| File write | One public `file_write` request in a fresh prepared session | Target/session setup, read-back verification, teardown |
-| File edit | One public `file_edit` request in a fresh prepared session | Target/session setup, read-back verification, teardown |
+| Sandbox create + base mount | One native manager-CLI subprocess from process launch through successful validated ready response | Base generation/copy, gateway start, verification, teardown |
+| Workspace/session create | Concurrent native runtime-CLI `create_workspace_session` subprocesses against a prepared sandbox and `paper-100m` base | Base generation/copy, sandbox creation, verification, teardown |
+| `exec_command` | One native runtime-CLI subprocess against a prepared explicit session | Sandbox/session setup, result verification, teardown |
+| File read | One native runtime-CLI `file_read` subprocess over a prepared target in the `paper-100m` base | Target generation and content verification |
+| File write | One native runtime-CLI `file_write` subprocess in a fresh prepared session over the `paper-100m` base | Target/session setup, read-back verification, teardown |
+| File edit | One native runtime-CLI `file_edit` subprocess in a fresh prepared session over the `paper-100m` base | Target/session setup, read-back verification, teardown |
 
-Initial sandbox creation and mounting are not currently a first-class measured
-operation: the runner invokes `create_sandbox` during setup and discards its
-timed response. If the paper reports "sandbox create + mount" latency, Phase 3
-must add an explicit metric with request-to-ready timing. Session-create
-latency must not be relabeled as sandbox-create latency.
+The focused campaign includes explicit manager-CLI sandbox-create-to-ready
+timing. The current runner invokes `create_sandbox` during setup and discards
+its response timing, so Phase 3 must add this separate metric. Session-create
+latency remains a distinct runtime-CLI operation and must never be relabeled as
+sandbox-create latency.
+
+### CLI timing contract
+
+- A measured operation begins immediately before the native Windows CLI
+  subprocess is created and ends only after it exits and its stdout and stderr
+  have been captured, parsed, and validated.
+- Primary latency therefore includes executable launch, argument parsing,
+  CLI-to-gateway transport, gateway execution, response serialization, and
+  subprocess exit. This is the user-visible cost of the required public CLI
+  boundary.
+- Product-reported internal command or gateway durations may be archived as
+  separate secondary observations when available. They must not replace,
+  subtract from, or be mixed with the primary end-to-end CLI latency.
+- Concurrent batches release their CLI subprocesses from one benchmark barrier
+  and measure makespan until every subprocess has produced a valid result.
+- Setup, correctness verification, observability sampling, and teardown also
+  use released product CLIs where they are sandbox operations, but remain
+  outside the measured operation interval.
 
 ## Draft good-pass matrix
 
@@ -115,12 +138,13 @@ The executable draft is
 
 | Operation | Cases | Concurrency | Measured cells |
 |---|---|---:|---:|
+| Sandbox create + base mount | `paper-100m`, shared network | 1 | 1 |
 | Workspace/session create | `paper-100m`, shared network | 1, 5 | 2 |
 | `exec_command` | no-op, 4 KiB fixture read | 1, 5 | 4 |
 | File read | 4 KiB, 256 KiB | 1, 5 | 4 |
 | File write | 4 KiB, 256 KiB, session-local | 1, 5 | 4 |
 | File edit | 4 KiB, 256 KiB, one exact replacement | 1, 5 | 4 |
-| **Total** |  |  | **18** |
+| **Total** |  |  | **19** |
 
 Each cell has 2 warmups and 100 measured trials. This sample count permits a
 reported empirical p99 without silently treating a smaller sample's maximum as
@@ -130,7 +154,8 @@ a stable tail estimate.
 
 ### Primary
 
-- client-observed batch makespan latency in milliseconds;
+- end-to-end native product-CLI subprocess latency and concurrent-batch
+  makespan in milliseconds;
 - p50, p95, and p99 over the 100 measured trials;
 - throughput in completed operation requests per second.
 
@@ -146,8 +171,9 @@ a stable tail estimate.
 
 ### Metric definitions
 
-- A trial's latency is its timed operation boundary, excluding setup,
-  verification, and teardown.
+- A trial's latency follows the CLI timing contract above. It includes native
+  CLI process launch and exit while excluding separate setup, verification, and
+  teardown operations.
 - For a concurrent batch, throughput is
   `completed_requests / batch_makespan_seconds`.
 - Warmups never contribute to aggregates.
@@ -193,6 +219,23 @@ results.
 
 ## Phases and acceptance tracker
 
+### Environment decision
+
+The native Windows workstation with Docker Desktop is the selected and
+qualified environment. Windows launches the released gateway and CLIs; Docker
+Desktop supplies the Linux engine and runs the pinned Ubuntu sandbox image.
+The exact qualification command and evidence are fixed in
+[`experiments/environment_setup.md`](experiments/environment_setup.md).
+
+Every sandbox lifecycle, command, file, and observation operation used for
+qualification or a future experiment must execute through
+`sandbox-manager-cli`, `sandbox-runtime-cli`, or
+`sandbox-observability-cli`. The imported benchmark currently implements only
+`direct_client`; its performance presets are therefore prohibited until a
+product-CLI subprocess cohort is implemented and reviewed. The complete
+execution contract is
+[`plan/task-packets/exp1-cli-performance-campaign.md`](plan/task-packets/exp1-cli-performance-campaign.md).
+
 ### Phase 0 - Reproducibility package
 
 - [x] Create the paper-local benchmark snapshot.
@@ -207,36 +250,55 @@ results.
 
 ### Phase 1 - Verify the final environment first
 
-- [ ] Provision the single Ubuntu 24.04 x86-64 host.
-- [ ] Place prebuilt product binaries; do not build on the measurement host.
-- [ ] Pull the pinned image before the measurement window.
-- [ ] Run `experiments/scripts/verify_environment.sh`.
-- [ ] Confirm ext4, cgroup v2, Docker server, CPU/RAM/free-space thresholds.
-- [ ] Confirm clean product `main` and record the exact commit.
-- [ ] Confirm binary, daemon, toolchain-archive, and image digests.
-- [ ] Archive the preflight output in the run directory.
-- [ ] Complete the preflight in 60 seconds or less with a warm local image.
+- [x] Confirm native Windows x64 host identity and build.
+- [x] Stage the official `v0.1.4` Windows AMD64 package under ignored `target/`.
+- [x] Confirm NTFS, CPU/RAM/free-space thresholds.
+- [x] Confirm Docker Desktop 29.0.1, Linux AMD64, `overlayfs`, and cgroup v2.
+- [x] Confirm the pinned Ubuntu image is present locally.
+- [x] Confirm clean product `main` and the exact commit.
+- [x] Confirm archive, gateway, CLI, config, daemon, and image digests.
+- [x] Archive the complete native Windows preflight output.
 
 **Gate 1:** every environment acceptance item passes. Any failure stops work;
 do not compensate by building, installing, or changing the host mid-run.
 
 ### Phase 2 - Minimal live smoke
 
-- [ ] Run the `paper-env-smoke` preset.
-- [ ] Confirm one sandbox/session lifecycle completes.
-- [ ] Confirm one `exec_command` completes and verifies.
-- [ ] Confirm cleanup leaves no owned sandbox, process, or runtime residue.
-- [ ] Record elapsed time and keep the smoke below 3 minutes.
-- [ ] Mark all smoke samples exploratory and ineligible for paper tables.
+- [x] Run the native Windows CLI-only environment smoke.
+- [x] Confirm two independent sandbox lifecycles complete.
+- [x] Confirm command and file-operation correctness in both batches.
+- [x] Confirm cleanup leaves no qualifier-owned container, volume, or process.
+- [x] Record elapsed time and keep the smoke below 3 minutes.
+- [x] Mark the elapsed time as environment evidence, ineligible for paper tables.
 
-**Gate 2:** live create, execute, observe, and cleanup succeed once.
+**Gate 2:** both product-CLI-controlled lifecycles complete, all 20 expected
+CLI calls pass strict response checks, and the unique gateway instance leaves
+no containers, volumes, processes, or runtime state.
+
+The earlier 2026-07-30 WSL smoke used the now-disallowed `direct_client`
+cohort. It remains diagnostic implementation evidence but is not
+Gate 2-equivalent under the product-CLI-only contract.
+
+A later WSL/Docker Desktop diagnostic executed the replacement product-CLI
+smoke successfully for two lifecycles. Because WSL is ineligible, this validates
+the automation only and still does not satisfy Gate 1 or Gate 2.
+
+The accepted native Windows run is
+`qualification-windows-docker-20260730-final-6`. It satisfies Gate 1 and Gate 2
+with the official Windows release gateway and CLIs controlling Docker Desktop.
 
 ### Phase 3 - Instrumentation and five-sample pilot
 
-- [ ] Decide and implement the file-operation base-workspace boundary.
-- [ ] Add explicit sandbox-create + mount timing if Table 2 will report it.
+- [ ] Implement and review the `product_cli` subprocess cohort for manager,
+  runtime, and observability operations; make paper presets reject
+  `direct_client`.
+- [ ] Apply `paper-100m` to command, lifecycle, read, write, and edit cells.
+- [ ] Add explicit manager-CLI sandbox-create + base-mount timing for Table 2.
+- [ ] Enforce the end-to-end CLI timing contract and retain any internal
+  product timing only as separate secondary evidence.
 - [ ] Confirm p99, throughput, and resource fields are emitted by analysis.
-- [ ] Run a five-sample pilot over every final cell.
+- [ ] Run a five-sample pilot over all 19 final cells with the final two
+  warmups retained.
 - [ ] Confirm operation setup is excluded from operation latency.
 - [ ] Confirm all correctness checks and cleanup gates pass.
 - [ ] Confirm raw observations deterministically regenerate draft tables.
@@ -262,7 +324,7 @@ do not compensate by building, installing, or changing the host mid-run.
 - [ ] Run `paper-good-pass` once with the frozen plan.
 - [ ] Preserve run manifest, raw observations, traces, resources, and logs.
 - [ ] Preserve failed or partial evidence if the run does not complete.
-- [ ] Confirm all 18 cells have 100 reportable measured trials.
+- [ ] Confirm all 19 cells have 100 reportable measured trials.
 
 **Gate 5:** one complete, provenance-rich measured corpus exists.
 

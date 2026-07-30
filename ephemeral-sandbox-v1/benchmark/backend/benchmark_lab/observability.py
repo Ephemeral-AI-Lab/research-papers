@@ -36,10 +36,17 @@ class CgroupSample(StrictModel):
 class CgroupView(StrictModel):
     view: Literal["cgroup"]
     scope: Literal["sandbox"]
-    series: list[CgroupSample] = Field(min_length=1, max_length=4096)
+    availability: Literal["available", "partial"]
+    errors: list[str]
+    topology: dict[str, Any]
+    series: list[CgroupSample] = Field(max_length=4096)
 
     @model_validator(mode="after")
     def validate_series(self) -> "CgroupView":
+        if (self.availability == "available") != (not self.errors):
+            raise ValueError("cgroup availability and errors disagree")
+        if not self.series and self.availability != "partial":
+            raise ValueError("available cgroup view has no samples")
         previous: CgroupSample | None = None
         for sample in self.series:
             expected_interval = None if previous is None else sample.ts - previous.ts
@@ -110,6 +117,7 @@ class NamespaceExecution(StrictModel):
 class SnapshotWorkspace(StrictModel):
     workspace_id: str = Field(min_length=1)
     lifecycle_state: Literal["active"]
+    finalization_state: Literal["active"]
     network_profile: str = Field(min_length=1)
     finalize_policy: str = Field(min_length=1)
     layers: SnapshotLayers
@@ -127,9 +135,16 @@ class SnapshotStack(StrictModel):
     active_leases: int = Field(ge=0)
 
 
+class SnapshotEventStore(StrictModel):
+    dropped_storage: int = Field(ge=0)
+    dropped_oversized: int = Field(ge=0)
+    truncated_records: int = Field(ge=0)
+
+
 class SnapshotDaemon(StrictModel):
     daemon_pid: int = Field(gt=0)
     runtime_dir: str = Field(min_length=1)
+    event_store: SnapshotEventStore
 
 
 class SnapshotView(StrictModel):

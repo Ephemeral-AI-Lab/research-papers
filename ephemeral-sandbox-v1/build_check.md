@@ -1,4 +1,4 @@
-# PW0 build check
+# PW3 build check
 
 **Status:** Passed with executed attestation.
 
@@ -8,7 +8,9 @@ The declared command is:
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The skill build recorder executed the declared command successfully at `2026-07-30T00:23:10.503310+00:00` using the user-local TinyTeX installation at `C:\Users\yifan\AppData\Roaming\TinyTeX`.
+The skill build recorder executed the declared command successfully at
+`2026-07-30T03:22:41.491473+00:00` using the user-local TinyTeX installation
+at `C:\Users\yifan\AppData\Roaming\TinyTeX`.
 
 ## Tool versions
 
@@ -20,14 +22,29 @@ The skill build recorder executed the declared command successfully at `2026-07-
 
 - Exit code: 0.
 - PDF: `main.pdf`.
-- PDF SHA-256: `dd63976a4714299aa99f564e2669c1e8a438dad6fe6eeaf1f4eeaadd50ef4406`.
-- Input SHA-256: `e0c64365a445533c8efdb74068d5d5d28945871853d26c06692d0f791b48868e`.
-- Build log: `plan/pw0-build-attempt.log`.
-- Build-log SHA-256: `b0ad2eb77266611365f2af42a8b146fa25d8fdbd29d4cce599d7106b8b1d1e94`.
+- PDF SHA-256: `bf893a5ac17e396233232b18d552e77ddddfc2bcba50786d457fd58db71604eb`.
+- Input SHA-256: `e31aa83e7db9c45cdf0c3c1f731fe66670fc6641dc20d755704a7673a552e18a`.
+- Build log: `plan/pw3-build.log`.
+- Build-log SHA-256: `39a836a6226fc9b8007dd23fda5deb9e2cd8bf3c453faf17539c9b356871e59f`.
 - Attestation: executed.
 
-The parsed LaTeX log contains zero errors, emergency stops, undefined citations, undefined references, missing files, or overfull boxes. It reports five underfull boxes in the provisional cost table and one expected empty-bibliography warning.
+The parsed LaTeX log contains zero errors, emergency stops, undefined
+citations, undefined references, missing files, or overfull boxes. It reports
+seven underfull boxes in the two narrow Section 7 tables and one expected
+empty-bibliography warning.
 
-Visual verification rendered all four US-letter pages. Text, headings, equations, table borders, page numbers, and draft markers are legible with no clipping, overlap, or broken glyphs. Because `references.bib` is intentionally comment-only, page 4 is an empty References page at this scaffold stage.
+The full-paper quality gate and citation-key checker pass at the current
+`full-paper` / `drafting` state. All ten section inputs appear exactly once
+and in order; the Section 6 and 7 headings and labels are stable; all four
+figure hashes and references pass; all relative Markdown links resolve; PDF
+and log hashes match `paper_state.json`; and Git whitespace checks pass.
 
-PW0's build blocker is closed. Other scientific, author, source-freeze, and evaluation blockers remain recorded in `paper_state.json`.
+The 14-page PDF was rendered in color and grayscale. Figures appear on pages
+3, 6, 8, and 10, the two Section 7 tables remain after their introductions,
+and no clipping, overlap, broken glyph, or page-number defect was found.
+Because `references.bib` remains comment-only, the sparse References page is
+expected.
+
+PW3's manuscript build gate is closed. Figure disparities are explicitly
+deferred to PW7; scientific, author, source-freeze, citation, and evaluation
+blockers remain recorded in `paper_state.json`.

@@ -1,6 +1,36 @@
-# PW0 figure and table plan
+# Figure and table plan
 
-No figure or table asset is generated in PW0. Concept-method assets are illustrative only and must be checked against final terminology and tagged source before inclusion. Every evidence-result asset is blocked until its named frozen source or experimental data exists.
+No figure or table asset was generated in PW0. PW2.5 now provides four
+self-contained concept-figure prompts under `figures/source/` and four
+author-supplied PNG review drafts under `figures/concept/`. Their hashes,
+provenance boundary, and drafting-stage QA are recorded in
+[`concept-figure-review.md`](concept-figure-review.md). The author accepted the
+supplied files unchanged for the drafting manuscript and deferred visual,
+resolution, topology, and style-family repair to PW7. Concept-method assets are
+illustrative only and must still be checked against final terminology and tagged
+source before submission. Every evidence-result asset remains blocked until its
+named frozen source or experimental data exists.
+
+## PW2.5 prompt package
+
+All four prompts use the shared visual language in
+[`source/STYLE_GUIDE.md`](source/STYLE_GUIDE.md), while repeating the relevant
+style instructions so each prompt can be sent independently to an image
+generator.
+
+| Figure ID | Diagram | Separate prompt | Figure-specific composition | Status |
+|---|---|---|---|---|
+| `fig:system-architecture` | LayerStack and workspace-session architecture | [`fig_system_architecture_prompt.md`](source/fig_system_architecture_prompt.md) | Three semantic bands with parallel private sessions and one publication boundary | Integrated on PDF page 3; PW7 visual repair |
+| `fig:publication-sequence` | Workspace-to-publication sequence | [`fig_publication_sequence_prompt.md`](source/fig_publication_sequence_prompt.md) | Five vertical swimlanes with a highlighted active-manifest commit line | Integrated on PDF page 6; PW7 visual repair |
+| `fig:lifecycle-state-machine` | Workspace-session lifecycle state machine | [`fig_lifecycle_state_machine_prompt.md`](source/fig_lifecycle_state_machine_prompt.md) | Precommit/post-commit state regions with retry and cleanup-failure branches | Integrated and PW3-qualified; exceptional-branch/topology QA in PW7 |
+| `fig:reconciliation-decision` | Current-head reconciliation decision flow | [`fig_reconciliation_decision_prompt.md`](source/fig_reconciliation_decision_prompt.md) | Source/ignored branches, narrow merge gates, and shared whole-candidate terminals | Integrated on PDF page 8; PW7 visual repair |
+
+Review and finalization order:
+
+1. integrated all four review drafts unchanged during PW3;
+2. revalidated lifecycle terminology against completed Section 6;
+3. inspected compiled placement, captions, final-size color, and grayscale;
+4. repair or explicitly accept all recorded visual disparities during PW7.
 
 ## Planned assets
 

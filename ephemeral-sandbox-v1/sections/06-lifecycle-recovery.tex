@@ -1,3 +1,99 @@
 \section{Lifecycle and Recovery}
 \label{sec:lifecycle-recovery}
-\emph{Draft.}
+
+The operation layer represents each admitted workspace session as
+\emph{active}, \emph{finalizing}, or \emph{finalize failed}.  A per-session
+admission gate serializes lifecycle-changing operations, while the command
+ledger records active runners.  For a live holder, explicit publication and
+destruction reject admission while that ledger is nonempty.  These states
+coordinate in-process service work; they are not a durable transaction log or
+a promise that arbitrary process state can be restored after failure.
+
+An explicit session has no automatic action when a command finishes.  A
+publish request moves an active session to finalizing, captures the upper tree,
+and submits the complete candidate to the publication path in
+Section~\ref{sec:capture-publication}.  Capture error, protected-drop
+rejection, invalid base, or another precommit publication failure restores the
+session to active and returns a retained-session result.  Its leased view and
+private overlay therefore remain available for a deliberate retry or
+destruction; rejection neither publishes a subset nor silently closes the
+session.
+
+An accepted explicit publication and an empty no-op both proceed to session
+destruction.  A nonempty acceptance has already become visible at the
+active-manifest transition before this cleanup begins; a no-op adds no layer
+and leaves the current head selected.  If workspace or cgroup cleanup then
+fails, the service retains a finalize-failed record and reports
+\emph{published but not closed}.  A later guarded cleanup can finish resource
+release, but it does not rerun publication or roll back the manifest.  The
+label applies to a committed path; cleanup failure after a no-op or discard
+does not retroactively create a publication.
+
+Implicit command sessions follow a deliberately different policy.  When a
+sessionless \texttt{exec\_command}'s ledger drains, the service quiesces the
+namespace holder, captures the completed filesystem state, attempts
+publication, and then proceeds toward destruction.  An empty capture skips
+publication.  A publish rejection is recorded in the completing command's
+finalization outcome, but the implicit session is not converted into a
+caller-managed retryable session.  Capture-after-quiescence or destruction
+failure instead produces a finalization-failure classification and may retain
+cleanup or recovery state.  Figure~\ref{fig:lifecycle-state-machine}
+summarizes the normal explicit and implicit paths.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{../figures/concept/fig_lifecycle_state_machine.png}
+\caption{Workspace-session lifecycle.  Explicit precommit failure or rejection
+can return to an active session for retry or discard, whereas an accepted
+active-manifest replacement precedes the published state and later cleanup.
+Cleanup failure cannot undo visible data.  This normal-path abstraction omits
+holder-exit recovery artifacts, shutdown convergence, and lease-aware remount
+outcomes; ``published but not closed'' applies only when publication committed
+before cleanup failed.}
+\label{fig:lifecycle-state-machine}
+\end{figure}
+
+Deliberate destruction is the discard operation for unpublished private
+state.  A live session with active commands is rejected rather than torn down
+through the normal public path.  Once admitted, teardown tracks workspace and
+workload-cgroup completion separately: if one resource is released and another
+fails, the retained cleanup record prevents a later retry from repeating the
+completed raw teardown solely because the other resource remains pending.
+Only complete teardown removes the session record, commits workspace
+destruction, releases terminal command state, and allows lease release.  This
+is convergent resource cleanup, not rollback of commands already executed.
+
+Unexpected holder exit uses a separate in-process reconciliation path.  The
+supervisor marks the holder dead, one teardown owner cancels and joins the
+recorded commands, and the service then destroys the workspace.  For an
+implicit publish-then-destroy session, it first preserves a bounded,
+identity-keyed copy of the upper tree plus a recovery manifest; truncation,
+missing source state, links, and unsupported entries are recorded.  The
+artifact supports later diagnosis or manual recovery but is not automatically
+published, replayed, or mounted as a restored session.  An explicit session
+whose holder dies is destroyed under its no-automatic-finalization policy
+rather than being silently published.
+
+LayerStack compaction changes physical representation without changing the
+intended leased logical view.  Squash planning treats live-lease boundaries as
+constraints, builds flattened replacements outside the exclusive writer
+section, and commits only after rechecking the planned runs.  A post-commit
+sweep then attempts to remount each live session onto an identity or
+substituted chain.  A session can be reported migrated, still leased because a
+safe switch was unavailable or uncertain, faulty, gone, or unchanged.  Faulty
+sessions can be destroyed through the ordinary gated teardown path, and
+garbage collection removes a superseded layer only when neither the active
+manifest nor another lease still references it.
+
+Daemon shutdown attempts bounded convergence by joining existing teardown
+work, cancelling active commands, finalizing eligible implicit sessions, and
+destroying the remaining sessions.  The baseline source and tests define
+these in-process paths, but final Linux fault evidence has not yet established
+their behavior under abrupt daemon restart, partial recovery-artifact writes,
+or every lease-substitution ordering.  The lease and session registries remain
+in memory, and the recovery artifact does not close that gap.  Consequently,
+the paper claims explicit partial-failure outcomes and conservative retention,
+not automatic recovery from every crash.  The next section exposes those
+outcomes through the operational interface.
+
+\clearpage

@@ -156,7 +156,12 @@ def _resource_values(
     cgroup: CgroupView,
     snapshot: SnapshotView,
 ) -> dict[str, tuple[int | None, str | None]]:
-    latest = cgroup.series[-1].metrics
+    latest = cgroup.series[-1].metrics if cgroup.series else None
+    cgroup_reason = (
+        None
+        if latest is not None
+        else "; ".join(cgroup.errors) or "product cgroup sample was unavailable"
+    )
     daemon_reason = (
         f"product snapshot exposed container PID {snapshot.daemon.daemon_pid} "
         "without a host PID namespace and process start identity"
@@ -187,17 +192,35 @@ def _resource_values(
         **local,
         "daemon_rss_bytes": (None, daemon_reason),
         "daemon_cpu_time_ns": (None, daemon_reason),
-        "sandbox_memory_current_bytes": (latest.mem_cur, _missing("sandbox memory", latest.mem_cur)),
-        "sandbox_memory_peak_bytes": (latest.mem_cur, _missing("sandbox memory", latest.mem_cur)),
+        "sandbox_memory_current_bytes": (
+            None if latest is None else latest.mem_cur,
+            cgroup_reason
+            if latest is None
+            else _missing("sandbox memory", latest.mem_cur),
+        ),
+        "sandbox_memory_peak_bytes": (
+            None if latest is None else latest.mem_cur,
+            cgroup_reason
+            if latest is None
+            else _missing("sandbox memory", latest.mem_cur),
+        ),
         "sandbox_cpu_time_ns": (
-            None if latest.cpu_usec is None else latest.cpu_usec * 1_000,
-            _missing("sandbox CPU counter", latest.cpu_usec),
+            None if latest is None or latest.cpu_usec is None else latest.cpu_usec * 1_000,
+            cgroup_reason
+            if latest is None
+            else _missing("sandbox CPU counter", latest.cpu_usec),
         ),
         "sandbox_block_read_bytes": (
-            latest.io_rbytes, _missing("sandbox block-read counter", latest.io_rbytes)
+            None if latest is None else latest.io_rbytes,
+            cgroup_reason
+            if latest is None
+            else _missing("sandbox block-read counter", latest.io_rbytes),
         ),
         "sandbox_block_write_bytes": (
-            latest.io_wbytes, _missing("sandbox block-write counter", latest.io_wbytes)
+            None if latest is None else latest.io_wbytes,
+            cgroup_reason
+            if latest is None
+            else _missing("sandbox block-write counter", latest.io_wbytes),
         ),
         "layerstack_bytes": (stack_value, stack_reason),
         "upperdir_bytes": (upperdir, upperdir_reason),

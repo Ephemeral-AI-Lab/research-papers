@@ -40,13 +40,29 @@ class SharedBase(StrictModel):
     readonly: bool
 
 
+class ResourceProfile(StrictModel):
+    name: str = Field(min_length=1)
+    nano_cpus: int = Field(gt=0)
+    memory_high_bytes: int = Field(gt=0)
+    memory_max_bytes: int = Field(gt=0)
+    pids_max: int = Field(gt=0)
+    workload_memory_high_bytes: int = Field(gt=0)
+    workload_memory_max_bytes: int = Field(gt=0)
+    workload_pids_max: int = Field(gt=0)
+    control_plane_pids_reserve: int = Field(ge=0)
+    daemon_runtime_profile: str = Field(min_length=1)
+    separate_workload_cgroup: bool
+
+
 class SandboxRecord(StrictModel):
     id: str
     workspace_root: str
     state: str
+    activity_revision: int = Field(ge=0)
     daemon: DaemonEndpoint | None
     daemon_http: DaemonEndpoint | None
     shared_base: SharedBase | None
+    resource_profile: ResourceProfile
 
 
 class ProductAccess:

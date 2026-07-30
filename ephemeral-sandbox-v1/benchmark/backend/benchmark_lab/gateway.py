@@ -27,7 +27,6 @@ from .transport import GatewayClient, GatewayEndpoint, GatewayError
 GATEWAY_EXECUTABLE = "sandbox-gateway"
 AUTH_ENV = "SANDBOX_GATEWAY_AUTH_TOKEN"
 SHARED_CACHE_ENV = "EOS_SHARED_BASE_CACHE"
-GIT_TOOLCHAIN_ENV = "SANDBOX_GIT_TOOLCHAIN_DIR"
 ALLOWED_ENV = (
     "PATH",
     "HOME",
@@ -114,7 +113,6 @@ class GatewayLauncher:
         try:
             gateway_binary = _prebuilt_executable(self._roots, GATEWAY_EXECUTABLE)
             daemon_binary = _container_daemon_executable(self._roots)
-            git_toolchains = _fixed_git_toolchains(self._roots)
         except CatalogError as error:
             raise GatewayLifecycleError("gateway preflight rejected a product binary") from error
 
@@ -177,7 +175,6 @@ class GatewayLauncher:
                 {
                     AUTH_ENV: token,
                     SHARED_CACHE_ENV: os.fspath(shared_cache),
-                    GIT_TOOLCHAIN_ENV: os.fspath(git_toolchains),
                 }
             )
             process = await self._process_factory(
@@ -583,22 +580,6 @@ async def recover_stale_gateway(
         raise GatewayLifecycleError(
             f"stale gateway cleanup was incomplete: {', '.join(issues)}"
         )
-
-
-def _fixed_git_toolchains(roots: BenchmarkRoots) -> Path:
-    directory = roots.product_root / "dist/git"
-    if directory.is_symlink() or not directory.is_dir() or directory.resolve(strict=True) != directory:
-        raise GatewayLifecycleError("fixed Git toolchain directory is unsafe")
-    for name in ("linux-arm64.tar", "linux-amd64.tar"):
-        archive = directory / name
-        if (
-            archive.is_symlink()
-            or not archive.is_file()
-            or archive.stat().st_size == 0
-            or archive.resolve(strict=True) != archive
-        ):
-            raise GatewayLifecycleError("fixed Git toolchain archive is unsafe")
-    return directory
 
 
 def _container_daemon_executable(roots: BenchmarkRoots) -> Path:

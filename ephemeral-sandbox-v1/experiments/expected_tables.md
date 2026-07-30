@@ -19,20 +19,20 @@ one host, image, product revision, benchmark revision, and workspace.
 
 | Field | Expected value | Evidence source |
 |---|---|---|
-| Host OS | Ubuntu Server 24.04 LTS | preflight record |
-| Kernel | `TBD` | `uname -r` |
-| Architecture | x86-64 / `amd64` | `uname -m`, image inspect |
-| CPU | `TBD model`, 8 vCPU or more | `/proc/cpuinfo`, `nproc` |
-| Memory | 16 GiB or more | `/proc/meminfo` |
-| Storage | local NVMe-backed ext4 | `findmnt`, `lsblk` |
-| Docker Engine | `TBD` | `docker version` |
-| Cgroup | v2 | `/sys/fs/cgroup/cgroup.controllers` |
+| Host OS | Native Windows build 26200 | Windows preflight record |
+| Container engine OS | Docker Desktop Linux engine | `docker info` |
+| Architecture | Windows x64 host; Linux AMD64 engine/image | PE/ELF checks and image inspect |
+| CPU | 48 logical CPUs | Windows preflight record |
+| Memory | 137,438,953,472 bytes | Windows preflight record |
+| Storage | NTFS host paths | `Get-Volume` |
+| Docker Engine | Docker Desktop 29.0.1 | `docker version`, `docker info` |
+| Cgroup | v2 inside the Docker Desktop engine | `docker info` |
 | Product commit/tag | `TBD final clean main` | Git record |
 | Benchmark commit | `TBD paper-local commit` | Git record |
 | Sandbox image | pinned Ubuntu 24.04 digest | plan and image inspect |
 | Sandbox limits | 1 vCPU, 512 MiB, 256 PIDs | effective configuration |
 | Workspace | 4,000 files, 100 MiB, depth 100 | fixture manifest |
-| Client | `direct_client` | expanded plan |
+| Client | native Windows `product_cli` | qualification summary and benchmark run manifest |
 | Seed | `20260712` | expanded plan |
 | Trials | 2 warmups + 100 measured per cell | expanded plan |
 
@@ -52,11 +52,12 @@ manifest.
 | Session create to ready | 5 | 100 | -- | -- | -- | -- |
 | First no-op command | 1 | 100 | -- | -- | -- | -- |
 
-The first row is blocked until the runner preserves an explicit
-`create_sandbox` request-to-ready timing. It must be omitted rather than filled
-from generic setup time if that instrumentation is not added. "Session create"
-uses the existing prepared-sandbox `create_workspace` boundary and must not be
-renamed to sandbox creation.
+The first row is blocked until the runner preserves an explicit end-to-end
+manager-CLI `create_sandbox` process-launch-to-ready timing. It must be omitted
+rather than filled from generic setup time if that instrumentation is not
+added. "Session create" uses a runtime-CLI
+`create_workspace_session` invocation against a prepared sandbox and must not
+be renamed to sandbox creation.
 
 ## Table 3 - Public CLI-operation performance
 
@@ -87,8 +88,11 @@ Failed, non-reportable, and partial samples remain visible in the run manifest
 and [`experiment_log.md`](experiment_log.md). A row with fewer than 100
 reportable samples is not published.
 
-These are public gateway-operation timings, not shell-process startup timings
-for launching the `sandbox` CLI executable itself.
+These are end-to-end native product-CLI subprocess timings. They include
+process launch, CLI-to-gateway transport, operation execution, JSON output
+capture and validation, and process exit. Product-reported internal command or
+gateway timing may be archived separately but is not substituted into this
+table.
 
 ## Table 4 - Resource envelope
 
@@ -114,6 +118,9 @@ explain why; never substitute a different scope.
 
 - Latency is reported in milliseconds with enough precision to avoid rounding
   materially different values together.
+- Primary latency begins immediately before native CLI process creation and
+  ends after validated process exit. Setup, verification, and teardown are
+  separate untimed operations.
 - Throughput is completed operation requests divided by batch makespan.
 - Byte values use binary units: KiB and MiB.
 - p50/p95/p99 are computed from exactly the reportable measured samples.
@@ -145,14 +152,14 @@ copied into the manuscript, numeric-evidence records, plots, or analysis tests.
 
 | Field | Simulated example value |
 |---|---|
-| Host OS | Ubuntu Server 24.04 LTS |
-| Kernel | `6.8.0-example` |
-| Architecture | x86-64 |
-| CPU | Example 8-vCPU host |
-| Memory | 16 GiB |
-| Storage | Example local NVMe, ext4 |
-| Docker Engine | `29.x (example)` |
-| Cgroup | v2 |
+| Host OS | Example native Windows 11 host |
+| Container engine OS | Example Docker Desktop Linux engine |
+| Architecture | Windows x64 / Linux AMD64 |
+| CPU | Example 48-logical-CPU host |
+| Memory | Example 128 GiB host |
+| Storage | Example NTFS host paths |
+| Docker Engine | Docker Desktop `29.x (example)` |
+| Cgroup | v2 inside the Linux engine |
 | Product commit/tag | `example-final-commit` |
 | Benchmark commit | `example-benchmark-commit` |
 | Sandbox image | pinned Ubuntu 24.04 digest |

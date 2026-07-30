@@ -31,6 +31,14 @@ def test_reads_strict_frozen_catalog_and_required_operations() -> None:
     names = exported.operation_names()
     assert len(names) == 20
     assert {"create_sandbox", "exec_command", "file_read", "file_write", "squash_layerstacks"} <= names
+    value = json.loads(GOLDEN.read_bytes())
+    argument = next(
+        argument
+        for operation in value["domains"]["runtime"]["operations"]
+        for argument in operation["args"]
+    )
+    argument["kind"] = "float"
+    read_catalog(json.dumps(value).encode())
     with pytest.raises(CatalogError, match="schema"):
         read_catalog(GOLDEN.read_bytes().replace(b'"schema_version": 1', b'"schema_version": 2', 1))
 
