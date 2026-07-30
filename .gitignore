@@ -13,3 +13,7 @@
 *.swp
 *~
 .DS_Store
+
+# Paper-local benchmark runtime state and Python environment
+/ephemeral-sandbox-v1/.benchmark-state/
+/ephemeral-sandbox-v1/.venv/

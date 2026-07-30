@@ -1,0 +1,56 @@
+\documentclass[10pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+
+\title{Ephemeral Sandbox: A LayerStack Workspace OS for Parallel Coding Agents\\
+  \large\textit{Provisional working title}}
+\author{\texttt{[AUTHOR INFORMATION NEEDED]}\\
+  \texttt{[AFFILIATION INFORMATION NEEDED]}}
+\date{Draft manuscript scaffold}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+\noindent\textbf{Provisional design-first draft---not submission text.}
+Agent systems can fan out intelligence, but conventional operating-system
+workspaces provide no agent-level protocol for fanning concurrent writes back
+into one durable project. Coding-agent teams and swarms inspect changing code,
+perform multi-file edits, run tests, and start services; sharing one mutable
+workspace permits live-state interference, while copying workspaces alone
+defers integration. We present Ephemeral Sandbox, a workspace OS organized
+around LayerStack: one durable project history, many private executable
+sessions, and controlled publication. A sessionless
+\texttt{exec\_command} tool call receives an implicit isolated session over a
+leased LayerStack snapshot. When its command ledger drains, the runtime
+captures the private overlay, reconciles the complete delta against the current
+head, and either publishes one new layer or returns a structured rejection.
+Eligible text divergence can use a bounded three-way merge; structural,
+binary, oversized, or conflicting changes reject. Explicit sessions let
+multiple command and file tool calls share private state before publication or
+discard. Source and correctness tests establish these mechanisms, but not
+formal security, semantic merge correctness, process-state rollback, resource
+coordination, or improved multi-agent throughput. Whether Ephemeral Sandbox
+raises the workload-dependent useful-work concurrency ceiling remains an
+empirical question.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-goals-nongoals}
+\input{sections/03-system-model}
+\input{sections/04-workspace-execution}
+\input{sections/05-capture-publication}
+\input{sections/06-lifecycle-recovery}
+\input{sections/07-implementation-interface}
+\input{sections/08-evaluation}
+\input{sections/09-limitations-related-work}
+\input{sections/10-conclusion}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}

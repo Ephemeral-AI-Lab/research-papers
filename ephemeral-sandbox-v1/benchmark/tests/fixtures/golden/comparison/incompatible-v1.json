@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "comparison_derivation_revision": 2,
+  "reference_run_id": "run-reference",
+  "candidate_run_id": "run-candidate",
+  "protocol": {
+    "reference": {"protocol_id": "default", "protocol_version": 1, "treatment_fields": [], "source": "defaulted"},
+    "candidate": {"protocol_id": "candidate", "protocol_version": 1, "treatment_fields": [], "source": "defaulted"},
+    "declarations_compatible": false
+  },
+  "compatible": false,
+  "descriptive_only": false,
+  "treatment_differences": ["Protocol id differs."],
+  "typed_treatment_differences": [],
+  "checks": [{"check_id": "protocol_declaration", "label": "Protocol declaration", "compatible": false, "consequence": "Aggregate deltas are blocked.", "scope": "core_invariant", "blocks_aggregate": true}],
+  "matched_cell_ids": [],
+  "matched_cells": [],
+  "deltas": [],
+  "performance_verdict": null
+}

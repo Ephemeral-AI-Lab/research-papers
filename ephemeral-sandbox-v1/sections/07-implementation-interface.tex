@@ -1,0 +1,71 @@
+\section{Implementation and Operational Interface}
+\label{sec:implementation-interface}
+
+\subsection{Source-Derived Operational Cost Model}
+\label{sec:cost-model}
+
+Ephemeral Sandbox does not have one context-free time or space complexity.
+Each session passes through stages with different scaling variables.  Let
+$L$ be manifest depth, $S$ the number of live sessions, $U$ the number of
+private-upper entries, $C$ the number of captured changes, $F$ the number of
+validated source paths, $B_p$ the logical regular-file bytes published, $Q$
+the number of concurrent publishers, and $R=\sum_{i=1}^{S}L_i$ the layer
+references retained across live leases.  Table~\ref{tab:cost-model} records
+source-derived drivers; it is not a performance result.
+
+\begin{table}[t]
+\centering
+\small
+\begin{tabular}{p{0.19\linewidth}p{0.36\linewidth}p{0.34\linewidth}}
+\hline
+Stage & Time driver & Live or peak space driver \\
+\hline
+Session creation &
+$O(L)$ manifest cloning, path resolution, lower validation, and mount
+configuration in userspace &
+$O(L)$ metadata per lease/session and $O(R)$ across live leases; fresh
+upper/work directories do not eagerly copy the project \\
+Capture &
+$O(U)$ metadata/path work plus per-directory sorting &
+$O(U)$ change metadata; regular-file payload remains referenced on disk \\
+Plan/resolve &
+Changed-path routing and repeated layered fingerprint probes; eligible merge
+depends on line count and edit distance &
+Fingerprints and validations scale with $C+F$; merge retains file, line,
+edit, output, origin, and trace state \\
+Commit &
+$O(C\log C)$ path aggregation, at least $O(B_p)$ byte hashing/copy/sync, and
+$O(L)$ manifest work under one writer &
+The private upper can coexist with staging/final publication data; each
+unsquashed publish adds a manifest layer \\
+Squash/GC &
+Manifest/lease planning, layered directory traversal, then a brief serialized
+commit &
+Replacement metadata coexists with old layers; leases retain otherwise
+obsolete history until safe release \\
+\hline
+\end{tabular}
+\caption{Operational cost model derived from the v1 source.  Logical bytes are
+not physical allocated bytes; the latter requires filesystem measurements.}
+\label{tab:cost-model}
+\end{table}
+
+The durable head transition is serialized by design.  In v1, the exclusive
+writer section includes active-head resolution, eligible text reconciliation,
+payload hashing and copying, synchronization, promotion, and manifest
+replacement.  Private execution can therefore remain parallel while
+publication wait grows with $Q$, $B_p$, $F$, or merge work.  This is a
+mechanism-level saturation hypothesis, not evidence that publication is the
+limiting stage for any workload.
+
+Text reconciliation is bounded to 8\,MiB per input, but that byte gate is not
+an independent memory bound for the line diff.  For total line count $n$,
+reached edit distance $D$, and $K=\min(n,200{,}000)$, the current implementation
+retains an $O(KD)$ frontier trace and can approach an $O(K^2)$ trace envelope.
+The evaluation must stress line count and edit shape in addition to file bytes.
+
+\subsection{Operational Interface}
+
+\emph{Draft pending PW3.  This subsection will describe the role-separated
+management, runtime, and read-only observability clients and the final tagged
+catalog-derived contract.}

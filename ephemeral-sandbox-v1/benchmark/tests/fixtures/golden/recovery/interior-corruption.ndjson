@@ -1,0 +1,3 @@
+{"schema_name":"eos_benchmark_event","schema_version":1,"data":{"sequence":1,"run_id":"recovery-fixture","monotonic_offset_ns":0,"data":{"kind":"run_state","state":"planned"}}}
+{"schema_name":"eos_benchmark_event","schema_version":1,"data":BROKEN}
+{"schema_name":"eos_benchmark_event","schema_version":1,"data":{"sequence":3,"run_id":"recovery-fixture","monotonic_offset_ns":2,"data":{"kind":"run_state","state":"running"}}}

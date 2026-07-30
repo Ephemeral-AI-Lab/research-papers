@@ -1,0 +1,65 @@
+schema_version: 1
+id: paper-good-pass
+version: 1
+plan:
+  schema_version: 1
+  name: paper-good-pass
+  configuration_base:
+    id: standard-local
+    version: 1
+    scope: all
+  seed: 20260712
+  environment:
+    image: ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf
+    client_cohort: direct_client
+  protocol:
+    order: randomized_blocks
+    resource_interval_ms: 100
+    trial_defaults:
+      fast: {warmups: 2, measured_trials: 100}
+      destructive: {warmups: 2, measured_trials: 100}
+    timeout_ms:
+      default: 120000
+      squash_layerstack: 120000
+  operations:
+    - operation: exec_command
+      configuration:
+        enabled: true
+        factors:
+          concurrent_requests: {role: varied, values: [1, 5], control: 1}
+          workspace_profile: {role: controlled, values: [paper-100m]}
+          session_mode: {role: controlled, values: [explicit]}
+          command_case: {role: varied, values: [noop, fixture_read], control: noop}
+    - operation: file_read
+      configuration:
+        enabled: true
+        factors:
+          concurrent_requests: {role: varied, values: [1, 5], control: 1}
+          returned_bytes: {role: varied, values: [4096, 262144], control: 4096}
+          source: {role: controlled, values: [snapshot]}
+          target_mode: {role: controlled, values: [independent]}
+    - operation: file_write
+      configuration:
+        enabled: true
+        factors:
+          concurrent_requests: {role: varied, values: [1, 5], control: 1}
+          content_bytes: {role: varied, values: [4096, 262144], control: 4096}
+          destination: {role: controlled, values: [session]}
+          target_mode: {role: controlled, values: [independent]}
+    - operation: file_edit
+      configuration:
+        enabled: true
+        factors:
+          concurrent_requests: {role: varied, values: [1, 5], control: 1}
+          file_bytes: {role: varied, values: [4096, 262144], control: 4096}
+          replacement_count: {role: controlled, values: [1]}
+          match_density: {role: controlled, values: [1.0]}
+          destination: {role: controlled, values: [session]}
+          target_mode: {role: controlled, values: [independent]}
+    - operation: create_workspace
+      configuration:
+        enabled: true
+        factors:
+          workspace_count: {role: varied, values: [1, 5], control: 1}
+          workspace_profile: {role: controlled, values: [paper-100m]}
+          network_profile: {role: controlled, values: [shared]}

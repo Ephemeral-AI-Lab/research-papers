@@ -1,0 +1,25 @@
+\section{Evaluation}
+\label{sec:evaluation}
+
+\subsection{RQ3: Latency, Storage, and Resource Scaling}
+
+RQ3 tests the source-derived cost model rather than assuming that worker count
+alone explains scaling.  The protocol independently varies worker/publisher
+count, manifest depth, live-session count and lease age, private-upper entry
+count and fan-out, changed and validated paths, published logical bytes,
+conflict class, and eligible-merge bytes, lines, similarity, and edit distance.
+Storage cases include small edits to large files, many small files, and
+incompressible controls.  All factors, warmups, repeats, and stopping rules
+must be fixed before the final source freeze.
+
+For each stage, we report latency distributions, CPU, RSS/PSS, I/O, failures,
+and exact phase boundaries.  Publication additionally reports writer-lock wait
+and hold time and decomposes planning, resolution/merge, hashing, copy,
+synchronization, and manifest transition.  Storage reports logical, allocated,
+shared, and exclusive bytes for upper, work, staging, published layers, and
+lease-retained history.  Squash reports plan, build, commit, and garbage
+collection separately.  No cost-model term becomes a paper result until it is
+reproduced from frozen raw artifacts and analysis code.
+
+\emph{The remaining RQ1--RQ5 methodology and all numerical results are pending
+protocol and evidence lock.}

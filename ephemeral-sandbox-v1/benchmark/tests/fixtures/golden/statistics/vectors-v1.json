@@ -1,0 +1,52 @@
+{
+  "schema_name": "eos_benchmark_statistics_golden_vectors",
+  "schema_version": 1,
+  "data": [
+    {
+      "id": "type-7-small-sample",
+      "samples": [4.0, 1.0, 3.0, 2.0],
+      "seed": 7,
+      "expected": {
+        "count": 4,
+        "minimum": 1.0,
+        "maximum": 4.0,
+        "mean": 2.5,
+        "sample_standard_deviation": 1.2909944487358056,
+        "median": 2.5,
+        "median_absolute_deviation": 1.0,
+        "p25": 1.75,
+        "p75": 3.25,
+        "p95": 3.8499999999999996,
+        "coefficient_of_variation": 0.5163977794943222,
+        "median_confidence_interval": null,
+        "confidence_interval_omission": "insufficient_n",
+        "p95_exploratory": true,
+        "outlier_indices": [],
+        "distribution": {"kind": "raw_points", "values": [4.0, 1.0, 3.0, 2.0]}
+      }
+    },
+    {
+      "id": "single-value-histogram",
+      "samples": [7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7],
+      "seed": 19,
+      "expected_projection": {
+        "kind": "histogram_ecdf",
+        "histogram": {"method": "single_value", "edges": [7.0, 7.0], "counts": [30]},
+        "last_ecdf": {"value": 7.0, "cumulative_probability": 1.0}
+      }
+    },
+    {
+      "id": "constant-bootstrap-difference",
+      "reference": [1, 1, 1, 1, 1],
+      "candidate": [3, 3, 3, 3, 3],
+      "seed": 42,
+      "expected": {"level": 0.95, "lower": 2.0, "upper": 2.0, "method": "percentile_bootstrap_median", "resamples": 10000}
+    },
+    {
+      "id": "perfect-pearson",
+      "pairs": [[1, 2], [2, 4], [3, 6], [4, 8], [5, 10]],
+      "seed": 24301,
+      "expected_bounds": [1.0, 1.0]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "comparison_derivation_revision": 2,
+  "reference_run_id": "run-reference",
+  "candidate_run_id": "run-candidate",
+  "protocol": {
+    "reference": {"protocol_id": "default", "protocol_version": 1, "treatment_fields": [], "source": "defaulted"},
+    "candidate": {"protocol_id": "default", "protocol_version": 1, "treatment_fields": [], "source": "defaulted"},
+    "declarations_compatible": true
+  },
+  "compatible": true,
+  "descriptive_only": false,
+  "treatment_differences": [],
+  "typed_treatment_differences": [],
+  "checks": [{"check_id": "protocol_declaration", "label": "Protocol declaration", "compatible": true, "consequence": "Cells may be matched.", "scope": "core_invariant", "blocks_aggregate": true}],
+  "matched_cell_ids": ["cell-command"],
+  "matched_cells": [{"match_id": "match-command", "comparison_key_sha256": "key-sha256", "operation_id": "exec_command", "reference_cell_id": "cell-command", "candidate_cell_id": "cell-command", "effective_protocol_compatible": true}],
+  "deltas": [{
+    "comparison_id": "delta-batch-makespan",
+    "match_id": "match-command",
+    "reference_cell_id": "cell-command",
+    "candidate_cell_id": "cell-command",
+    "metric_id": "batch_makespan_ns",
+    "unit": "nanoseconds",
+    "reference_unit": "nanoseconds",
+    "candidate_unit": "nanoseconds",
+    "reference_value": 1000000,
+    "candidate_value": 1100000,
+    "reference_n": 30,
+    "candidate_n": 30,
+    "reference_unavailable_n": 0,
+    "candidate_unavailable_n": 0,
+    "absolute_change": 100000,
+    "percent_change": 10,
+    "median_difference_confidence_interval": {"level": 0.95, "lower": 50000, "upper": 150000, "method": "percentile_bootstrap_median", "resamples": 10000},
+    "confidence_interval_omission_reason": null,
+    "unavailable_reason": null,
+    "direction": "lower_is_preferred",
+    "descriptive_only": false,
+    "correctness": {"reference_correctness_failed": 0, "candidate_correctness_failed": 0, "reference_cleanup_invalid": 0, "candidate_cleanup_invalid": 0}
+  }],
+  "performance_verdict": "candidate slower on batch makespan"
+}

@@ -10,11 +10,11 @@ Read these project artifacts first:
 
 - `PRD.md`
 - `progress.md`
-- the source repository checkout at `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox-v1`
+- the source repository checkout at `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox`
 
 The initial experimental baseline is upstream `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`. This line is mutable for paper-specific fixes and benchmarks. The final paper version will be an annotated `paper-v1-freeze` tag; record the exact commit for every source claim and experiment.
 
-Before modifying source code, read the repository’s `AGENTS.md` and `CLAUDE.md`. Work directly on its `main` as required by those rules; do not create branches or worktrees.
+Before modifying source code, read the repository’s `AGENTS.md` and `CLAUDE.md`. Use the existing checkout, pull `origin/main` with a fast-forward-only update, and work directly on `main` as required by those rules; do not create branches or worktrees.
 
 ## Established evidence constraints
 

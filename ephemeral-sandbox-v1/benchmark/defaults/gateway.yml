@@ -1,0 +1,36 @@
+daemon:
+  server:
+    socket_path: /eos/runtime/daemon/runtime.sock
+    pid_path: /eos/runtime/daemon/runtime.pid
+    max_worker_threads: 32
+
+runtime:
+  workspace:
+    layer_stack_root: /eos/layer-stack
+    scratch_root: /eos/workspace
+    setup_timeout_s: 30
+    exit_grace_s: 0.25
+    rfc1918_egress: allow
+  namespace_execution:
+    scratch_root: /eos/namespace_execution
+  layerstack:
+    remount_sweep_width: 1
+
+runner:
+  mount_mask:
+    hidden_paths:
+      - /eos
+
+manager:
+  registry_path: benchmark-fills-this-value
+  workspace_roots: []
+  docker:
+    privileged: false
+    daemon_binary_path: benchmark-fills-this-value
+    daemon_config_yaml_path: benchmark-fills-this-value
+    gateway_instance_id: benchmark-fills-this-value
+
+gateway:
+  bind_addr: 127.0.0.1:1
+  pid_path: benchmark-fills-this-value
+  max_concurrent_connections: 256

@@ -1,0 +1,11 @@
+schema_version: 1
+id: paper-100m
+version: 1
+label: Paper 100 MiB, depth 100
+help: Paper stress profile with 4,000 files, exactly 100 MiB of deterministic logical content, and maximum depth 100.
+generator_version: 1
+standard: true
+fixture:
+  file_count: 4000
+  logical_bytes: 104857600
+  maximum_depth: 100

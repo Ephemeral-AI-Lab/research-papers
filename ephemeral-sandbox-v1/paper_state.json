@@ -1,0 +1,42 @@
+{
+  "schema_version": "ai-research-writing/paper-state-v1",
+  "mode": "full-paper",
+  "stage": "drafting",
+  "target_venue": "arXiv cs.OS",
+  "main_tex": "main.tex",
+  "bibliography": "references.bib",
+  "required_artifacts": [
+    "BUILD.md",
+    "plan/terminology.md",
+    "figures/figure_plan.md",
+    "complexity_and_evolution.md"
+  ],
+  "blockers": [
+    "The annotated paper-v1-freeze source tag is missing; baseline source links remain provisional.",
+    "experiment_inventory.md is missing, so the evaluation protocol is not locked.",
+    "Final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
+    "Author names and affiliations are unresolved.",
+    "Publication attribution remains best-effort after data commit rather than transactionally coupled to publication.",
+    "Explicit versus implicit protected-drop behavior still requires maintainer confirmation.",
+    "Lease/substitution behavior across daemon restart still requires fault testing.",
+    "The source-derived cost model has not been validated over layer depth, live leases, upperdir structure, changed paths/bytes, writer queueing, merge shape, or retained history.",
+    "The current text-merge byte gate does not independently bound retained diff-trace memory; adversarial CPU/RSS evidence or a stricter implementation bound is required.",
+    "LayerStack 2.0 remains future work; its integrated A/B/C results are absent and its pinned stock Windows Docker Desktop/WSL 2 reflink feasibility cell failed.",
+    "Claim Plane requires a complete sentence-level novelty audit.",
+    "The PW0 build attempt was blocked because latexmk and its required LaTeX toolchain are unavailable on PATH, in conventional local install locations, and in WSL."
+  ],
+  "build": {
+    "status": "passed",
+    "command": "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex",
+    "pdf": "main.pdf",
+    "external_inputs": [],
+    "input_sha256": "24b8f17359dd516e89e1fffe38b1a25604f2d1f9daf0a131181227d359f51e74",
+    "pdf_sha256": "dd63976a4714299aa99f564e2669c1e8a438dad6fe6eeaf1f4eeaadd50ef4406",
+    "exit_code": 0,
+    "log": "plan\\pw0-build-attempt.log",
+    "log_sha256": "b0ad2eb77266611365f2af42a8b146fa25d8fdbd29d4cce599d7106b8b1d1e94",
+    "tool_version": "Initial Win CP for (console input, console output, system): (CP437, CP65001, CP1252)",
+    "attestation": "executed",
+    "ran_at": "2026-07-30T00:23:10.503310+00:00"
+  }
+}

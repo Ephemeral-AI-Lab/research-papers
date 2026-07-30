@@ -1,0 +1,52 @@
+\section{Limitations and Related Work}
+\label{sec:limitations-related-work}
+
+\subsection{Cost and Implementation Limits}
+
+Workspace isolation removes one source of interference; it does not solve task
+decomposition, model quality, semantic compatibility, verification, resource
+ownership, or general agent coordination.  v1 also exposes concrete scaling
+risks.  It serializes publication and performs current-head reconciliation plus
+payload hashing, copying, and synchronization inside the writer critical
+section.  It retains a full manifest per live lease, repeatedly probes layered
+history during path validation, and can retain obsolete history while
+long-lived leases protect session views.  Its text merge is byte-limited but
+does not yet have an independently small line/edit-distance trace bound.
+These are source-derived limitations whose practical severity remains to be
+measured.
+
+The copy-on-write workspace abstraction is not a claim of constant or negligible
+physical storage.  Kernel copy-up, sparse allocation, compression, extent
+sharing, page cache, and filesystem metadata are backend-dependent.  A small
+edit to a large lower file can produce a large logical upper file, and v1
+publication copies the resulting regular-file payload into a new layer.
+Accordingly, the evaluation distinguishes logical from allocated, shared, and
+exclusive bytes.
+
+\subsection{LayerStack 2.0 as a Candidate Evolution}
+
+LayerStack 2.0 is future work, not part of the v1 contribution.  Its migration
+protocol proposes a qualified single-filesystem storage domain and compares a
+copy-based v1 layout, a co-located copy control, and a reflink-required
+candidate.  The target is to reduce byte-transfer and allocated-storage
+amplification without changing image compatibility, blame, squash, remount,
+active execution, crash, memory, daemon-health, or privilege behavior.  A
+reflink is not $O(1)$: clone work depends on filesystem and extent structure,
+and later writes allocate changed extents.
+
+The completed Windows feasibility evidence is negative and narrowly scoped.
+On the pinned stock Windows Docker Desktop/WSL~2 storage cell, direct
+\texttt{FICLONE} returned \texttt{errno=95}; the integrated Windows candidate
+therefore remained blocked.  A future design requires capability detection and
+a correctness-preserving copy fallback, and this paper makes no Windows
+reflink storage or performance claim.
+
+Other targets follow directly from the v1 model: shorten the writer critical
+section while preserving all-or-none and crash visibility semantics; share or
+compact immutable manifest state across leases; index revision-keyed path,
+fingerprint, and ignore lookups; and reject merge work through independently
+bounded CPU/memory admission.
+
+\subsection{Related Work}
+
+\emph{Draft pending PW4 and final citation verification.}

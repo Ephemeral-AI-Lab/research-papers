@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ephemeralos-benchmark"
+version = "0.1.0"
+description = "External EphemeralOS benchmark laboratory"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "fastapi>=0.116,<1",
+  "pydantic>=2.11,<3",
+  "PyYAML>=6,<7",
+  "uvicorn>=0.35,<1",
+]
+
+[project.optional-dependencies]
+test = [
+  "httpx>=0.28,<1",
+  "pytest>=8.4,<10",
+  "pytest-asyncio>=1.1,<2",
+]
+
+[project.scripts]
+sandbox-benchmark = "benchmark_lab.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "backend"}
+
+[tool.setuptools.packages.find]
+where = ["backend"]
+
+[tool.pytest.ini_options]
+addopts = "-ra --strict-config --strict-markers"
+asyncio_mode = "auto"
+pythonpath = ["backend"]
+testpaths = ["backend/tests"]

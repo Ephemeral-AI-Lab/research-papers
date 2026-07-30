@@ -1,0 +1,805 @@
+{
+  "schema_version": 1,
+  "kind": "ephemeral_sandbox_product_catalog",
+  "domains": {
+    "manager": {
+      "operation_execution_space": "manager",
+      "families": [
+        {
+          "id": "management",
+          "title": "Management",
+          "summary": "Manage sandbox records, compact layer stacks, and export published changes.",
+          "description": "Create, destroy, list, and inspect sandbox records; compact published layer stacks; and export published changes. Daemons are managed as part of sandbox lifecycle behavior, not as standalone manager operations."
+        }
+      ],
+      "operations": [
+        {
+          "name": "create_sandbox",
+          "family": "management",
+          "summary": "Create a host-side sandbox record and runtime sandbox.",
+          "description": "Create a host-side sandbox record, create the runtime sandbox, and start its daemon.",
+          "args": [
+            {
+              "name": "image",
+              "kind": "string",
+              "required": true,
+              "help": "Container image used to create the sandbox.",
+              "default": null
+            },
+            {
+              "name": "workspace_root",
+              "kind": "path",
+              "required": true,
+              "help": "Absolute host workspace directory bind-mounted into this sandbox.",
+              "default": null
+            },
+            {
+              "name": "count",
+              "kind": "integer",
+              "required": false,
+              "help": "Number of sandboxes to create (minimum 1). Values greater than 1 use a shared read-only workspace base.",
+              "default": "1"
+            }
+          ],
+          "related": [
+            "list_sandboxes",
+            "inspect_sandbox",
+            "destroy_sandbox"
+          ]
+        },
+        {
+          "name": "list_docker_images",
+          "family": "management",
+          "summary": "List local Docker image references available for sandbox creation.",
+          "description": "List every local Docker image reference, including untagged image IDs that can create a sandbox.",
+          "args": [],
+          "related": [
+            "create_sandbox"
+          ]
+        },
+        {
+          "name": "list_workspace_directories",
+          "family": "management",
+          "summary": "List local workspace directories available for sandbox creation.",
+          "description": "List picker-visible workspace roots when path is omitted, or up to 500 immediate local subdirectories of a selected workspace directory.",
+          "args": [
+            {
+              "name": "path",
+              "kind": "path",
+              "required": false,
+              "help": "Absolute picker-visible workspace directory to browse. Omit to list roots.",
+              "default": null
+            }
+          ],
+          "related": [
+            "create_sandbox"
+          ]
+        },
+        {
+          "name": "destroy_sandbox",
+          "family": "management",
+          "summary": "Destroy a host-side sandbox and remove it from the registry.",
+          "description": "Stop the sandbox daemon, destroy the runtime sandbox, and remove the host-side sandbox record.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Sandbox id.",
+              "default": null
+            }
+          ],
+          "related": [
+            "list_sandboxes",
+            "inspect_sandbox"
+          ]
+        },
+        {
+          "name": "list_sandboxes",
+          "family": "management",
+          "summary": "List sandbox records known to the manager.",
+          "description": "List sandbox records known to the manager, including lifecycle state and configured daemon endpoint metadata.",
+          "args": [],
+          "related": [
+            "inspect_sandbox",
+            "create_sandbox"
+          ]
+        },
+        {
+          "name": "inspect_sandbox",
+          "family": "management",
+          "summary": "Inspect one sandbox record.",
+          "description": "Inspect one sandbox record, including lifecycle state, workspace root, and configured daemon endpoint metadata.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Sandbox id.",
+              "default": null
+            }
+          ],
+          "related": [
+            "list_sandboxes"
+          ]
+        },
+        {
+          "name": "squash_layerstacks",
+          "family": "management",
+          "summary": "Squash a sandbox's layer stack and live-remount its sessions.",
+          "description": "Squash every squashable block of the selected sandbox's published layers into equivalent flattened layers and migrate live workspace sessions onto the compact chains. Forwards one squash_layerstack request to the sandbox daemon.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Sandbox id.",
+              "default": null
+            }
+          ],
+          "related": [
+            "list_sandboxes",
+            "inspect_sandbox",
+            "export_changes"
+          ]
+        },
+        {
+          "name": "export_changes",
+          "family": "management",
+          "summary": "Export a sandbox's published changes to a host path.",
+          "description": "Fold every published layer above the base (newest-wins, whiteout/opaque aware) into a compressed delta stream, fetch it from the sandbox daemon, and apply it onto --dest or write it as an archive. Forwards export_layerstack and read_export_chunk requests to the sandbox daemon.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Sandbox id.",
+              "default": null
+            },
+            {
+              "name": "dest",
+              "kind": "path",
+              "required": true,
+              "help": "Absolute host destination: directory for dir format, archive file for tar formats.",
+              "default": null
+            },
+            {
+              "name": "format",
+              "kind": "string",
+              "required": false,
+              "help": "Output format: dir, tar, or tar-zst.",
+              "default": "dir"
+            }
+          ],
+          "related": [
+            "inspect_sandbox",
+            "squash_layerstacks"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "operation": "create_sandbox",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "list_docker_images",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "list_workspace_directories",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "destroy_sandbox",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "list_sandboxes",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "inspect_sandbox",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "squash_layerstacks",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "export_changes",
+          "scope_policy": "system",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        }
+      ]
+    },
+    "runtime": {
+      "operation_execution_space": "runtime",
+      "families": [
+        {
+          "id": "command",
+          "title": "Command",
+          "summary": "Run, interact with, and inspect commands.",
+          "description": "Run, interact with, and inspect commands inside the active sandbox runtime."
+        },
+        {
+          "id": "file",
+          "title": "File",
+          "summary": "Read, write, edit, and inspect workspace files.",
+          "description": "Read, write, and edit files against the layerstack snapshot or a live workspace session, and query per-line ownership over the publish auditability log."
+        },
+        {
+          "id": "daemon_http",
+          "title": "Daemon HTTP",
+          "summary": "Daemon HTTP capability boundary.",
+          "description": "Runtime capability exercised through the daemon HTTP boundary."
+        },
+        {
+          "id": "network_isolation",
+          "title": "Network isolation",
+          "summary": "Runtime network-isolation capability.",
+          "description": "Runtime capability that constrains sandbox network access."
+        },
+        {
+          "id": "reserved_paths",
+          "title": "Reserved paths",
+          "summary": "Reserved workspace-path capability.",
+          "description": "Runtime capability that protects reserved workspace paths."
+        },
+        {
+          "id": "shell_security",
+          "title": "Shell security",
+          "summary": "Shell-security capability.",
+          "description": "Runtime capability that enforces shell execution policy."
+        },
+        {
+          "id": "workspace_session",
+          "title": "Workspace session",
+          "summary": "Workspace-session lifecycle capability.",
+          "description": "Runtime capability that owns workspace-session lifecycle and finalization."
+        }
+      ],
+      "operations": [
+        {
+          "name": "exec_command",
+          "family": "command",
+          "summary": "Start a command in a workspace session.",
+          "description": "Start a shell command in a workspace session. With workspace_session_id, run inside that existing session. Without it, exec_command creates an automatic session with finalize policy publish_then_destroy: after its last command reaches terminal state, the runtime captures and publishes the session's changes to the layerstack, then destroys the session. Explicitly managed sessions remain alive until internal teardown and discard unpublished changes when torn down. File operations and remounts run under the session's admission gate and neither extend nor trigger the session lifecycle. If the command is still running after the initial wait, the response includes a command_session_id usable with read_command_lines or write_command_stdin; a still-running command stays terminable through write_command_stdin (Ctrl-C or Ctrl-D).",
+          "args": [
+            {
+              "name": "workspace_session_id",
+              "kind": "string",
+              "required": false,
+              "help": "Existing workspace session id to run inside. Omit to create a session with finalize policy publish_then_destroy.",
+              "default": null
+            },
+            {
+              "name": "cmd",
+              "kind": "string",
+              "required": true,
+              "help": "Shell command text.",
+              "default": null
+            },
+            {
+              "name": "timeout_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Command timeout in milliseconds.",
+              "default": null
+            },
+            {
+              "name": "yield_time_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Initial output wait in milliseconds.",
+              "default": null
+            }
+          ],
+          "related": [
+            "write_command_stdin",
+            "read_command_lines"
+          ]
+        },
+        {
+          "name": "write_command_stdin",
+          "family": "command",
+          "summary": "Write text to a running command stdin.",
+          "description": "Append text to the stdin stream of a running command session and return a bounded output yield.",
+          "args": [
+            {
+              "name": "command_session_id",
+              "kind": "string",
+              "required": true,
+              "help": "Command session id returned by exec_command.",
+              "default": null
+            },
+            {
+              "name": "stdin",
+              "kind": "string",
+              "required": true,
+              "help": "Text to write to stdin.",
+              "default": null
+            },
+            {
+              "name": "yield_time_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Output wait after writing stdin.",
+              "default": null
+            }
+          ],
+          "related": [
+            "exec_command",
+            "read_command_lines"
+          ]
+        },
+        {
+          "name": "read_command_lines",
+          "family": "command",
+          "summary": "Read command output by line offset.",
+          "description": "Read rendered command output for a command session using stable line offsets.",
+          "args": [
+            {
+              "name": "command_session_id",
+              "kind": "string",
+              "required": true,
+              "help": "Command session id returned by exec_command.",
+              "default": null
+            },
+            {
+              "name": "start_offset",
+              "kind": "integer",
+              "required": false,
+              "help": "First transcript line offset. Defaults to 0.",
+              "default": "0"
+            },
+            {
+              "name": "limit",
+              "kind": "integer",
+              "required": false,
+              "help": "Maximum transcript rows to return. Defaults to 200; maximum 1000.",
+              "default": "200"
+            }
+          ],
+          "related": [
+            "exec_command",
+            "write_command_stdin"
+          ]
+        },
+        {
+          "name": "file_read",
+          "family": "file",
+          "summary": "Read a text file from the snapshot or a session.",
+          "description": "Read a UTF-8 text window from a repository-relative or workspace-root-absolute path. With workspace_session_id the read runs inside that live session's mounted workspace; without it the read projects the latest published snapshot.",
+          "args": [
+            {
+              "name": "path",
+              "kind": "string",
+              "required": true,
+              "help": "Repository-relative or workspace-root-absolute path to read.",
+              "default": null
+            },
+            {
+              "name": "offset",
+              "kind": "integer",
+              "required": false,
+              "help": "1-indexed line number to start reading from. Defaults to 1.",
+              "default": "1"
+            },
+            {
+              "name": "limit",
+              "kind": "integer",
+              "required": false,
+              "help": "Maximum number of lines to read. Defaults to 2000; must be 1..=2000.",
+              "default": "2000"
+            },
+            {
+              "name": "workspace_session_id",
+              "kind": "string",
+              "required": false,
+              "help": "Existing workspace session id to read inside. Omit to read the snapshot.",
+              "default": null
+            }
+          ],
+          "related": [
+            "file_write",
+            "file_edit",
+            "file_blame"
+          ]
+        },
+        {
+          "name": "file_write",
+          "family": "file",
+          "summary": "Overwrite a file in the snapshot or a session.",
+          "description": "Write content to a repository-relative or workspace-root-absolute path. With workspace_session_id the write lands in that live session's mounted workspace and is attributed on capture; without it the write publishes one layer attributed to operation:<request_id>.",
+          "args": [
+            {
+              "name": "path",
+              "kind": "string",
+              "required": true,
+              "help": "Repository-relative or workspace-root-absolute path to write.",
+              "default": null
+            },
+            {
+              "name": "content",
+              "kind": "string",
+              "required": true,
+              "help": "File content to write.",
+              "default": null
+            },
+            {
+              "name": "workspace_session_id",
+              "kind": "string",
+              "required": false,
+              "help": "Existing workspace session id to write inside. Omit to publish a layer.",
+              "default": null
+            }
+          ],
+          "related": [
+            "file_read",
+            "file_edit",
+            "file_blame"
+          ]
+        },
+        {
+          "name": "file_edit",
+          "family": "file",
+          "summary": "Apply ordered string edits to a file.",
+          "description": "Apply an ordered list of exact-string replacements to a repository-relative or workspace-root-absolute path. Each old_string must be found and unique unless replace_all is set. With workspace_session_id the edit runs inside that live session; without it the edit publishes one layer attributed to operation:<request_id>.",
+          "args": [
+            {
+              "name": "path",
+              "kind": "string",
+              "required": true,
+              "help": "Repository-relative or workspace-root-absolute path to edit.",
+              "default": null
+            },
+            {
+              "name": "edits",
+              "kind": "json_array",
+              "required": true,
+              "help": "JSON array of { old_string, new_string, replace_all? } edits, applied in order.",
+              "default": null
+            },
+            {
+              "name": "workspace_session_id",
+              "kind": "string",
+              "required": false,
+              "help": "Existing workspace session id to edit inside. Omit to publish a layer.",
+              "default": null
+            }
+          ],
+          "related": [
+            "file_read",
+            "file_write",
+            "file_blame"
+          ]
+        },
+        {
+          "name": "file_blame",
+          "family": "file",
+          "summary": "Show per-line ownership for a published file.",
+          "description": "Return each line's owner for a published path, tiling the whole file from the latest auditability event. The owner is an opaque string (workspace_session:<id> | operation:<id> | original | unknown).",
+          "args": [
+            {
+              "name": "path",
+              "kind": "string",
+              "required": true,
+              "help": "Repository-relative path to blame.",
+              "default": null
+            }
+          ],
+          "related": [
+            "file_read",
+            "file_write",
+            "file_edit"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "operation": "exec_command",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "write_command_stdin",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "read_command_lines",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "file_read",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "file_write",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "file_edit",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        },
+        {
+          "operation": "file_blame",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "runtime",
+          "visibility": "public"
+        }
+      ]
+    },
+    "observability": {
+      "operation_execution_space": "observability",
+      "families": [
+        {
+          "id": "snapshot",
+          "title": "Snapshot",
+          "summary": "Inspect current sandbox state.",
+          "description": "Read live sandbox state and aggregate ready manager-known sandboxes."
+        },
+        {
+          "id": "trace",
+          "title": "Trace",
+          "summary": "Inspect a trace waterfall.",
+          "description": "Render one sandbox observability trace as a span waterfall."
+        },
+        {
+          "id": "events",
+          "title": "Events",
+          "summary": "Inspect domain-fact events.",
+          "description": "List sandbox observability events across traces."
+        },
+        {
+          "id": "cgroup",
+          "title": "Cgroup",
+          "summary": "Inspect resource series.",
+          "description": "Read sandbox CPU, memory, I/O, and workspace disk resource series."
+        },
+        {
+          "id": "layerstack",
+          "title": "Layerstack",
+          "summary": "Inspect layerstack inventory.",
+          "description": "Read live layerstack leasing, booking, and stack-series state."
+        }
+      ],
+      "operations": [
+        {
+          "name": "snapshot",
+          "family": "snapshot",
+          "summary": "Show live sandbox state.",
+          "description": "Show current state from the runtime registry for one sandbox, or aggregate ready manager-known sandboxes when --sandbox-id is omitted: sandbox lifecycle state, workspaces (with layer counts), in-flight executions, and the latest resource sample per scope. Served live; does not read the log.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": false,
+              "help": "Optional target sandbox id. When omitted, the manager queries all ready sandboxes.",
+              "default": null
+            }
+          ],
+          "related": [
+            "trace",
+            "cgroup"
+          ]
+        },
+        {
+          "name": "trace",
+          "family": "trace",
+          "summary": "Render one flow as a span waterfall.",
+          "description": "Fold the log into a span waterfall for one trace: spans nested by parent, offset by start, with attached events inline. Use --trace-id last for the most recent root trace.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Target sandbox id (selects the daemon to query).",
+              "default": null
+            },
+            {
+              "name": "trace_id",
+              "kind": "string",
+              "required": false,
+              "help": "Trace id to render, or 'last' for the most recent root trace.",
+              "default": "last"
+            }
+          ],
+          "related": [
+            "events",
+            "snapshot"
+          ]
+        },
+        {
+          "name": "events",
+          "family": "events",
+          "summary": "List domain-fact events across traces.",
+          "description": "Fold the log into a flat, cross-trace stream of point-in-time events (lease, errors, …), newest first. Filter by exact name and/or a start timestamp, and cap to the newest N with --last-n.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Target sandbox id (selects the daemon to query).",
+              "default": null
+            },
+            {
+              "name": "name",
+              "kind": "string",
+              "required": false,
+              "help": "Filter to events with this exact name (e.g. lease.acquired).",
+              "default": null
+            },
+            {
+              "name": "since_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Only events at or after this unix-ms timestamp.",
+              "default": null
+            },
+            {
+              "name": "last_n",
+              "kind": "integer",
+              "required": false,
+              "help": "Keep only the N newest matched events.",
+              "default": null
+            }
+          ],
+          "related": [
+            "trace"
+          ]
+        },
+        {
+          "name": "cgroup",
+          "family": "cgroup",
+          "summary": "Resource series for a scope (cpu/mem/io + disk).",
+          "description": "Return a read-only resource time series. Sandbox scope reads CPU, memory, and block-I/O counters from the host Docker Engine; workspace scopes retain daemon disk samples.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Target sandbox id (selects the daemon to query).",
+              "default": null
+            },
+            {
+              "name": "scope",
+              "kind": "string",
+              "required": false,
+              "help": "Resource scope: 'sandbox' or a workspace id.",
+              "default": "sandbox"
+            },
+            {
+              "name": "window_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Lookback window in milliseconds (max 600000).",
+              "default": "60000"
+            }
+          ],
+          "related": [
+            "snapshot"
+          ]
+        },
+        {
+          "name": "layerstack",
+          "family": "layerstack",
+          "summary": "Per-layer leasing/booking inventory, and stack series.",
+          "description": "Show the active manifest as a per-layer inventory: disk bytes, how many workspaces lease each layer, and which leased layers book each base. Served live from the runtime; does not read the log.",
+          "args": [
+            {
+              "name": "sandbox_id",
+              "kind": "string",
+              "required": true,
+              "help": "Target sandbox id (selects the daemon to query).",
+              "default": null
+            },
+            {
+              "name": "workspace_id",
+              "kind": "string",
+              "required": false,
+              "help": "Show one workspace's lower layers and private upperdir.",
+              "default": null
+            },
+            {
+              "name": "window_ms",
+              "kind": "integer",
+              "required": false,
+              "help": "Lookback window in milliseconds for the stack trend (max 600000).",
+              "default": "60000"
+            }
+          ],
+          "related": [
+            "snapshot",
+            "cgroup"
+          ]
+        }
+      ],
+      "routes": [
+        {
+          "operation": "snapshot",
+          "scope_policy": "system_or_sandbox",
+          "scope_kind": "system",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "snapshot",
+          "scope_policy": "system_or_sandbox",
+          "scope_kind": "sandbox",
+          "execution_owner": "observability",
+          "visibility": "public"
+        },
+        {
+          "operation": "trace",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "observability",
+          "visibility": "public"
+        },
+        {
+          "operation": "events",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "observability",
+          "visibility": "public"
+        },
+        {
+          "operation": "cgroup",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "manager",
+          "visibility": "public"
+        },
+        {
+          "operation": "layerstack",
+          "scope_policy": "sandbox_required",
+          "scope_kind": "sandbox",
+          "execution_owner": "observability",
+          "visibility": "public"
+        }
+      ]
+    }
+  }
+}

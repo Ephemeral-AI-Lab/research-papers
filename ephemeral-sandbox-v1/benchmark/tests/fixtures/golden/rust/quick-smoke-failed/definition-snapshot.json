@@ -1,0 +1,1106 @@
+{
+  "schema_name": "eos_benchmark_definition_snapshot",
+  "schema_version": 2,
+  "data": {
+    "schema_version": 2,
+    "families": [
+      {
+        "id": "command",
+        "label": "Command",
+        "help": "Bounded, compile-time command cases executed through the public runtime operation.",
+        "research_question": "How do concurrency, workspace scale, command work, and session lifecycle affect command execution?",
+        "measured_boundary": "Explicit-session cells measure command admission and execution; automatic-session cells deliberately include create, publish, and destroy lifecycle."
+      },
+      {
+        "id": "files",
+        "label": "File Operations",
+        "help": "Deterministic read, write, edit, and EphemeralOS ownership workloads over published snapshots or live sessions.",
+        "research_question": "How do concurrency, payload, topology, source, and mutation destination affect file operations?",
+        "measured_boundary": "Each request measures exactly one public file operation; fixture setup, verification, and cleanup remain separately timed."
+      },
+      {
+        "id": "workspace_lifecycle",
+        "label": "Workspace Lifecycle",
+        "help": "Concurrent explicit no_op session creation through the exact internal test adapter.",
+        "research_question": "How do workspace scale, network profile, and concurrent session count affect time to ready?",
+        "measured_boundary": "A prepared sandbox and fixture precede the barrier; the measured operation creates C independent sessions and observes readiness."
+      },
+      {
+        "id": "layer_stack",
+        "label": "LayerStack",
+        "help": "Destructive squash studies over fresh deterministic layer and live-session topologies.",
+        "research_question": "How do storage topology and live-session load affect squash, commit, and remount behavior?",
+        "measured_boundary": "One public manager request includes storage planning, flatten, atomic commit, and the bounded post-commit live-session remount sweep."
+      }
+    ],
+    "factor_roles": [
+      "varied",
+      "controlled"
+    ],
+    "metrics": [
+      {
+        "id": "runner_rss_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "runner",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "descriptive_only"
+      },
+      {
+        "id": "daemon_rss_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "daemon",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "daemon_cpu_time_ns",
+        "semantic_revision": 1,
+        "unit": "nanoseconds",
+        "scope": "daemon",
+        "kind": "monotonic_counter",
+        "availability": "explicit_unavailable",
+        "aggregation": "delta",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "sandbox_memory_current_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "sandbox",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "sandbox_memory_peak_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "sandbox",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "sandbox_cpu_time_ns",
+        "semantic_revision": 1,
+        "unit": "nanoseconds",
+        "scope": "sandbox",
+        "kind": "monotonic_counter",
+        "availability": "explicit_unavailable",
+        "aggregation": "delta",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "sandbox_block_read_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "sandbox",
+        "kind": "monotonic_counter",
+        "availability": "explicit_unavailable",
+        "aggregation": "delta",
+        "direction": "descriptive_only"
+      },
+      {
+        "id": "sandbox_block_write_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "sandbox",
+        "kind": "monotonic_counter",
+        "availability": "explicit_unavailable",
+        "aggregation": "delta",
+        "direction": "descriptive_only"
+      },
+      {
+        "id": "workspace_logical_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "workspace",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "descriptive_only"
+      },
+      {
+        "id": "workspace_allocated_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "workspace",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "workspace_file_count",
+        "semantic_revision": 1,
+        "unit": "count",
+        "scope": "workspace",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "descriptive_only"
+      },
+      {
+        "id": "layerstack_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "layerstack",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "upperdir_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "layerstack",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "maximum",
+        "direction": "lower_is_preferred"
+      },
+      {
+        "id": "host_free_bytes",
+        "semantic_revision": 1,
+        "unit": "bytes",
+        "scope": "host_volume",
+        "kind": "gauge",
+        "availability": "explicit_unavailable",
+        "aggregation": "minimum",
+        "direction": "higher_is_preferred"
+      }
+    ],
+    "workspace_profiles": {
+      "schema_version": 1,
+      "profiles": [
+        {
+          "schema_version": 1,
+          "id": "large",
+          "version": 1,
+          "label": "Large",
+          "help": "Opt-in stress profile with 50,000 files and 2 GiB of deterministic logical content.",
+          "generator_version": 1,
+          "standard": false,
+          "fixture": {
+            "file_count": 50000,
+            "logical_bytes": 2147483648,
+            "maximum_depth": 12
+          }
+        },
+        {
+          "schema_version": 1,
+          "id": "medium",
+          "version": 1,
+          "label": "Medium",
+          "help": "Standard representative profile with 10,000 files and 256 MiB of deterministic logical content.",
+          "generator_version": 1,
+          "standard": true,
+          "fixture": {
+            "file_count": 10000,
+            "logical_bytes": 268435456,
+            "maximum_depth": 8
+          }
+        },
+        {
+          "schema_version": 1,
+          "id": "small",
+          "version": 1,
+          "label": "Small",
+          "help": "Standard quick profile with 1,000 files and 16 MiB of deterministic logical content.",
+          "generator_version": 1,
+          "standard": true,
+          "fixture": {
+            "file_count": 1000,
+            "logical_bytes": 16777216,
+            "maximum_depth": 4
+          }
+        }
+      ]
+    },
+    "operations": [
+      {
+        "id": "exec_command",
+        "family": "command",
+        "label": "Execute command",
+        "help": "Runs one of four compile-time allowlisted bounded shell cases through the public exec_command operation.",
+        "measured_boundary": "Explicit mode measures command admission and execution against a prepared session; automatic mode deliberately includes create, publish, and destroy lifecycle.",
+        "count_semantics_help": "Concurrent requests is the number of independent exec_command product requests released in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "execution_shape": "barrier_request_batch",
+        "isolation": "session_mode_dependent",
+        "cleanup": "resolve_from_isolation",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "exec_command"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "bounded_shell",
+        "factors": [
+          {
+            "id": "concurrent_requests",
+            "label": "Concurrent requests",
+            "help": "Independent exec_command requests released together from one trial barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "workspace_profile",
+            "label": "Workspace profile",
+            "help": "Deterministic materialized fixture scale available to the command.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "profile_catalog",
+              "catalog": "workspace_profiles"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "session_mode",
+            "label": "Session boundary",
+            "help": "Explicit measures against a prepared session; automatic includes create, publish, and destroy lifecycle.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "explicit",
+                "automatic"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "command_case",
+            "label": "Command case",
+            "help": "Compile-time allowlisted bounded shell template; plans cannot submit arbitrary command text.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "noop",
+                "output64_kib",
+                "cpu50_ms",
+                "fixture_read"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "command_exit_status",
+            "label": "Command exit status",
+            "help": "The product result reports the case's exact expected exit status.",
+            "semantic_revision": 1,
+            "evidence_limit": 8
+          },
+          {
+            "id": "command_output",
+            "label": "Bounded command output",
+            "help": "Stored stdout and stderr satisfy the case contract, cap, and digest checks.",
+            "semantic_revision": 1,
+            "evidence_limit": 8
+          },
+          {
+            "id": "command_lifecycle",
+            "label": "Command lifecycle",
+            "help": "Session ownership and cleanup match the selected explicit or automatic boundary.",
+            "semantic_revision": 1,
+            "evidence_limit": 8
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "concurrent_requests",
+            "workspace_profile",
+            "session_mode",
+            "command_case"
+          ]
+        }
+      },
+      {
+        "id": "file_read",
+        "family": "files",
+        "label": "Read file",
+        "help": "Reads a bounded UTF-8 line window through the public file_read operation.",
+        "measured_boundary": "One request reads from a verified published snapshot or prepared live session; fixture preparation and content verification remain outside request latency.",
+        "count_semantics_help": "Concurrent requests is the number of independent file_read product requests released in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "execution_shape": "barrier_request_batch",
+        "isolation": "reusable_verified_fixture",
+        "cleanup": "verify_fixture_unchanged",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "file_read"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "public_read_only",
+        "factors": [
+          {
+            "id": "concurrent_requests",
+            "label": "Concurrent requests",
+            "help": "Independent product requests released together from one trial barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "returned_bytes",
+            "label": "Returned bytes",
+            "help": "Requested UTF-8 line-window size, bounded by the fixed product output and line caps.",
+            "value_kind": "unsigned_integer",
+            "unit": "bytes",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "read_source",
+            "label": "Read source",
+            "help": "Read from the published snapshot or from an explicitly prepared live workspace session.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "snapshot",
+                "session"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "target_mode",
+            "label": "Target mode",
+            "help": "Independent targets preserve the baseline; same-target mode is an explicit contention treatment.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "independent",
+                "same_target"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "file_read_window",
+            "label": "Read window",
+            "help": "Returned UTF-8 lines exactly cover the requested bounded window.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          },
+          {
+            "id": "file_content_hash",
+            "label": "File content hash",
+            "help": "Observed file content and size match the deterministic fixture expectation.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "concurrent_requests",
+            "returned_bytes",
+            "read_source",
+            "target_mode"
+          ]
+        }
+      },
+      {
+        "id": "file_write",
+        "family": "files",
+        "label": "Write file",
+        "help": "Overwrites deterministic content in a live session or publishes one attributed operation layer.",
+        "measured_boundary": "One request overwrites an independent or explicitly contended target; session setup or fresh publish topology and later verification are separately timed.",
+        "count_semantics_help": "Concurrent requests is the number of independent file_write product requests released in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "execution_shape": "barrier_request_batch",
+        "isolation": "mutation_destination_dependent",
+        "cleanup": "resolve_from_isolation",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "file_write"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "public_mutation",
+        "factors": [
+          {
+            "id": "concurrent_requests",
+            "label": "Concurrent requests",
+            "help": "Independent product requests released together from one trial barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "content_bytes",
+            "label": "Content bytes",
+            "help": "Deterministic non-sparse content bytes written by each request.",
+            "value_kind": "unsigned_integer",
+            "unit": "bytes",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "mutation_destination",
+            "label": "Mutation destination",
+            "help": "Session mutates only live workspace state; publish creates one attributed operation layer.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "session",
+                "publish"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "target_mode",
+            "label": "Target mode",
+            "help": "Independent targets preserve the baseline; same-target mode is an explicit contention treatment.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "independent",
+                "same_target"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "file_content_hash",
+            "label": "File content hash",
+            "help": "Observed file content and size match the deterministic mutation expectation.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          },
+          {
+            "id": "mutation_attribution",
+            "label": "Mutation attribution",
+            "help": "The mutation remains session-local or creates exactly one attributed published layer as selected.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "concurrent_requests",
+            "content_bytes",
+            "mutation_destination",
+            "target_mode"
+          ]
+        }
+      },
+      {
+        "id": "file_edit",
+        "family": "files",
+        "label": "Edit file",
+        "help": "Applies typed ordered exact-string replacements in a live session or one attributed published layer.",
+        "measured_boundary": "One request applies the configured ordered replacements; deterministic fixture creation, attribution verification, and cleanup remain separately timed.",
+        "count_semantics_help": "Concurrent requests is the number of independent file_edit product requests released in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "execution_shape": "barrier_request_batch",
+        "isolation": "mutation_destination_dependent",
+        "cleanup": "resolve_from_isolation",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "file_edit"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "public_mutation",
+        "factors": [
+          {
+            "id": "concurrent_requests",
+            "label": "Concurrent requests",
+            "help": "Independent product requests released together from one trial barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "file_bytes",
+            "label": "File bytes",
+            "help": "Deterministic UTF-8 fixture size before ordered exact-string replacements.",
+            "value_kind": "unsigned_integer",
+            "unit": "bytes",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "replacement_count",
+            "label": "Replacement count",
+            "help": "Number of unique ordered exact-string replacements requested and verified.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "match_density",
+            "label": "Match density",
+            "help": "Fraction of deterministic fixture regions containing an exact replacement match.",
+            "value_kind": "unit_ratio",
+            "unit": "ratio",
+            "constraint": {
+              "kind": "unit_interval"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "mutation_destination",
+            "label": "Mutation destination",
+            "help": "Session mutates only live workspace state; publish creates one attributed operation layer.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "session",
+                "publish"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "target_mode",
+            "label": "Target mode",
+            "help": "Independent targets preserve the baseline; same-target mode is an explicit contention treatment.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "independent",
+                "same_target"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "file_edit_replacement_count",
+            "label": "Replacement count",
+            "help": "The product applied exactly the requested ordered replacement count.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          },
+          {
+            "id": "file_content_hash",
+            "label": "File content hash",
+            "help": "Observed edited content matches the deterministic expected hash.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          },
+          {
+            "id": "mutation_attribution",
+            "label": "Mutation attribution",
+            "help": "The edit remains session-local or creates exactly one attributed published layer as selected.",
+            "semantic_revision": 1,
+            "evidence_limit": 16
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "concurrent_requests",
+            "file_bytes",
+            "replacement_count",
+            "match_density",
+            "mutation_destination",
+            "target_mode"
+          ]
+        }
+      },
+      {
+        "id": "file_blame",
+        "family": "files",
+        "label": "File ownership",
+        "help": "Reads EphemeralOS per-line ownership from publish auditability through file_blame; this is not Git blame.",
+        "measured_boundary": "One request resolves ownership for a deterministic published line range; auditability fixture construction and range verification are outside request latency.",
+        "count_semantics_help": "Concurrent requests is the number of independent file_blame product requests released in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "execution_shape": "barrier_request_batch",
+        "isolation": "reusable_verified_fixture",
+        "cleanup": "verify_fixture_unchanged",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "file_blame"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "public_read_only",
+        "factors": [
+          {
+            "id": "concurrent_requests",
+            "label": "Concurrent requests",
+            "help": "Independent product requests released together from one trial barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "line_count",
+            "label": "Line count",
+            "help": "Deterministic number of published text lines covered by the ownership query.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "ownership_segments",
+            "label": "Ownership segments",
+            "help": "Expected contiguous per-line ownership segments in the published fixture.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "auditability_event_count",
+            "label": "Auditability events",
+            "help": "Deterministic publish-auditability events used to construct ownership history.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "blame_range_coverage",
+            "label": "Ownership range coverage",
+            "help": "Returned ownership ranges are gap-free, ordered, and cover every requested line exactly once.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          },
+          {
+            "id": "blame_ownership",
+            "label": "Ownership attribution",
+            "help": "Every returned range matches the deterministic EphemeralOS publish-auditability owner.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "concurrent_requests",
+            "line_count",
+            "ownership_segments",
+            "auditability_event_count"
+          ]
+        }
+      },
+      {
+        "id": "create_workspace",
+        "family": "workspace_lifecycle",
+        "label": "Create workspace",
+        "help": "Benchmarks the exact allowlisted create_workspace_session test adapter for explicit no_op sessions; it is not a public operation.",
+        "measured_boundary": "C independent session-creation requests start together after one sandbox and fixture are prepared; readiness is measured, while residual cleanup is not.",
+        "count_semantics_help": "Workspace count C is the number of independent product requests in one measured trial.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "concurrent_workspace_creates",
+          "factor": "workspace_count"
+        },
+        "execution_shape": "barrier_workspace_creation",
+        "isolation": "prepared_sandbox_per_cell",
+        "cleanup": "destroy_sessions_and_verify_baseline",
+        "product_access": {
+          "kind": "internal_workspace",
+          "action": "create_no_op_session"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "internal_workspace_lifecycle",
+        "factors": [
+          {
+            "id": "workspace_count",
+            "label": "Concurrent workspace creations",
+            "help": "Number of independent create_workspace_session requests released from one barrier.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "workspace_profile",
+            "label": "Workspace profile",
+            "help": "Deterministic materialized fixture scale used by every requested session.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "profile_catalog",
+              "catalog": "workspace_profiles"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "network_profile",
+            "label": "Network profile",
+            "help": "Allowlisted network mode applied to each created workspace session.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "shared",
+                "isolated"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "workspace_ready",
+            "label": "Workspace ready",
+            "help": "Every successful creation reaches the product's ready state.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          },
+          {
+            "id": "workspace_network_profile",
+            "label": "Network profile",
+            "help": "The created sessions expose the requested allowlisted network profile.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          },
+          {
+            "id": "workspace_registry_baseline",
+            "label": "Workspace registry baseline",
+            "help": "Paired destruction restores the pre-trial workspace-session registry baseline.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          }
+        ],
+        "phases": [],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "workspace_count",
+            "workspace_profile",
+            "network_profile"
+          ]
+        }
+      },
+      {
+        "id": "squash_layerstack",
+        "family": "layer_stack",
+        "label": "Squash LayerStack",
+        "help": "Measures the public manager squash_layerstacks operation, which forwards one internal squash and bounded remount sweep.",
+        "measured_boundary": "After a fresh deterministic topology and N live sessions are prepared, one squash request measures storage planning, flatten, commit, and the bounded remount sweep.",
+        "count_semantics_help": "Every measured trial issues exactly one product request; N counts prepared live-session load and never request concurrency.",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "count_semantics": {
+          "kind": "single_request_with_prepared_load",
+          "load_factor": "live_sessions"
+        },
+        "execution_shape": "single_request_after_prepared_load",
+        "isolation": "fresh_topology_per_trial",
+        "cleanup": "destroy_topology_and_verify_baseline",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "squash_layerstacks"
+        },
+        "supported_cohorts": [
+          "direct_client"
+        ],
+        "security_class": "destructive_manager_mutation",
+        "factors": [
+          {
+            "id": "live_sessions",
+            "label": "Live sessions N",
+            "help": "Prepared sessions exposed to the post-commit remount sweep; N is load, never request concurrency.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "non_negative"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "requested_migration_ratio",
+            "label": "Requested migration ratio",
+            "help": "Fixture request for the share of live sessions eligible to migrate, rounded to the nearest whole session with halves upward; observed M remains evidence.",
+            "value_kind": "unit_ratio",
+            "unit": "ratio",
+            "constraint": {
+              "kind": "unit_interval"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "remount_parallelism",
+            "label": "Remount parallelism W",
+            "help": "Fixed bounded width of the live-session remount sweep inside the single squash request.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "squashable_blocks",
+            "label": "Squashable blocks B",
+            "help": "Number of contiguous deterministic layer blocks prepared for the squash request.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "layers_per_block",
+            "label": "Layers per block",
+            "help": "Published layers in each squashable block of the prepared topology.",
+            "value_kind": "unsigned_integer",
+            "unit": "count",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "payload_bytes",
+            "label": "Payload bytes",
+            "help": "Deterministically materialized payload bytes contributed by each published layer.",
+            "value_kind": "unsigned_integer",
+            "unit": "bytes",
+            "constraint": {
+              "kind": "positive"
+            },
+            "comparison": "scientific_invariant"
+          },
+          {
+            "id": "session_activity",
+            "label": "Session activity",
+            "help": "Whether prepared live sessions remain idle or perform bounded deterministic activity before squash.",
+            "value_kind": "choice",
+            "unit": null,
+            "constraint": {
+              "kind": "choices",
+              "values": [
+                "idle",
+                "active"
+              ]
+            },
+            "comparison": "scientific_invariant"
+          }
+        ],
+        "checks": [
+          {
+            "id": "layerstack_content_equivalence",
+            "label": "Content equivalence",
+            "help": "Published content is unchanged across the atomic squash commit.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          },
+          {
+            "id": "layerstack_manifest_reduction",
+            "label": "Manifest reduction",
+            "help": "The committed manifest has the expected reduced layer topology.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          },
+          {
+            "id": "layerstack_disposition_accounting",
+            "label": "Session disposition accounting",
+            "help": "Migrated and non-migrated dispositions account for every requested live session.",
+            "semantic_revision": 1,
+            "evidence_limit": 64
+          },
+          {
+            "id": "layerstack_session_usability",
+            "label": "Session usability",
+            "help": "Sessions expected to survive the sweep remain usable after remount.",
+            "semantic_revision": 1,
+            "evidence_limit": 64
+          },
+          {
+            "id": "layerstack_residue",
+            "label": "LayerStack residue",
+            "help": "Cleanup leaves no owned topology residue beyond the pre-trial baseline.",
+            "semantic_revision": 1,
+            "evidence_limit": 32
+          }
+        ],
+        "phases": [
+          {
+            "id": "layerstack_squash",
+            "label": "Total squash",
+            "help": "Server-observed total duration of the one squash request.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "layerstack.squash"
+          },
+          {
+            "id": "layerstack_storage_plan",
+            "label": "Storage plan",
+            "help": "Server phase that plans the layer-storage rewrite.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "layerstack.squash.plan"
+          },
+          {
+            "id": "layerstack_flatten",
+            "label": "Flatten",
+            "help": "Server phase that materializes flattened layer content.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "layerstack.squash.flatten"
+          },
+          {
+            "id": "layerstack_commit",
+            "label": "Commit",
+            "help": "Server phase that atomically commits the new manifest.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "layerstack.squash.commit"
+          },
+          {
+            "id": "layerstack_remount_sweep",
+            "label": "Remount sweep",
+            "help": "Wall time of the bounded post-commit session sweep.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "layerstack.squash.remount_sweep"
+          },
+          {
+            "id": "workspace_session_remount",
+            "label": "Session remount",
+            "help": "Per-session remount span observed within the bounded sweep.",
+            "semantic_revision": 1,
+            "unit": "nanoseconds",
+            "source": "product_trace",
+            "correlation": "exact_request_trace_span",
+            "trace_span_name": "workspace_session.remount"
+          }
+        ],
+        "comparison": {
+          "semantic_revision": 1,
+          "factors": [
+            "live_sessions",
+            "requested_migration_ratio",
+            "remount_parallelism",
+            "squashable_blocks",
+            "layers_per_block",
+            "payload_bytes",
+            "session_activity"
+          ]
+        }
+      }
+    ]
+  }
+}

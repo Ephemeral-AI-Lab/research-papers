@@ -5,18 +5,38 @@ Design paper for the v1 implementation of [ephemeral-sandbox](https://github.com
 ## Project management
 
 - [PRD](PRD.md) — evidence-gated requirements and submission criteria
-- [Progress tracker](progress.md) — current milestones, evidence gates, and blockers
+- [Progress tracker](progress.md) — current milestones, parallel work lanes, evidence gates, and blockers
+- [Paper and work skeleton](paper_skeleton.md) — section plan, research questions, figures/tables, work packages, and dependencies
+- [Paper-writing lane](lanes/paper-writing.md) — source-grounded drafting order, evidence contract, and completion gates
+- [Experiment lane](lanes/experiments.md) — protocol lock, pilots, freeze, final runs, analysis, and manuscript handoff
 
-## Planned contents
+## Evidence and story documents
 
-- `paper_story.md` — thesis and paper arc
-- `project_inventory.md` — source, test, experiment, and environment inventory
-- `claim_evidence_map.md` — claims mapped to supporting evidence
-- `main.tex` — arXiv submission source
-- `references.bib` — verified bibliography
-- `figures/` — architecture and evaluation figures
-- `experiments/` — archived run manifests, data, and analysis
-- `paper.pdf` — released compiled preprint
-- `ARTIFACTS.md` — v1 commit, build instructions, and reproducibility notes
+- [Paper story](paper_story.md) — title, thesis, abstracts, introduction opening, contributions, and claim boundaries
+- [Project inventory](project_inventory.md) — source, test, documentation, experiment, and environment evidence
+- [Claim–evidence map](claim_evidence_map.md) — intended claims mapped to source, tests, measurements, or limitations
+- [Complexity and evolution](complexity_and_evolution.md) — source-derived time/space cost model, scaling risks, limitations, and LayerStack 2.0 targets
+- [CLI contract matrix](cli_contract_matrix.md) — source-derived management, runtime, and observability interfaces
+- [Related-work audit](references/related_work.md) — verified metadata, citation safety, differentiation, and novelty risks
 
-Status: discovery complete; evidence collection and manuscript drafting are pending.
+## Folder structure
+
+```text
+ephemeral-sandbox-v1/
+├── README.md, PRD.md, progress.md, NEXT_AGENT_PROMPT.md
+├── paper_skeleton.md
+├── paper_story.md, project_inventory.md
+├── claim_evidence_map.md, complexity_and_evolution.md, cli_contract_matrix.md
+├── lanes/                                # paper-writing and experiment charters
+├── main.tex, references.bib              # created when manuscript drafting begins
+├── sections/                             # LaTeX section files
+├── references/                           # related-work and citation-verification records
+├── figures/                              # concept sources and generated/result assets
+├── experiments/                          # protocols, immutable runs, and analysis
+├── ARTIFACTS.md
+└── paper.pdf                             # generated only after evidence gates pass
+```
+
+The required evidence documents remain at the paper-folder root so the PRD, progress tracker, and handoff links stay stable. Large or generated assets belong in the dedicated subdirectories.
+
+Status: baseline discovery and paper-story work are complete; protocol lock, frozen evidence collection, and LaTeX drafting are next.

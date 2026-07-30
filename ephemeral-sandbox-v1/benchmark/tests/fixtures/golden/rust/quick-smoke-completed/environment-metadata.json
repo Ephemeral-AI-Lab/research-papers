@@ -1,0 +1,28 @@
+{
+  "schema_name": "eos_benchmark_environment_metadata",
+  "schema_version": 1,
+  "data": {
+    "schema_version": 1,
+    "treatment": {
+      "source_commit": "b5de14c415aed1b663a027f9f2f060c3a637fe6f",
+      "source_dirty": true,
+      "source_diff_hash": "sha256:0f8287ca876aaafea3aec53c6f6f8482a49180ff8af3a2068a7dcfd9fc6ab75c",
+      "daemon_binary_hash": "sha256:075a609acaf8db4ff16bcb87b3e22bff439dca94801807c620a636fc59892af9",
+      "gateway_binary_hash": "sha256:434bee4f04881f5e459d8a24738e8e66191fa0c248eeb7c70d2a6fcbca2734bb"
+    },
+    "host": {
+      "operating_system": "macos",
+      "architecture": "aarch64",
+      "kernel_release": "25.4.0",
+      "docker_engine_version": "29.5.2",
+      "filesystem": "/",
+      "free_space_bytes": 548188672000,
+      "monotonic_clock": "std::time::Instant"
+    },
+    "image_reference": "ubuntu:24.04",
+    "image_digest": "sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90",
+    "workspace_root_identity": "sha256:3667c767cfb284ab53169bbbbbdf0d9b7c40900c2f97b7ddf198739e937f9335",
+    "client_cohort": "direct_client",
+    "gateway_endpoint_identity": "isolated_loopback_per_execution_block"
+  }
+}

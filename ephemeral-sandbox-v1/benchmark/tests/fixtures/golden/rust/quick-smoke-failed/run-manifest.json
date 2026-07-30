@@ -1,0 +1,315 @@
+{
+  "schema_name": "eos_benchmark_run_manifest",
+  "schema_version": 1,
+  "data": {
+    "schema_version": 1,
+    "run_id": "019f5437-604e-75f0-81b0-5d1014437b84",
+    "name": "quick-smoke-command",
+    "plan_hash": "sha256:baa1ff5bedb596135be897d6b6b9b4224cb38dbdd82c7425b610d57aa9a954ac",
+    "starting_preset": null,
+    "state": "failed",
+    "producer": {
+      "package": "sandbox-benchmark",
+      "version": "0.1.0"
+    },
+    "artifact_schemas": {
+      "run_manifest": {
+        "schema_name": "eos_benchmark_run_manifest",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      },
+      "intent_plan": {
+        "schema_name": "eos_benchmark_intent_plan",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      },
+      "expanded_plan": {
+        "schema_name": "eos_benchmark_expanded_plan",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      },
+      "definition_snapshot": {
+        "schema_name": "eos_benchmark_definition_snapshot",
+        "write_version": 2,
+        "read_versions": [
+          2
+        ]
+      },
+      "environment_metadata": {
+        "schema_name": "eos_benchmark_environment_metadata",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      },
+      "events": {
+        "schema_name": "eos_benchmark_event",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      },
+      "observations": {
+        "schema_name": "eos_benchmark_observation",
+        "write_version": 3,
+        "read_versions": [
+          1,
+          2,
+          3
+        ]
+      },
+      "bounded_evidence": {
+        "schema_name": "eos_benchmark_operation_evidence",
+        "write_version": 1,
+        "read_versions": [
+          1
+        ]
+      }
+    },
+    "definition_snapshot": {
+      "schema_name": "eos_benchmark_definition_snapshot",
+      "schema_version": 2,
+      "sha256": "sha256:44dc5ce0ef7139fb28502e0868c31c13740f0afacd5260b34d0b72b2c48f8bba"
+    },
+    "operation_authorities": [
+      {
+        "operation_id": "exec_command",
+        "family_id": "command",
+        "semantic_revision": 1,
+        "factor_schema_revision": 1,
+        "comparison_projection_revision": 1,
+        "client_cohort": "direct_client",
+        "product_access": {
+          "kind": "public_gateway",
+          "action": "exec_command"
+        },
+        "count_semantics": {
+          "kind": "concurrent_requests",
+          "factor": "concurrent_requests"
+        },
+        "cleanup_policy": "resolve_from_isolation",
+        "resolved_isolation_policies": [
+          "reusable_verified_fixture"
+        ],
+        "request_timeout_ms": [
+          120000
+        ],
+        "stabilization_policy": {
+          "kind": "not_required",
+          "semantic_revision": 1
+        }
+      }
+    ],
+    "metric_revisions": [
+      {
+        "metric_id": "daemon_cpu_time_ns",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "daemon_rss_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "host_free_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "layerstack_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "runner_rss_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "sandbox_block_read_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "sandbox_block_write_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "sandbox_cpu_time_ns",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "sandbox_memory_current_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "sandbox_memory_peak_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "upperdir_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "workspace_allocated_bytes",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "workspace_file_count",
+        "semantic_revision": 1
+      },
+      {
+        "metric_id": "workspace_logical_bytes",
+        "semantic_revision": 1
+      }
+    ],
+    "check_revisions": [
+      {
+        "check_id": "command_exit_status",
+        "semantic_revision": 1
+      },
+      {
+        "check_id": "command_output",
+        "semantic_revision": 1
+      },
+      {
+        "check_id": "command_lifecycle",
+        "semantic_revision": 1
+      }
+    ],
+    "phase_revisions": [],
+    "fixed_lifecycle_policy": {
+      "lifecycle_revision": 1,
+      "failure_revision": 1,
+      "stabilization_revision": 1,
+      "automatic_retries": 0,
+      "one_active_campaign": true,
+      "sequential_families": true
+    },
+    "failure_policy": {
+      "semantic_revision": 1,
+      "product_transport_timeout_or_correctness": "continue_when_environment_safe",
+      "fixture_containment_ownership_environment_or_infrastructure": "abort_campaign",
+      "teardown_or_cleanup_baseline": "abort_campaign",
+      "automatic_measured_operation_retries": 0
+    },
+    "effective_timeouts": {
+      "sandbox_create_timeout_ms": 600000,
+      "sandbox_destroy_timeout_ms": 120000,
+      "operation_teardown_timeout_ms": 300000,
+      "gateway_stop_timeout_ms": 720000,
+      "gateway_owned_resource_cleanup_timeout_ms": 600000,
+      "gateway_shutdown_timeout_ms": 10000,
+      "gateway_log_drain_timeout_ms": 2000,
+      "layerstack_observation_timeout_ms": 10000,
+      "layerstack_trace_retry_timeout_ms": 5000,
+      "product_resource_observation_timeout_ms": 10000
+    },
+    "gateway_policy": {
+      "semantic_revision": 1,
+      "mode": "isolated",
+      "loopback_only": true,
+      "isolated_runtime_per_execution_block": true,
+      "remount_sweep_widths": [
+        1
+      ],
+      "maximum_connections": 256,
+      "readiness_timeout_ms": 60000,
+      "readiness_probe_timeout_ms": 2000,
+      "readiness_poll_interval_ms": 50
+    },
+    "safety_policy": {
+      "semantic_revision": 1,
+      "cap_behavior": "reject_above_maximum",
+      "campaign_caps": {
+        "expanded_test_combinations": {
+          "requested": 2,
+          "effective": 2,
+          "fixed_maximum": 10000,
+          "unit": "count",
+          "cap_revision": 1
+        },
+        "trial_batches": {
+          "requested": 12,
+          "effective": 12,
+          "fixed_maximum": 1000000,
+          "unit": "count",
+          "cap_revision": 1
+        },
+        "issued_product_requests": {
+          "requested": 36,
+          "effective": 36,
+          "fixed_maximum": 10000000,
+          "unit": "count",
+          "cap_revision": 1
+        }
+      },
+      "product_caps": [
+        {
+          "operation_id": "exec_command",
+          "cap_id": "stored_command_output",
+          "maximum_requested": 65536,
+          "maximum_effective": 65536,
+          "fixed_maximum": 65536,
+          "unit": "bytes",
+          "cap_revision": 1
+        }
+      ],
+      "fixed_gateway_caps": {
+        "log_bytes": 131072,
+        "log_line_bytes": 16384,
+        "product_path_bytes": 4096,
+        "product_content_bytes": 4194304,
+        "product_edits": 4096,
+        "command_timeout_ms": 120000,
+        "product_trace_nodes": 16384,
+        "product_resource_window_ms": 600000,
+        "product_resource_samples": 65536
+      }
+    },
+    "treatment": {
+      "source_commit": "b5de14c415aed1b663a027f9f2f060c3a637fe6f",
+      "source_dirty": true,
+      "source_diff_hash": "sha256:904ef7307df62cc868dcaa1d1368f6df1e32f7ff7efebf47e76910057ad3ccc9",
+      "daemon_binary_hash": "sha256:0d5f7b92b04972747e38e22c1de60e8e88f907df340980b5a49872742742c505",
+      "gateway_binary_hash": "sha256:6e962499d19fc6fc68debfe4cb7a2aaaf8994ca51f35cb8e356071adf78e64df"
+    },
+    "environment": {
+      "schema_version": 1,
+      "treatment": {
+        "source_commit": "b5de14c415aed1b663a027f9f2f060c3a637fe6f",
+        "source_dirty": true,
+        "source_diff_hash": "sha256:904ef7307df62cc868dcaa1d1368f6df1e32f7ff7efebf47e76910057ad3ccc9",
+        "daemon_binary_hash": "sha256:0d5f7b92b04972747e38e22c1de60e8e88f907df340980b5a49872742742c505",
+        "gateway_binary_hash": "sha256:6e962499d19fc6fc68debfe4cb7a2aaaf8994ca51f35cb8e356071adf78e64df"
+      },
+      "host": {
+        "operating_system": "macos",
+        "architecture": "aarch64",
+        "kernel_release": "25.4.0",
+        "docker_engine_version": "29.5.2",
+        "filesystem": "/",
+        "free_space_bytes": 560010661888,
+        "monotonic_clock": "std::time::Instant"
+      },
+      "image_reference": "ubuntu:24.04",
+      "image_digest": "sha256:4fbb8e6a8395de5a7550b33509421a2bafbc0aab6c06ba2cef9ebffbc7092d90",
+      "workspace_root_identity": "sha256:08dac2edc705c3824549f93734627c91150dbf28760a36e3297da237fe8cb2f6",
+      "client_cohort": "direct_client",
+      "gateway_endpoint_identity": "isolated_loopback_per_execution_block"
+    },
+    "fixture_generator_revision": 1,
+    "fixture_hashes": {
+      "small": "sha256-b12ed9db8e60d1584094b0c4f64f7b103066539d90dfc9c549deb09d64372def"
+    },
+    "created_at": "2026-07-12T02:45:43.289449Z",
+    "started_at": "2026-07-12T02:45:48.536499Z",
+    "ended_at": "2026-07-12T02:45:57.309556Z",
+    "failure": {
+      "code": "gateway_failure",
+      "message": "gateway returned an error (internal_error)",
+      "infrastructure": true
+    }
+  }
+}
