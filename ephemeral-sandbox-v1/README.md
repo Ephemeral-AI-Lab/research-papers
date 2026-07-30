@@ -9,6 +9,14 @@ Design paper for the v1 implementation of [ephemeral-sandbox](https://github.com
 - [Paper and work skeleton](paper_skeleton.md) — section plan, research questions, figures/tables, work packages, and dependencies
 - [Paper-writing lane](lanes/paper-writing.md) — source-grounded drafting order, evidence contract, and completion gates
 - [Experiment lane](lanes/experiments.md) — protocol lock, pilots, freeze, final runs, analysis, and manuscript handoff
+- [Focused performance protocol](experiment_inventory.md) — phase gates,
+  acceptance tracker, workload, metrics, and stopping rules
+- [Environment setup](experiments/environment_setup.md) — prebuilt staging,
+  first-step verification, smoke, and good-pass commands
+- [Expected tables](experiments/expected_tables.md) — final schemas and
+  clearly labeled simulated previews
+- [Experiment log](experiments/experiment_log.md) — append-only attempts,
+  failures, amendments, and dispositions
 
 ## Evidence and story documents
 

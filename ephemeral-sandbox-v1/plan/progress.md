@@ -2,6 +2,28 @@
 
 Root [`progress.md`](../progress.md) is the authoritative project milestone tracker. This file records executions of the `ai-research-writing-skill` workflow and does not replace the root tracker.
 
+## EXP0: focused performance protocol
+
+- **2026-07-30 -- scope:** Defined a bounded RQ3 practical-performance slice
+  for workspace readiness and public command/read/write/edit operations. The
+  protocol explicitly avoids competitive-superiority and multi-agent-quality
+  claims.
+- **2026-07-30 -- reproducibility package:** Created the phase-gated
+  `experiment_inventory.md`, environment staging and first-step verification
+  guide, four expected table schemas with separated simulated previews, and an
+  append-only experiment log.
+- **2026-07-30 -- executable configuration:** Added a pinned-image two-cell
+  smoke preset, an 18-cell good-pass preset, and a network-free preflight that
+  requires prebuilt product artifacts and performs no build, install, pull, or
+  source mutation.
+- **2026-07-30 -- deterministic checks:** Both presets passed planner
+  expansion; the good pass expands to 1,836 trial batches and 5,508 operation
+  requests. The preflight passed `bash -n`. No live sandbox or performance
+  measurement was run.
+- **2026-07-30 -- blockers:** Final native Ubuntu verification, live smoke,
+  file-operation base-workspace policy, explicit sandbox-create timing, pilot
+  duration, source/benchmark freeze, and protocol approval remain open.
+
 ## PW0: manuscript scaffold and vocabulary
 
 - **2026-07-30 -- started:** Loaded the complete skill instructions, full-paper workflow, artifact contract, deterministic-check instructions, figure workflow, and figure specification.
@@ -26,3 +48,11 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
 - **2026-07-30 -- later-phase preservation:** Confirmed that Sections 7--9 now contain intentional PW3/PW4 source-derived prose. Updated the PW0 task packet so its heading-only acceptance check is explicitly historical; no manuscript section was reverted or edited.
 - **2026-07-30 -- toolchain recheck:** Rechecked `PATH`, conventional local MiKTeX/TeX Live/TinyTeX locations, and WSL. `latexmk`, a compatible TeX engine, and BibTeX remain unavailable. No toolchain was installed or reconfigured, the declared build was not rerun, and the existing precise build blocker and hashes were retained.
 - **2026-07-30 -- verification:** The full-paper quality gate passed at the current `drafting` stage before and after the maintenance edit. Section input order, later-work preservation in Sections 7--9, relative links, Git diff whitespace, follow-up-file whitespace, paper state, prior build-log hash, and the read-only source baseline all passed. `main.pdf` remains absent.
+
+## PW0 build closure
+
+- **2026-07-30 -- user-local toolchain:** Installed the official self-contained TinyTeX distribution under `C:\Users\yifan\AppData\Roaming\TinyTeX` and added its bin directory to the user `PATH`. No administrator or system-wide installation was used.
+- **2026-07-30 -- recorded build:** Ran the declared `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex` command through the skill build recorder. Latexmk 4.88, pdfTeX 1.40.29 from TeX Live 2026, and BibTeX 0.99e produced `main.pdf` with exit code 0.
+- **2026-07-30 -- attestation:** Recorded input SHA-256 `e0c64365a445533c8efdb74068d5d5d28945871853d26c06692d0f791b48868e`, PDF SHA-256 `dd63976a4714299aa99f564e2669c1e8a438dad6fe6eeaf1f4eeaadd50ef4406`, and build-log SHA-256 `b0ad2eb77266611365f2af42a8b146fa25d8fdbd29d4cce599d7106b8b1d1e94`.
+- **2026-07-30 -- log and visual QA:** The log contains no errors, undefined citations/references, missing files, or overfull boxes. Five underfull boxes remain in the provisional cost table, and the comment-only bibliography intentionally yields an empty References page. All four rendered pages were inspected with no clipping, overlap, or broken glyphs.
+- **2026-07-30 -- outcome:** PW0 is complete. Remaining full-paper blockers are scientific, provenance, author, literature, and evaluation blockers carried in `paper_state.json`.

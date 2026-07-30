@@ -210,6 +210,14 @@ Do not run the good pass until every Phase 3 instrumentation item in
 Verified on 2026-07-30:
 
 - the registry exposes the selected Linux AMD64 Ubuntu manifest digest;
+- Docker Desktop 29.0.1 exposes a Linux AMD64 engine with cgroup v2 and the
+  `overlayfs` storage driver;
+- the exact pinned image is present locally and reports `linux/amd64`;
+- a disposable-container probe enforced the planned 1 vCPU, 512 MiB, and
+  256-PID limits;
+- a disposable privileged probe mounted, copied up, wrote through, and
+  unmounted nested OverlayFS when given a separate `tmpfs` backing store;
+- a container-to-Windows bind-mount write/read round trip passed;
 - the paper-local profile loads as 4,000 files, 100 MiB, depth 100;
 - the profile's deterministic fixture identity is
   `sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7`;
@@ -220,8 +228,46 @@ Not verified:
 - the selected final Ubuntu host;
 - local presence of the pinned image on that host;
 - final product binaries and hashes;
-- ext4/cgroup/Docker readiness on that host;
+- ext4, cgroup, and Docker readiness on that host;
 - a live smoke or measured campaign.
 
-The current Windows workstation is not an accepted fallback: its Docker daemon
-was not reachable during the earlier check.
+The current Windows workstation remains a development and capability-check
+environment, not the selected measurement host. Docker Desktop now works, but
+the checkout is on a WSL `9p` mount, the WSL distribution is Ubuntu 26.04, and
+the prebuilt Linux product bundle is incomplete.
+
+### Current workstation Gate 1 score
+
+After Docker Desktop was started, the 2026-07-30 audit passed 7 of 15 strict
+acceptance items (about 47%), not 70%:
+
+| Gate item | Current workstation |
+|---|---|
+| Linux x86-64 | Partial: Linux AMD64 is available through Docker Desktop/WSL 2, not the selected native host |
+| Ubuntu 24.04 | Fail: WSL distribution reports Ubuntu 26.04 |
+| At least 8 CPUs | Pass: 48 exposed |
+| At least 15 GiB memory | Pass: approximately 62.8 GiB exposed |
+| ext4 paper/product roots | Fail: Windows checkout is mounted through WSL `9p` |
+| Cgroup v2 | Pass |
+| Docker server | Pass: client/server 29.0.1, Linux AMD64, `overlayfs`, cgroup v2 |
+| Pinned image local | Pass: exact digest, Linux AMD64 |
+| Clean product `main` | Pass |
+| Gateway/catalog binaries | Fail: missing |
+| Daemon and Git archives | Fail: daemon present; both archives missing |
+| Linux CPython 3.13 environment | Fail: WSL Python is 3.14; Python 3.13 exists only in the Windows venv |
+| Product-catalog plan validation | Fail: exporter binary missing |
+| `paper-100m` profile | Pass |
+| Preflight within 60 seconds | Not run because prerequisites fail |
+
+The Docker substrate is now sufficiently validated to support continued
+development: resource controls, the pinned image, nested OverlayFS on an
+appropriate backing store, and bind mounts all passed. A direct nested
+OverlayFS attempt on the container's existing overlay root failed, as expected
+for overlay-on-overlay; therefore the successful `tmpfs`-backed probe does not
+replace a live product smoke using the product's real storage layout.
+
+The benchmark configuration is also validated by profile checks, focused tests,
+planner expansion, Python 3.13 imports, and shell syntax. Confidence that the
+design can run after staging the required Linux bundle is moderate to high.
+Confidence in this workstation as a paper-grade measurement host is still low:
+the strict gate is 7/15, and no end-to-end sandbox has been launched.

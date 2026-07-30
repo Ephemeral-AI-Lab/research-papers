@@ -96,6 +96,74 @@
   sandbox-create timing.
 - **Disposition:** draft; requires review before protocol lock.
 
+### 2026-07-30 (time not recorded) - Preset and script validation
+
+- **Entry ID:** `planning-config-validation-001`
+- **Phase:** 0
+- **Kind:** deterministic configuration check
+- **Python:** 3.13 paper-local virtual environment.
+- **Smoke preset:** runnable; 2 cells, 2 trial batches, 2 operation requests.
+- **Good-pass preset:** runnable; 18 cells, 1,836 trial batches, 5,508
+  operation requests.
+- **Shell preflight:** `bash -n` passed under the Ubuntu WSL shell.
+- **Caveat:** planner validation used a synthetic runtime-environment identity,
+  so its provisional plan hashes are not final-host plan hashes.
+- **Disposition:** passed as configuration validation; no sandbox was launched
+  and no performance evidence was produced.
+
+### 2026-07-30 (time not recorded) - Current workstation Gate 1 audit
+
+- **Entry ID:** `preflight-workstation-audit-002`
+- **Phase:** 1 exploratory check
+- **Kind:** preflight audit
+- **Gate score:** 5 of 15 passed (about 33%); environment not accepted.
+- **Passed:** CPU count, memory capacity, cgroup v2, clean product `main`, and
+  deterministic workspace profile.
+- **Partial:** Linux x86-64 exists through WSL 2, but it is not the selected
+  native host.
+- **Failed:** Ubuntu version is 26.04 rather than 24.04; paper/product paths
+  are WSL `9p` rather than ext4; Docker server and pinned local image are
+  unavailable; gateway/catalog binaries and both Git archives are missing;
+  Linux-side Python is 3.14 rather than the required 3.13.
+- **Disposition:** failed and ineligible for measurements.
+- **Interpretation:** benchmark configuration readiness does not establish
+  measurement-host readiness.
+
+### 2026-07-30 (time not recorded) - Docker Desktop capability audit
+
+- **Entry ID:** `preflight-docker-capability-003`
+- **Phase:** 1 exploratory check
+- **Kind:** preflight audit
+- **Host/runtime:** Windows workstation; Docker Desktop 29.0.1; Linux AMD64
+  engine; kernel `6.6.87.2-microsoft-standard-WSL2`; `overlayfs` storage
+  driver; cgroup v2.
+- **Capacity reported by engine:** 48 CPUs and 67,414,814,720 bytes of memory.
+- **Image:** exact pinned
+  `ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf`
+  pulled and inspected as `linux/amd64`.
+- **Resource-control probe:** passed; disposable container observed
+  `memory.max=536870912`, `pids.max=256`, and
+  `cpu.max="100000 100000"`.
+- **OverlayFS probe:** passed on a separate `tmpfs` backing store, including
+  mount, read, copy-up/write, and unmount. A direct nested mount on the
+  container's existing overlay root failed, so this probe does not validate the
+  product's complete storage path.
+- **Bind-mount probe:** passed container write followed by host read.
+- **Prebuilt artifact audit:** Linux daemon present with SHA-256
+  `a55d4775b992c02d603ca294746fb314e99d59774732ab7b8e7bf24ef010fb22`;
+  release gateway, catalog exporter, and both fixed Git archives missing.
+- **Updated strict Gate 1 score:** 7 of 15 passed (about 47%).
+- **Disposition:** partial; Docker substrate accepted for development checks,
+  but the workstation is ineligible for paper measurements and the live product
+  smoke is blocked by the incomplete prebuilt bundle.
+- **Supported interpretation:** the selected image, resource controls, nested
+  OverlayFS capability on a suitable backing store, and bind mounts can work on
+  this machine.
+- **Unsafe interpretation:** end-to-end benchmark readiness or performance.
+- **Next action:** stage the prebuilt Linux AMD64 bundle on the selected native
+  Ubuntu 24.04/ext4 host, then run `verify_environment.sh` and
+  `paper-env-smoke`.
+
 ## Entry template
 
 Copy this section for every new action.

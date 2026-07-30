@@ -1,6 +1,6 @@
 # PW0 task packet: manuscript scaffold and vocabulary
 
-**Status:** Incomplete -- build blocked.
+**Status:** Complete.
 
 ## Bounded objective
 
@@ -44,14 +44,16 @@ Create the minimal arXiv-compatible LaTeX package, full-paper execution records,
 - [x] No experimental-result asset is required to compile.
 - [x] No unverified BibTeX entry or manuscript citation is introduced.
 - [x] The source checkout remains clean at the required baseline commit.
-- [x] An actual build attempt and tool version/blocker are recorded.
+- [x] An executed build and exact tool versions are recorded.
 - [x] The skill quality gate was run before and after scaffold creation.
-- [ ] The declared LaTeX command completes successfully and produces `main.pdf`.
+- [x] The declared LaTeX command completes successfully and produces an attested `main.pdf`.
 
 ## Final outcome and blockers
 
 All requested PW0 source and planning artifacts were created without modifying the read-only source checkout or overwriting prior paper work. The early quality gate exposed the seven expected missing scaffold artifacts; after creation, the full-paper quality gate passed at stage `drafting`. Citation, section-structure, section-order, terminology, JSON-state, and source-baseline checks also passed.
 
-PW0 remains **incomplete** because the required real LaTeX build could not start: `latexmk` and a compatible TeX engine/bibliography tool were unavailable on `PATH`, in the checked conventional local installations, and in WSL. The skill recorder returned exit code 2, no tool version or PDF exists, and no installation or system change was attempted. Other full-paper blockers carried in `paper_state.json` include the missing `paper-v1-freeze`, missing `experiment_inventory.md`, absent final measurements, unresolved author metadata, best-effort attribution, protected-drop and restart questions, and the Claim Plane novelty audit.
+PW0's build gate was closed on 2026-07-30 using a user-local TinyTeX/TeX Live 2026 installation. The skill recorder executed `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`, produced `main.pdf`, and recorded the command, exact tool versions, exit code, run time, input hash, PDF hash, and build-log hash in `paper_state.json`. The mode-aware full-paper quality gate passed after the attestation.
+
+Other full-paper blockers carried in `paper_state.json` include the missing `paper-v1-freeze`, missing `experiment_inventory.md`, absent final measurements, unresolved author metadata, best-effort attribution, protected-drop and restart questions, source-derived cost-model validation, LayerStack 2.0 evidence, and the Claim Plane novelty audit.
 
 The checklist above records the PW0 scaffold as it existed at that checkpoint. Subsequent source-derived work in Sections 7--9 is expected manuscript evolution and does not retroactively fail PW0's heading-only scaffold acceptance check.

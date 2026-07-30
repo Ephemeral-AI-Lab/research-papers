@@ -100,6 +100,8 @@ The paper lane has eight phases. PW0–PW3 can start from baseline source eviden
 
 ### PW1. Foundations
 
+**Execution prompt:** [`lanes/prompts/pw1.md`](./prompts/pw1.md).
+
 **Writes:**
 
 - **Section 2 — Goals, Non-goals, and Threat-model Boundary** in `sections/02-goals-nongoals.tex`.

@@ -16,6 +16,8 @@ Paper-local additions that are not present in the upstream benchmark subtree:
 
 - `PAPER_ARTIFACT.md`
 - `defaults/workspace-profiles/paper-100m.yml`
+- `presets/paper-env-smoke.yml`
+- `presets/paper-good-pass.yml`
 
 Paper-local modifications to the upstream snapshot:
 
@@ -62,7 +64,7 @@ sandbox-benchmark validate \
   --test-repository-root "$PWD" \
   --product-root /absolute/path/to/ephemeral-sandbox \
   --product-bin-dir /absolute/path/to/ephemeral-sandbox/target/release \
-  --plan quick-smoke
+  --plan paper-env-smoke
 ```
 
 Validation checks the plan and the product catalog but does not establish
@@ -73,11 +75,12 @@ sandbox-benchmark run \
   --test-repository-root "$PWD" \
   --product-root /absolute/path/to/ephemeral-sandbox \
   --product-bin-dir /absolute/path/to/ephemeral-sandbox/target/release \
-  --plan quick-smoke
+  --plan paper-env-smoke
 ```
 
-Pin the container image by digest in the measured preset before collecting
-numbers intended for the paper.
+The paper smoke and good-pass presets pin the selected Linux AMD64 Ubuntu image
+by digest. The final host must pull and independently inspect that exact digest
+before collecting numbers intended for the paper.
 
 ## Paper base workspace
 

@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-30  
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; the PW0 LaTeX scaffold exists, but its local build and all frozen evaluation evidence remain pending.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0 is reproducibly built and attested, while all frozen evaluation evidence remains pending.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -43,8 +43,11 @@ Claim mapping, citation verification, provenance, and skeptical review are share
 
 - [x] Create the paper-writing lane charter.
 - [x] Create the experiment lane charter.
-- [ ] Paper PW0: scaffold, vocabulary, and planning artifacts were created on 2026-07-30; the later PW3/PW4 evolution of Sections 7--9 is preserved, and completion remains blocked because the follow-up recheck found no compatible local LaTeX tool for the required recorded build.
-- [ ] Paper PW1: write Sections 2–3, Goals/Non-goals and System Model.
+- [x] Create a focused RQ3 practical-performance draft with phase gates,
+  environment preflight, expected table schemas, simulated previews, and an
+  append-only experiment log.
+- [x] Paper PW0: scaffold, vocabulary, planning artifacts, and later PW3/PW4 evolution of Sections 7--9 are preserved; the declared build completed with an executed tool/version/hash attestation on 2026-07-30.
+- [ ] Paper PW1: execute [`lanes/prompts/pw1.md`](./lanes/prompts/pw1.md) to write Sections 2–3, Goals/Non-goals and System Model.
 - [ ] Paper PW2: write Sections 4–5, Workspace Execution and Capture/Publication.
 - [ ] Paper PW3: write Sections 6–7, Lifecycle/Recovery and Implementation/Interface, including the source-derived operational cost table.
 - [ ] Paper PW4: write Section 8 methodology and Section 9 related-work/source limitations/future evolution after protocol lock.
@@ -86,7 +89,7 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 
 ## 5. Manuscript and artifacts
 
-- [ ] Create arXiv-compatible `main.tex` and a reproducible local build command. The source scaffold and command exist; local build verification is blocked on a compatible LaTeX tool.
+- [x] Create arXiv-compatible `main.tex` and a reproducible local build command; execute it through the skill build recorder and retain the PDF, log, tool versions, and hashes.
 - [ ] Create verified `references.bib`; check that every citation supports its sentence.
 - [ ] Create a source-grounded architecture figure.
 - [ ] Create a workspace-to-publication sequence figure.
@@ -119,4 +122,4 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - The current 8 MiB text-merge byte limit does not independently bound its retained line-diff trace; adversarial CPU/RSS testing or a stricter implementation bound is required before freeze.
 - The implemented isolation layers are not a formal security evaluation, and `rfc1918_egress=deny` is currently rejected.
 - Source work uses the existing `ephemeral-sandbox` checkout on `main` because its `AGENTS.md` and `CLAUDE.md` prohibit side branches and worktrees; it was fast-forwarded cleanly to baseline commit `b22862550e0a7cb4fe61ce581831e9244cc492b5`.
-- The PW0 manuscript build blocker was rechecked after Sections 7--9 advanced: `latexmk`, a compatible TeX engine, and BibTeX remain unavailable on `PATH`, in the checked conventional local installations, and in WSL. No toolchain was installed and no `main.pdf` was produced.
+- PW0 now builds through user-local TinyTeX/TeX Live 2026. The recorded `latexmk` run produced and attested `main.pdf`; this removes the PW0 build blocker but does not satisfy the later full-manuscript submission build gate.
