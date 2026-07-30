@@ -33,13 +33,13 @@
     "command": "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex",
     "pdf": "main.pdf",
     "external_inputs": [],
-    "input_sha256": "e0c64365a445533c8efdb74068d5d5d28945871853d26c06692d0f791b48868e",
-    "pdf_sha256": "dd63976a4714299aa99f564e2669c1e8a438dad6fe6eeaf1f4eeaadd50ef4406",
+    "input_sha256": "414eef7f33ae33849df5ac2305606499d01871d43d1aa00a692ef1a9b5feaf16",
+    "pdf_sha256": "ba4963d3d5f6352e1829946290265671599432e9984e301d5626de7316435327",
     "exit_code": 0,
-    "log": "plan\\pw0-build-attempt.log",
-    "log_sha256": "b0ad2eb77266611365f2af42a8b146fa25d8fdbd29d4cce599d7106b8b1d1e94",
-    "tool_version": "Latexmk 4.88 (2026-03-09); pdfTeX 3.141592653-2.6-1.40.29 (TeX Live 2026); BibTeX 0.99e (TeX Live 2026)",
+    "log": "plan\\pw1-build.log",
+    "log_sha256": "719696c0aa0efb9fce4796efaab3cce5b27dd17563c4b60d7f4951b539aa7f30",
+    "tool_version": "Initial Win CP for (console input, console output, system): (CP437, CP65001, CP1252)",
     "attestation": "executed",
-    "ran_at": "2026-07-30T00:23:10.503310+00:00"
+    "ran_at": "2026-07-30T00:48:19.855325+00:00"
   }
 }

@@ -137,7 +137,7 @@ No inconsistency in `claim_evidence_map.md` or `plan/terminology.md` was exposed
 - Declared manuscript command: `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`.
 - Skill build recorder: `python <skill>/scripts/record_build.py <paper-folder> --run`.
 - Full-paper gate: `python <skill>/scripts/research_quality_gate.py <paper-folder>`.
-- Citation checker: `python <skill>/scripts/check_citations.py <paper-folder>`.
+- Citation checker: `python <skill>/scripts/check_citations.py main.tex references.bib`.
 - JSON parse and `full-paper` / `drafting` assertions.
 - Exact ten-section `main.tex` input count/order check.
 - Exact Section 2/3 heading and label check.
