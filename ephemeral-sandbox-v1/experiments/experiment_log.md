@@ -666,6 +666,47 @@
 - **Disposition:** passed for explicit workspace-base staging; no performance
   experiment ran.
 
+### 2026-07-30T03:39:00Z - EXP1 CLI performance campaign specification
+
+- **Entry ID:** `planning-exp1-cli-campaign-spec-011`
+- **Phase:** 0 and planning for 3--7
+- **Kind:** amendment
+- **Reason:** the user requested corrected experiment documentation and a
+  complete execution specification for the next agent.
+- **Decision timing:** all decisions were made before viewing performance
+  measurements; no performance preset or pilot was run.
+- **Environment decision:** retain the already qualified native Windows x64
+  host with Docker Desktop's Linux AMD64 cgroup-v2 engine and pinned Ubuntu
+  image. Do not restore superseded native-Ubuntu-host requirements.
+- **Client decision:** every paper sandbox operation must use the released
+  native Windows manager, runtime, or observability CLI through the canonical
+  `product_cli` cohort. `direct_client` and `cli_e2e` are prohibited.
+- **Timing decision:** primary latency is end-to-end native CLI subprocess
+  latency from process creation through validated process exit, including
+  process launch and CLI-to-gateway transport.
+- **Workspace decision:** command, lifecycle, read, write, and edit cells all
+  use a fresh copy of the deterministic `paper-100m` base.
+- **Matrix decision:** add a distinct concurrency-1 manager-CLI sandbox-create
+  + base-mount cell. The final focused matrix is 19 cells; session-create
+  remains separate.
+- **Files changed:** `progress.md`, `experiment_inventory.md`,
+  `experiments/expected_tables.md`, `benchmark/PAPER_ARTIFACT.md`,
+  `plan/progress.md`, and
+  `plan/task-packets/exp1-cli-performance-campaign.md`.
+- **Prior runs invalidated:** none. Qualification remains environment evidence;
+  no performance measurements exist.
+- **Required next action:** implement and review the paper-local benchmark's
+  `product_cli` cohort and pass its deterministic tests before any live
+  performance preset.
+- **Approval boundary:** documentation/specification work was user-authorized;
+  Gate 0 protocol approval and any later commit, tag, or push remain explicit
+  gates.
+- **Disposition:** passed as a planning amendment; no experimental result.
+- **Supported interpretation:** the environment is qualified and the next
+  experiment work is precisely specified.
+- **Unsafe interpretation:** any performance conclusion or claim that the
+  current `direct_client` presets are eligible.
+
 ## Entry template
 
 Copy this section for every new action.

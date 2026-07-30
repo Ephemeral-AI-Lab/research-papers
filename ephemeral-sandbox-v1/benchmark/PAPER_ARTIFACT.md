@@ -95,7 +95,8 @@ any pilot or final measurement begins.
 
 ## Paper base workspace
 
-Use workspace profile `paper-100m` for the paper's depth-stress measurements.
-It generates exactly 100 MiB (104,857,600 bytes) across 4,000 deterministic
-files with a maximum directory depth of 100. The cached seed is copied into a
-clean per-cell workspace before sandbox creation.
+Use workspace profile `paper-100m` for every final measured cell. It generates
+exactly 100 MiB (104,857,600 bytes) across 4,000 deterministic files with a
+maximum directory depth of 100. The cached seed is copied into a clean
+benchmark-owned per-cell workspace before sandbox creation; operation-specific
+file targets are prepared there outside the primary timing interval.

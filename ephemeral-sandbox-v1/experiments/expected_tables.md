@@ -135,7 +135,7 @@ explain why; never substitute a different scope.
 | Table | Required inputs | Blocking acceptance gate |
 |---|---|---|
 | Table 1 | Preflight, expanded plan, Git/binary/image/fixture hashes | Gate 1 |
-| Table 2 | Workspace lifecycle samples and optional sandbox-create timing | Gate 3 |
+| Table 2 | Workspace lifecycle samples and required manager-CLI sandbox-create timing | Gate 3 |
 | Table 3 | Reportable operation trials | Gate 5 |
 | Table 4 | Resource samples correlated to reportable trials | Gate 5 |
 

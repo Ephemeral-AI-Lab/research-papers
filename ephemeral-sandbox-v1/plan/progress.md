@@ -184,3 +184,25 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   page-number defect was found. PW3 is complete. Submission-final figure
   repair/waiver remains PW7, and scientific/source-freeze/evaluation blockers
   remain open.
+
+## EXP1: CLI-only focused performance campaign specification
+
+- **2026-07-30 -- tracker reconciliation:** Updated the authoritative root
+  tracker to record the accepted native Windows/Docker Desktop environment and
+  remove the stale native-Linux-host experiment gate. Gates 1 and 2 remain
+  complete; no performance measurement was run.
+- **2026-07-30 -- pre-measurement decisions:** Fixed the focused RQ3 primary
+  timing boundary as end-to-end native product-CLI subprocess latency, selected
+  `paper-100m` for every operation family, and retained sandbox-create-to-ready
+  as a distinct manager-CLI metric. These decisions were recorded before
+  viewing performance results.
+- **2026-07-30 -- next-agent contract:** Created
+  `plan/task-packets/exp1-cli-performance-campaign.md` with exact environment,
+  image, executable, hash, cohort, timing, workspace, implementation, test,
+  pilot, freeze, final-run, analysis, stop, artifact, and handoff requirements.
+  The final focused matrix is 19 cells after the required sandbox-create cell
+  is implemented.
+- **2026-07-30 -- outcome:** Documentation/specification work is complete.
+  The immediate executable task is the reviewed `product_cli` benchmark cohort.
+  `paper-env-smoke`, `paper-pilot`, and `paper-good-pass` remain prohibited
+  until the implementation and validation gates in the EXP1 packet pass.
