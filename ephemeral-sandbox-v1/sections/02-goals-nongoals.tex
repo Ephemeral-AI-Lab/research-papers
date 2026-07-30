@@ -1,3 +1,69 @@
 \section{Goals, Non-goals, and Threat-model Boundary}
 \label{sec:goals-nongoals}
-\emph{Draft.}
+
+The first goal of Ephemeral Sandbox is stable private execution over changing
+shared history.  A workspace session should continue to observe the manifest
+and ordered layer set acquired by its lease even as later publications advance
+the shared head.  Its shared lower layers should remain read-only from the
+session's perspective, while its filesystem writes accumulate in a
+session-unique private overlay.  At the end of that private phase, capture
+should faithfully translate the relevant OverlayFS state---including writes,
+deletions, links, and directory metadata---into typed changes or explicit
+protected drops.  This is a filesystem-change contract, not process
+checkpointing.
+
+The second goal is controlled integration with explicit outcomes.  A captured
+candidate changeset is reconciled against the current active head using the
+implemented path-fingerprint, structural, protected-path, and bounded
+line-oriented text-merge rules.  Every proposed data change must resolve, or
+the candidate is rejected as a whole.  On acceptance, the runtime provides
+\emph{atomic data publication}: one fully resolved data changeset becomes
+visible through the durable active-manifest transition after its layer is
+promoted.  Attribution, accounting, and session cleanup occur outside this
+atomic data boundary.  The lifecycle therefore distinguishes rejection or
+precommit failure, which can leave an explicit session available for retry,
+from successful or no-op publication and from the
+published-but-not-closed outcome caused by later cleanup failure.
+
+A third goal is a role-separated operational contract for orchestration.
+Management, sandbox-scoped runtime work, and read-only observability are
+exposed through distinct client surfaces, with typed scope, request
+correlation, machine-readable results, and lifecycle outcomes.  These surfaces
+let an external orchestrator invoke and inspect narrower classes of operation;
+their separation is an interface and least-exposure property, not by itself an
+authorization or security boundary.
+
+The design also makes isolation, publication, scaling, and useful-work behavior
+measurable.  Evaluation must test private-view and publication correctness,
+partial failures, resource and latency scaling, and verification-passing
+durably accepted work under stated workloads and runtime configurations.
+These are evaluation goals rather than achieved results: the audited baseline
+does not establish a performance advantage, a resource advantage, improved
+agent productivity, or a higher workload-dependent concurrency ceiling.
+
+We use \emph{workspace OS} in a deliberately bounded sense.  It denotes the
+runtime substrate that supplies LayerStack history, workspace-session
+execution, filesystem capture and publication, lifecycle handling, and
+operational observability for coding-agent work.  It does not denote a
+general-purpose operating system, kernel, hypervisor, security monitor, or
+complete coordination plane.
+
+The threat model is correspondingly narrow.  The mechanism addresses
+accidental interference through session filesystem state and stale or
+overlapping publication under the audited runtime contract.  It does not
+provide a formal security proof, complete noninterference, sandbox-escape
+resistance, or universal network-egress denial; an implicit command session
+currently uses a shared-network profile, and isolated networking is only a
+selectable profile.  It captures neither process state nor a process rollback
+point, and a clean textual reconciliation does not guarantee semantic
+compatibility, a successful build, or passing tests.
+
+Finally, Ephemeral Sandbox does not automatically decompose tasks, arrange
+inter-agent communication, schedule workers, negotiate intent, transfer
+ownership, or implement a general agent-coordination plane.  The audited
+mechanism is centered on Linux namespaces and OverlayFS and makes no universal
+cross-platform support or durability claim.  Workspace isolation can remove
+one source of interference, but it cannot by itself solve collaboration,
+selection, integration policy, or verification.  With these goals and
+boundaries fixed, the next section defines the state and invariants to which
+the mechanism is held.

@@ -56,3 +56,9 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
 - **2026-07-30 -- attestation:** Recorded input SHA-256 `e0c64365a445533c8efdb74068d5d5d28945871853d26c06692d0f791b48868e`, PDF SHA-256 `dd63976a4714299aa99f564e2669c1e8a438dad6fe6eeaf1f4eeaadd50ef4406`, and build-log SHA-256 `b0ad2eb77266611365f2af42a8b146fa25d8fdbd29d4cce599d7106b8b1d1e94`.
 - **2026-07-30 -- log and visual QA:** The log contains no errors, undefined citations/references, missing files, or overfull boxes. Five underfull boxes remain in the provisional cost table, and the comment-only bibliography intentionally yields an empty References page. All four rendered pages were inspected with no clipping, overlap, or broken glyphs.
 - **2026-07-30 -- outcome:** PW0 is complete. Remaining full-paper blockers are scientific, provenance, author, literature, and evaluation blockers carried in `paper_state.json`.
+
+## PW1: foundations
+
+- **2026-07-30 -- started:** Loaded the complete `ai-research-writing-skill` instructions, full-paper workflow, artifact contract, section-writing method, task-management rules, and reference map. Created `plan/task-packets/pw1-foundations.md` with the bounded scope, pre-draft theses, paragraph roles, evidence IDs, rejection checks, validation plan, and acceptance criteria.
+- **2026-07-30 -- input audit:** Read all 21 required PW1 paper artifacts completely. Confirmed the paper checkout is clean on `agent/pw0-build-pw1-prompt`; confirmed the read-only source checkout is clean on `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`. No source, experiment, later-section, bibliography, or figure artifact was changed.
+- **2026-07-30 -- evidence boundary:** PW1 uses M0--M6, C1--C4, and D1--D9. C5 and measured useful-work or concurrency-ceiling language remain pending evaluation; source-derived wording remains provisional until `paper-v1-freeze`.

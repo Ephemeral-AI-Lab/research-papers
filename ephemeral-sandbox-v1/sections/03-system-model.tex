@@ -1,3 +1,105 @@
 \section{System Model and Invariants}
 \label{sec:system-model}
-\emph{Draft.}
+
+A \emph{project history} is the runtime-recorded filesystem history from which
+workspace views are projected.  Its \emph{LayerStack} is the ordered,
+manifest-selected base plus promoted published or squash layers.  A
+\emph{layer} is one such filesystem contribution; promoted layers are
+content-digested and treated as append-oriented and immutable by the runtime,
+without claiming filesystem-enforced immutability against external mutation.
+A versioned \emph{manifest} records the ordered layer references, and its
+derived root hash identifies that logical view.  The \emph{active head} is the
+currently shared durable project view selected by the active manifest.  A
+\emph{lease} captures one exact manifest and its resolved ordered layer-path
+set, retaining those layers or a safe substitute until release.
+
+A \emph{workspace session} is a runtime-owned private executable workspace over
+a leased LayerStack view.  Its \emph{private overlay} combines shared
+read-only lower layers with a session-unique writable upper/work pair.  An
+\emph{implicit session} is created only for a sessionless
+\texttt{exec\_command}; after its command ledger drains, its policy is to
+publish and then destroy the session.  An \emph{explicit session} is created
+by a caller and can preserve one live private overlay across multiple command
+and file operations until deliberate publication or destruction.  Sessionless
+file operations follow different paths: reads project the active LayerStack,
+whereas writes and edits amend the current head directly.  The model therefore
+does not claim that every tool call creates a workspace session.
+
+\emph{Capture} walks a private upper directory and interprets OverlayFS
+metadata to produce typed filesystem changes and protected drops.  Their
+complete proposed delta is the \emph{candidate changeset}; it is not yet an
+accepted patch, a durable layer, or evidence of semantic validity.
+\emph{Current-head reconciliation} rereads the active manifest, compares
+candidate paths with leased-base and current-head fingerprints, applies only
+the eligible bounded text-merge rules, and either resolves every change or
+rejects the data changeset.  \emph{Publication} comprises planning,
+reconciliation, staging, synchronization, layer promotion, and the
+active-manifest transition.  \emph{Rejection} is a publication outcome that
+leaves the active manifest unchanged.  Other outcomes distinguish precommit
+failure, no-op publication, successful publication and closure, and
+publication followed by a cleanup failure; the last is reported as
+published-but-not-closed rather than rolled back.
+
+The state categories are orthogonal.  \emph{Shared state} includes the
+runtime's recorded base, promoted layers, manifest-selected history, and
+active head; lease bookkeeping is shared runtime metadata, while the view
+captured by a lease belongs to its session.  \emph{Private state} includes a
+session's upper/work directories, uncommitted filesystem changes, and live
+command and process state.  \emph{Durable state} at successful data
+publication is the promoted layer and digest together with the active
+manifest that selects it.  \emph{Publicly visible operational state} means
+state exposed to other runtime callers through the active LayerStack,
+lifecycle results, or read-only operational views; it does not mean public
+Internet visibility and is not synonymous with durability.  The accepted
+filesystem data becomes publicly visible at the active-manifest transition.
+Best-effort attribution, accounting, observability records, and later cleanup
+are outside that atomic data boundary and can have different persistence and
+failure behavior.
+
+An \emph{orchestrator} is an external controller that selects work, invokes
+role-appropriate operations, and interprets outcomes; a \emph{worker} performs
+one or more coding tasks through those operations.  These roles do not imply
+that the runtime itself decomposes or schedules work.  For evaluation, an
+\emph{agent team} is the workload family with relatively stable roles,
+delegated tasks, dependencies, handoffs, and an orchestration or integration
+lane.  An \emph{exploratory swarm} is the workload family with redundant or
+competing work, weaker central coordination, hot-path overlap, rapidly
+changing bases, and result selection.  These are workload families rather than
+universal product taxonomies.  For workload \(W\), runtime \(R\), agent
+configuration \(A\), and worker count \(n\), \emph{useful work} is
+verification-passing, durably accepted contribution units per unit wall time
+or resource cost.  The \emph{concurrency ceiling} is the workload- and
+runtime-specific region in which adding workers no longer improves that rate
+because conflict, retry, integration, verification, selection, or resource
+costs dominate marginal accepted progress.  Both the shape of this region and
+whether Ephemeral Sandbox changes it remain hypotheses for evaluation.
+
+\paragraph{Core invariants.}
+The model requires the following four evidence-bounded properties.
+
+\begin{enumerate}
+  \item A workspace session observes the manifest snapshot and ordered layer
+    set captured by its lease at creation.  Compaction may replace a physical
+    representation only when a safe substitute preserves that leased logical
+    view.
+
+  \item Filesystem writes made through a workspace session remain in its
+    private overlay until successful publication.  Capture creates a candidate
+    changeset but does not itself expose the changes through the active head.
+
+  \item Publication either makes one fully resolved data changeset visible
+    through a durable active-manifest transition or leaves the active manifest
+    unchanged.  This all-or-none property excludes attribution, accounting,
+    and cleanup; a failure in those later phases does not undo an already
+    visible data publication.
+
+  \item Compaction or garbage collection must not reclaim layers still pinned
+    by a live lease unless a safe substitute preserves the leased logical
+    view.  The baseline source and lease-aware tests establish the in-process
+    mechanism, but the lease/substitution registries are in memory and their
+    behavior across daemon restart still requires fault testing.
+\end{enumerate}
+
+These invariants specify a leased filesystem view and an atomic data-publication
+boundary.  They do not constitute a full transaction, serializable snapshot
+isolation, cross-platform crash proof, or process-state snapshot.
