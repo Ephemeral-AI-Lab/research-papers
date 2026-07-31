@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
-**Last updated:** 2026-07-30  
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested, the focused RQ3 Windows/Docker Desktop environment has passed strict CLI-only qualification, and all frozen evaluation measurements remain pending.
+**Last updated:** 2026-07-31
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; EXP1 Gates 0--4 passed with a frozen CLI-only treatment, but the sole final attempt failed during a mandatory resource boundary and is permanently ineligible.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -55,18 +55,19 @@ Claim mapping, citation verification, provenance, and skeptical review are share
 - [ ] Paper PW6: rewrite Introduction, Conclusion, contributions, title, and Abstract.
 - [ ] Paper PW7: complete whole-paper verification, build, and packaging.
 - [x] Experiment lane: create `experiment_inventory.md`.
-- [ ] Experiment lane: review and approve the focused RQ3 draft, implement the
-  `product_cli` benchmark cohort, and complete the five-sample exploratory
+- [x] Experiment lane: review and approve the focused RQ3 protocol, implement
+  the `product_cli` benchmark cohort, and complete the five-sample exploratory
   pilot defined by
   [`plan/task-packets/exp1-cli-performance-campaign.md`](plan/task-packets/exp1-cli-performance-campaign.md).
 
-The next focused-experiment gate is **Gate 3: instrumentation and the
-five-sample exploratory pilot**. Before that pilot, the draft protocol must be
-reviewed and the paper-local benchmark must execute every sandbox operation
-through the released product CLIs. Protocol lock and source/benchmark freeze
-follow a passing pilot; `paper-good-pass` remains prohibited until then. The
-broader RQ1--RQ5 experiment lane still requires its own accepted-work,
-workload, baseline, fault, and useful-work decisions.
+EXP1 Gates 0--4 passed and protocol v1.0 was frozen. The sole eligible
+`paper-good-pass`, run `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`, failed after
+853 of 1,938 batches when a mandatory observability CLI connection hit Windows
+socket error 10048; TCP/IP Event 4227 confirms local endpoint-reuse pressure.
+The verified corpus is `failed_ineligible`. Gates 5--7 fail, no numeric result
+may enter the paper, and v1.0 must not be rerun. The broader RQ1--RQ5
+experiment lane still requires its own accepted-work, workload, baseline,
+fault, and useful-work decisions.
 
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
@@ -88,14 +89,15 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - [x] Choose and document the final focused RQ3 platform: native Windows x64
   host with Docker Desktop 29.0.1 providing a Linux AMD64 `overlayfs`,
   cgroup-v2 engine and the pinned Ubuntu 24.04 sandbox image.
-- [ ] Implement and review a `product_cli` subprocess cohort for every paper
-  performance operation; the existing `direct_client` presets are ineligible.
-- [ ] Apply the deterministic `paper-100m` base to every measured cell and add
+- [x] Implement and review a `product_cli` subprocess cohort for every paper
+  performance operation; `direct_client` and `cli_e2e` are prohibited.
+- [x] Apply the deterministic `paper-100m` base to every measured cell and add
   explicit manager-CLI sandbox-create-to-ready timing.
-- [ ] Run and archive a five-sample exploratory pilot over all 19 final cells;
-  keep its numbers out of paper tables.
-- [ ] Lock protocol `v1.0`, freeze product/benchmark/image/binary identities,
-  and run the 19-cell `paper-good-pass` only after every prior gate passes.
+- [x] Run and archive a five-sample exploratory pilot over all 19 final cells;
+  its numbers remain outside paper tables.
+- [x] Lock protocol `v1.0`, freeze product/benchmark/image/binary identities,
+  and launch the sole 19-cell `paper-good-pass` after every prior gate passed.
+  The run failed and therefore produced no eligible final result.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.
@@ -135,13 +137,15 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 
 ## Active blockers and constraints
 
-- There are no v1-specific archived performance measurements yet; do not state performance conclusions.
+- There is no eligible v1 final performance corpus. The sole final archive is
+  `failed_ineligible`; do not state performance conclusions from it.
 - Existing test source is not proof of a passing v1 test run; rerun and archive results.
 - The prior scripted ten-lane run predates v1 and has incomplete provenance; it is exploratory only.
 - The accepted-work unit, structured-team and exploratory-swarm workloads, matched baseline policy, and final experiment protocol are not yet locked.
-- The imported performance benchmark exposes only `direct_client`; no paper
-  performance preset may run until the released Windows manager, runtime, and
-  observability CLIs are integrated as the reviewed `product_cli` cohort.
+- The reviewed `product_cli` cohort exists and its smoke/pilot passed, but the
+  sole frozen final hit Windows TCP endpoint-reuse pressure during a mandatory
+  observability boundary. Any new final requires an amended protocol, a new
+  freeze, and explicit author authorization.
 - Focused RQ3 timing is end-to-end native CLI subprocess latency, including
   process launch and CLI-to-gateway transport. Product-reported internal timing
   may be retained only as a separate secondary field.

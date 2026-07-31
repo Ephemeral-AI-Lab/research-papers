@@ -16,10 +16,10 @@
     "experiments/experiment_log.md"
   ],
   "blockers": [
-    "The annotated paper-v1-freeze source tag is missing; baseline source links remain provisional.",
-    "experiment_inventory.md now contains a focused RQ3 practical-performance draft, but it is not protocol-locked and does not replace the broader RQ1-RQ5 evaluation charter.",
-    "The imported performance planner exposes only direct_client; performance presets remain prohibited until a reviewed product-CLI subprocess cohort exists. This does not block the standalone CLI environment qualifier.",
-    "Final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
+    "EXP1 protocol v1.0 and its product/source identities were frozen, but the sole final attempt failed during a mandatory observability boundary after Windows reported WSAEADDRINUSE 10048 and TCP/IP Event 4227. The preserved corpus is failed_ineligible; any new final requires a protocol amendment, new freeze, and explicit author authorization.",
+    "experiment_inventory.md contains the frozen focused RQ3 protocol and failure outcome, but this does not replace the broader RQ1-RQ5 evaluation charter.",
+    "The reviewed product_cli cohort and exploratory smoke/pilot exist, but their values are ineligible and no final performance table or numeric-evidence record was generated.",
+    "Eligible final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
     "Author names and affiliations are unresolved.",
     "The four supplied concept figures are drafting-stage review assets; recorded topology, resolution, grayscale-contrast, and style-family disparities require PW7 repair or an explicit submission-stage waiver.",
     "Publication attribution remains best-effort after data commit rather than transactionally coupled to publication.",

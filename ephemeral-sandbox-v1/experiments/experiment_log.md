@@ -5773,3 +5773,244 @@ must not be used to selectively remove unfavorable cells.
   correlation, deterministic regeneration, anomaly review, and all three
   amended runtime conditions pass. Freeze is now authorized under the user's
   prior explicit local commit/tag permission; no final run has occurred.
+
+### 2026-07-31T06:34:57.974Z - EXP1 protocol v1.0 and treatment frozen
+
+- **Entry ID:** `exp1-protocol-v1-freeze-107`.
+- **Phase/kind:** EXP1-E scoped local source commit, annotated product tag,
+  machine-readable freeze record, and independent clean-scope verification.
+  No final measurement clock has started.
+- **Paper source:** exact staged review covered 62 campaign source, test,
+  preset, protocol, analysis, and experiment-log files; `git diff --cached
+  --check` exited 0. Local commit
+  `eb10c26d1bfd632772baf1bc331c985d0231f52d`
+  (`feat(benchmark): freeze EXP1 CLI protocol v1.0`) was created on the
+  existing paper branch. The archive script's final-mode provenance check
+  independently reports `dirty: false`, empty scoped status, and
+  `clean_frozen_commit`. Excluded caches and non-frozen evidence remain
+  preserved.
+- **Benchmark identity:** 207 non-excluded files, 16,290,860 bytes,
+  content-tree
+  `sha256:1efeff548dd664580dcb452829d86e1ae114477828a1af65589b7e34cc311b67`.
+  The frozen protocol and expected-table specifications hash to
+  `sha256:c021ecdd47cc80b1601171c7c175ed4f42d12dfe51229aa4c36b603b8d0a18ce`
+  and
+  `sha256:7c1ae3d78a9ca7a5b6cbb4a9cc80bac555d676c5833a40d2846597884f8f50da`.
+- **Product treatment:** direct clean product `main` remains
+  `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3`. Annotated local tag
+  `paper-v1-freeze` was created; tag object
+  `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d` has object type `tag` and
+  peels exactly to the measured commit. Nothing was pushed.
+- **Package/image/fixture:** candidate ZIP is 5,685,130 bytes,
+  `sha256:2d487a7d42bfb85058ce0f9a2336229e1bda112b940a6854ee25fbd2e604920e`;
+  the Ubuntu 24.04 digest is unchanged. Fixture hash is
+  `sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7`
+  with tree
+  `sha256:d4c2fefbf94a30352f39d701ececaeeb8fad35603e4fb721dd5cf21296258c9f`.
+- **Final plan/analysis:** the reviewed final plan remains
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`,
+  seed 20260712, 19 cells, two warmups plus 100 measured trials, 1,938
+  batches, and 5,610 requests, exclusively `product_cli` and `paper-100m`.
+  Archive, table-generation, and projection scripts hash to
+  `sha256:25cca63e4acc035a60384dce11221d6571a10ccd1bdf5b3a39e0e7a0d027426e`,
+  `sha256:37f2dddec2684b6eb2682c65ebdb4750b3a4f795596045ec05da827f06dff7e3`,
+  and
+  `sha256:444eafef866c9d8be5a00f63a80eeb3727b6dfddd0faa0128d2f54deb161319f`.
+- **Freeze artifact:** the complete machine-readable record is
+  `experiments\analysis\exp1-freeze-record-eb10c26-0392b299.json`. It freezes
+  protocol version, Git identities, binary/package/image/fixture identities,
+  seed, trials, plan, table schema, metrics, exclusions, stopping rules, and
+  analysis identities.
+- **Gate-4 decision:** PASS. Every scientific and executable identity is now
+  fixed. The sole eligible `paper-good-pass` is authorized after one final
+  read-only preflight; any source/protocol/treatment mutation from this point
+  would invalidate the freeze and block final execution.
+
+### 2026-07-31T06:38:09.609Z - Frozen final preflight passed
+
+- **Entry ID:** `preflight-exp1-0392b299-final-108`.
+- **Phase/kind:** EXP1-F last read-only preflight for the sole eligible final
+  attempt. No final benchmark clock had started while this record was written.
+- **Freeze/source:** the machine-readable freeze JSON parses successfully and
+  hashes to
+  `sha256:38608c306476ce19cd63f1e42808aaa45cd030e3e160a88dd6defd1189aa3429`.
+  Frozen paper scope remains clean at
+  `eb10c26d1bfd632772baf1bc331c985d0231f52d`. Product remains clean direct
+  `main` at `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3`; annotated tag object
+  `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d` still peels exactly to that
+  commit. Candidate package SHA-256 remains
+  `2d487a7d42bfb85058ce0f9a2336229e1bda112b940a6854ee25fbd2e604920e`.
+- **Fresh final-plan validation:** `benchmark_lab validate` exited 0 with empty
+  stderr. The UTF-16 PowerShell capture hashes to
+  `sha256:fc12b1e75fb9716369a0c63743b074277252121f08b7de28d143d6418d1fd534`.
+  Corrected structural parsing confirms `runnable: true`, no findings or
+  warnings, 19 cells, 1,938 batches, 5,610 requests, `product_cli`, and exact
+  plan
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`.
+- **Uniqueness/state:** there are zero prior `paper-good-pass` result manifests
+  and zero final archives. Benchmark runtime and campaign workspace are
+  absent; `C:` has 563,278,090,240 free bytes.
+- **Protected baseline:** restricted probes that exposed no labels found only
+  protected gateway PID 62980, one pre-existing exited container
+  `5ce30657bf83`, and the same five pre-existing volumes. No protected resource
+  was changed.
+- **Inspection corrections retained:** one wrapper-sidecar read used a
+  nonexistent timestamped filename before the exact existing filename was
+  read; one combined no-match `rg` probe propagated exit 1 before a corrected
+  no-match-aware probe proved both final counts are zero; one malformed
+  exploratory `rg` regular expression was replaced by fixed-string searches.
+  The first PowerShell view misleadingly counted absent JSON properties as one,
+  and a first Python parse assumed UTF-8 for a UTF-16 PowerShell redirect.
+  Corrected UTF-16 structural parsing produced the accepted values above.
+  These were read-only orchestration/inspection failures and did not mutate
+  the frozen treatment or consume a final attempt.
+- **Authorization/clock discipline:** exactly one `paper-good-pass` launch is
+  now authorized. From its command start through terminal wrapper cleanup, no
+  build, test, install, pull, source/log edit, dependency change, Docker
+  inspection, recursive workspace scan, archive, or environment
+  reconfiguration may occur. Progress reads are limited to the exact wrapper
+  process and small run-manifest fields.
+
+### 2026-07-31T07:19:03.383Z - Sole frozen final fails and is preserved ineligible
+
+- **Entry ID:** `exp1-0392b299-final-failed-handoff-109`.
+- **Phase/kind:** EXP1-F sole frozen final attempt, terminal failure
+  preservation, exact cleanup, independent archive verification, post-run
+  diagnosis, claim-boundary handoff, and final Gate 0--7 report. No second
+  final was launched; no frozen source, treatment, environment, plan, metric,
+  exclusion, or trial count was changed.
+- **Run/identity:** `paper-good-pass` run
+  `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`; frozen paper commit
+  `eb10c26d1bfd632772baf1bc331c985d0231f52d`; clean product commit
+  `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3`; annotated product tag object
+  `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`; package
+  `sha256:2d487a7d42bfb85058ce0f9a2336229e1bda112b940a6854ee25fbd2e604920e`;
+  final plan
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`.
+- **Terminal result:** benchmark/wrapper process exit 0 and empty stderr do not
+  override the run manifest: terminal state is `failed`, correctness `fail`,
+  eligibility `failed_ineligible`, and infrastructure failure is true. The
+  manifest started `2026-07-31T06:39:01.112787Z`, ended
+  `2026-07-31T06:50:13.449078Z`, and records 672.336291 seconds. The run
+  completed 853/1,938 trial batches and issued 2,077/5,610 product requests
+  before its single failure; these are completion/provenance counts, not
+  performance results.
+- **Failed trial:** family `files`, operation `file_read`, cell
+  `sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16`,
+  measured trial
+  `trial-242749a59d59cc16-measured-000034`. The product request succeeded, but
+  the mandatory post-response snapshot boundary failed before verification.
+  Only one of two 14-metric resource boundary batches was durably recorded.
+  The trial is `infrastructure_failed`, `reportable: false`, and records
+  `cleanup_baseline_restored: true`.
+- **Direct connection evidence:** observability request
+  `trial-242749a59d59cc16-measured-000034.observe.snapshot.1.boundary.0`,
+  invocation record
+  `raw/cli-subprocesses/de511434eb741316c53eba28b2e8586c402560f3d346b593c3f37c36e4547311.json`,
+  returned 1 with
+  `transport_error:gateway transport failed (connection_error)` and Windows
+  WSAEADDRINUSE 10048. Record SHA-256 is
+  `3e188c6e284c0f65e2a909df854ac18a5f550ea1daffb86f2eb3d02ebc26ab0f`;
+  its 187-byte stderr hashes to
+  `b61e0c2f370d165f3aee73407c216ca82db0bed41112c5462f1257f9888bab5c`.
+  The concurrent post-boundary cgroup sibling returned valid data, so the
+  gateway was still live and the product file-read was not the proximate
+  failure.
+- **System evidence/root cause:** a read-only post-run query retrieved exact
+  Windows System/Tcpip event 4227, record 88385, timestamp
+  `2026-07-31T06:50:09.9652511Z`. Its message says the selected local endpoint
+  had recently been used for the same remote endpoint and identifies high-rate
+  connection open/close churn as the typical cause. The primary event capture
+  is
+  `experiments/analysis/exp1-final-system-event-4227.json`,
+  `sha256:b6eac476b6ecf8c20de529be5c5ca8de297874ae9273c65a4baaf6ffc34ac89d`;
+  message SHA-256 is
+  `535f882dfc5e90d98a9ffb429ef7a2c3d5eeb45d71892b54eb0af2bb1bc548dc`;
+  XML SHA-256 is
+  `864d02daffa7ea1c6030f520ccbe7983279229ea8f6ff0e2a5d468bc0a134c34`.
+  High-confidence scoped diagnosis is Windows local TCP endpoint-reuse
+  pressure at the snapshot connection. The evidence does not establish that
+  all 16,384 dynamic ports were simultaneously occupied, an exact TIME_WAIT
+  count, or a universal Windows ceiling.
+- **Connection-pressure context:** before stop, the archive retained 7,992
+  committed CLI invocation records: 7,991 return-code-zero and exactly one
+  return-code-one snapshot. Of these, 6,760 were produced in the preceding
+  240 seconds; roles are manager 328, runtime 3,829, and observability 3,835.
+  The host reported IPv4 and IPv6 dynamic TCP ranges beginning at 49,152 with
+  16,384 ports each. These contextual counts do not prove instantaneous port
+  occupancy.
+- **Evidence-group disclosure:** the raw CLI projection directory has 7,993
+  basenames, one more than the 7,992 committed invocation metadata records.
+  Basename
+  `766ed434998f2dc7c002bac6dd08c3d642cf1ec416eb2d2cc7df65a6906471a0`
+  has a 20,165-byte valid cgroup JSON stdout
+  (`sha256:0c53f4064938e550a540f0b7004f3ee0f131e097bfabb39a3874e34ff03e4c5b`)
+  and empty stderr, but no metadata commit marker. It is consistent with the
+  concurrent cgroup sibling completing while the snapshot exception unwound
+  the boundary gather; the exact persistence race is not logged and is not
+  claimed as proven.
+- **Archival attempts and cleanup:** the first archive invocation failed
+  closed because the exact owned
+  `.benchmark-state/runs/019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`
+  workspace still existed. Explicit exact-run benchmark cleanup then exited 0
+  with `cleaned: true`; the owned workspace and benchmark runtime are absent.
+  The second archive creation and an independent verify-only invocation both
+  exited 0 and agree at
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\experiments\runs\019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`:
+  24,867 files, 620,311,242 bytes, content-tree
+  `sha256:7efa643b12aba09f0ba5ecfbed5b5692a166a5c12931490402d3992d92f3ae6a`.
+  Archive-manifest SHA-256 is
+  `5e0a3c4f7c864df8070a668d2f373b75bece3c2a57cc4340cd89ece292cc7927`;
+  campaign-manifest SHA-256 is
+  `8eefbec9772406943bb1baa2476b181c7436a6fafd7a6d7984874e8889f96982`;
+  raw-tree SHA-256 is
+  `1cc85e7883136ede15e342aa6f2ac50d72bdf6d4eace340dc0e6dba9e992f5b5`;
+  verify output SHA-256 is
+  `13b4b44f9a6f2e8835fd85b81d73de0bba7a65ac0eb7c110a57ad21168f43630`.
+- **Independent final cleanup proof:** no benchmark runtime or exact run
+  workspace exists; no matching process remains. Protected gateway PID 62980
+  remains live. The one pre-existing exited container and five pre-existing
+  volumes remain. Product is clean direct `main` at `0392b299`, and
+  `paper-v1-freeze^{}` still resolves exactly to that commit. No protected
+  resource was changed and nothing was pushed.
+- **Inspection/orchestration attempts:** the initial background wrapper launch
+  returned blank output and the exact process/run ID was recovered without a
+  relaunch. Early progress reads addressed absent or nested manifest
+  properties and were corrected against the actual envelope. An initial final
+  archive failed cleanup proof as described above. A combined tracker patch
+  failed before any partial edit because of a quote-encoding mismatch; smaller
+  patches then succeeded. The first post-run `git diff --check` found four
+  Markdown trailing-space defects, which were removed. One PowerShell tag-peel
+  expression was parsed as a script block; quoting `paper-v1-freeze^{}` fixed
+  it. One orphan-group inspection searched for `.stdout.txt` instead of the
+  actual `.stdout` suffix and was corrected. The host PowerShell/.NET version
+  lacks static `SHA256.HashData`; a disposable instance `ComputeHash`
+  calculation then reproduced the accepted message/XML hashes. These
+  attempts did not mutate the frozen treatment or consume another final.
+- **Validation and independent audit:** `paper_state.json`, the freeze record,
+  the failure diagnostic, and the System-event capture parse as JSON.
+  The first final-report marker check required literal `Gate 0` through
+  `Gate 7`, while the table initially used bare numbers for Gates 1--7; the
+  labels were made explicit and the complete JSON/diff/encoding/marker check
+  then exited 0. Post-format scoped `git diff --check` passes. A
+  user-requested independent read-only subagent audit reproduced the failed
+  trial classification, WSAEADDRINUSE connection error, still-live gateway
+  evidence, frozen-code control flow, archive count discrepancy, and rerun
+  prohibition. It made no edit or Docker call.
+- **Post-run documents:** failure diagnostic
+  `experiments/analysis/exp1-final-failure-diagnostic.json`, claim handoff
+  `experiments/analysis/exp1-final-handoff.md`, primary Event 4227 capture
+  `experiments/analysis/exp1-final-system-event-4227.json`, and required final
+  report `experiments/analysis/exp1-gate0-7-final-report.md` were created.
+  `claim_evidence_map.md`, `experiment_inventory.md`, `progress.md`,
+  `plan/progress.md`, `paper_state.json`, and `benchmark/PAPER_ARTIFACT.md`
+  were updated. These post-run records do not alter the immutable freeze or
+  make partial values eligible.
+- **Gate/protocol decision:** Gates 0--4 PASS. Gate 5 FAILS. Gates 6 and 7
+  FAIL because partial-final aggregation and numeric paper handoff are
+  prohibited. No final tables or numeric-evidence v2 record are generated.
+  Smoke/pilot values remain qualification/exploratory only; all partial-final
+  performance values are excluded. Frozen v1.0 cannot be relaunched. Any
+  future attempt requires a scientifically documented protocol amendment, a
+  new source/environment freeze, and explicit author authorization; it cannot
+  replace this immutable failed archive.

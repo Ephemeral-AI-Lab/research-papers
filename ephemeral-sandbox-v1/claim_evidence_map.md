@@ -1,6 +1,6 @@
 # Ephemeral Sandbox v1 claim–evidence map
 
-Status date: 2026-07-30. Source rows point to baseline commit [`b22862550e0a7cb4fe61ce581831e9244cc492b5`](https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/b22862550e0a7cb4fe61ce581831e9244cc492b5), not yet to the required annotated `paper-v1-freeze` tag. No performance, resource, productivity, or multi-agent workflow result is paper-ready.
+Status date: 2026-07-31. Source rows still point to baseline commit [`b22862550e0a7cb4fe61ce581831e9244cc492b5`](https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/b22862550e0a7cb4fe61ce581831e9244cc492b5), while EXP1 froze the measured product at `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3` with annotated `paper-v1-freeze` tag object `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`. The sole final EXP1 attempt failed and is `failed_ineligible`; no performance, resource, productivity, or multi-agent workflow result is paper-ready.
 
 ## Evidence levels
 
@@ -75,7 +75,7 @@ The detailed variable definitions, derivations, and measurement matrix are in [`
 |---|---|---|---|
 | Isolation correctness | Two or more leased sessions from controlled bases; cross-session file/process/network probes; cleanup and compaction during a lease; isolated and shared network profiles. | Visibility matrix, namespace identity, leakage failures, cleanup state, exact manifest/lease IDs. | Not yet run with v1-freeze provenance. |
 | Publication correctness | Disjoint stale-base writes, same-path clean text merge, binary/structural conflict, protected/drop cases, concurrent publishers, injected storage faults, cleanup faults. | Accepted/rejected paths and reasons, exact pre/post manifest root/version, layer count/digest, unrelated-path leakage, retry behavior. | Unit/integration coverage exists; paper-grade matrix/fault run still required. |
-| Latency/resource scaling | 1/2/4/8/... concurrent workers on fixed no-op, command, capture, publish, and conflict workloads; independently vary \(L,S,U,C,F,B_p\), merge line/edit-distance shape, lease age, and storage backend; use warmups and repeated measured runs. | Start/exec/capture/publish/squash latency distributions, writer wait/hold, CPU, RSS/PSS, I/O, logical/allocated/shared/exclusive storage, retained history, queue/retry/conflict rates, failures. | Source-derived cost model exists; no paper-ready runs. |
+| Latency/resource scaling | 1/2/4/8/... concurrent workers on fixed no-op, command, capture, publish, and conflict workloads; independently vary \(L,S,U,C,F,B_p\), merge line/edit-distance shape, lease age, and storage backend; use warmups and repeated measured runs. | Start/exec/capture/publish/squash latency distributions, writer wait/hold, CPU, RSS/PSS, I/O, logical/allocated/shared/exclusive storage, retained history, queue/retry/conflict rates, failures. | The focused CLI-only EXP1 smoke and pilot passed but are ineligible. The sole frozen final failed during a mandatory resource boundary after Windows reported WSAEADDRINUSE 10048 and TCP/IP Event 4227. Its verified archive is `failed_ineligible`, so no paper-ready distribution exists. |
 | Multi-agent workflow effect | Shared mutable directory vs Git worktrees vs Ephemeral on overlap-controlled tasks, same models/prompts/budgets/tooling/integration tests and matched seeds/repeats. Instantiate both structured-team workloads with explicit dependencies/handoffs and exploratory-swarm workloads with redundant or competing proposals. | Verification-passing durably accepted units per time/cost, conflict/retry/integration time, stale or duplicated work, selection cost, and clean textual publishes that fail tests. | Not run. |
 | Operational attribution/recovery | Correlated requests through accept, reject, retry, cleanup failure, daemon restart. | Availability/correctness of base, request, paths, result and audit; unknown/missing attribution rate; recovery time/state. | Source exposes pieces; best-effort audit and restart behavior need measurement. |
 
@@ -93,17 +93,17 @@ Every reported number must archive: source/tag and tag object, benchmark-reposit
 | Serializable snapshot isolation | A leased stable view and path-level validation do not establish database serializability. |
 | Semantic merge correctness | Bounded line merge and fingerprints do not prove behavioral compatibility. |
 | Atomic data + attribution + cleanup | Only resolved data publication is committed at the manifest boundary; audit/accounting/cleanup are separate. |
-| Cheap, fast, scalable, or productivity-improving | No paper-ready measurements. |
+| Cheap, fast, scalable, or productivity-improving | No paper-ready measurements; the sole frozen EXP1 final is a preserved failed corpus and cannot support numeric claims. |
 | Linear-time or safely memory-bounded merge | The current byte limit does not eliminate edit-distance/line-count-dependent trace growth. |
 | \(O(1)\) reflink publication or storage | Clone work/allocation is filesystem- and extent-dependent, LayerStack 2.0 is not a v1 capability, and the Windows feasibility cell failed. |
 | Universal agent-count threshold | The useful limit depends on workload, runtime, models, orchestration, verification, and resources. |
 
 ## Current blockers
 
-1. `paper-v1-freeze` does not yet exist.
+1. The sole EXP1 v1.0 final failed during a mandatory post-response resource observation because a fresh observability CLI connection hit Windows TCP endpoint-reuse pressure. Its partial archive is ineligible; any new final requires a protocol amendment, a new freeze, and explicit author authorization.
 2. Attribution is best-effort rather than atomically coupled to publication; the paper must decide whether to weaken “attributable” or change/test the implementation before freeze.
 3. Explicit versus implicit protected-drop policy needs maintainer confirmation.
 4. In-memory lease/substitution behavior across daemon restart needs fault testing.
 5. Claim Plane's full manuscript needs a complete novelty audit.
 6. The merge implementation needs adversarial CPU/RSS characterization or a stricter independent resource bound.
-7. No final isolation, fault, scaling, resource, or multi-agent workflow dataset exists.
+7. No eligible final isolation, fault, scaling, resource, or multi-agent workflow dataset exists.

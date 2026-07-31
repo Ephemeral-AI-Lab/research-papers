@@ -1,15 +1,18 @@
 # Focused sandbox performance experiment specification
 
-**Protocol ID:** `ephemeral-sandbox-v1-practical-performance-v0.1`  
-**Status:** Draft; not protocol-locked and not approved for final measurement  
-**Last updated:** 2026-07-30  
+**Protocol ID:** `ephemeral-sandbox-v1-practical-performance-v1.0`
+
+**Status:** Frozen; sole final attempt failed and is permanently ineligible
+
+**Last updated:** 2026-07-31
 **Primary tracker:** the phase checklists in this document  
 **Run log:** [`experiments/experiment_log.md`](experiments/experiment_log.md)
 
 ## Purpose and claim boundary
 
 This experiment characterizes whether Ephemeral Sandbox has practically useful
-startup and public-operation performance in one disclosed Linux environment.
+startup and public-operation performance on one disclosed native-Windows host
+using Docker Desktop's pinned Linux sandbox environment.
 It does not attempt to show that Ephemeral beats another sandbox, shared
 directory, Git worktree, or agent framework.
 
@@ -244,7 +247,7 @@ execution contract is
 - [x] Define the environment, table schemas, and append-only log.
 - [x] Create a network-free fast preflight script.
 - [x] Create minimal-smoke and good-pass presets.
-- [ ] Review and approve this draft protocol.
+- [x] Review and approve this protocol.
 
 **Gate 0:** all files exist and cross-links/configuration validate.
 
@@ -289,65 +292,73 @@ with the official Windows release gateway and CLIs controlling Docker Desktop.
 
 ### Phase 3 - Instrumentation and five-sample pilot
 
-- [ ] Implement and review the `product_cli` subprocess cohort for manager,
+- [x] Implement and review the `product_cli` subprocess cohort for manager,
   runtime, and observability operations; make paper presets reject
   `direct_client`.
-- [ ] Apply `paper-100m` to command, lifecycle, read, write, and edit cells.
-- [ ] Add explicit manager-CLI sandbox-create + base-mount timing for Table 2.
-- [ ] Enforce the end-to-end CLI timing contract and retain any internal
+- [x] Apply `paper-100m` to command, lifecycle, read, write, and edit cells.
+- [x] Add explicit manager-CLI sandbox-create + base-mount timing for Table 2.
+- [x] Enforce the end-to-end CLI timing contract and retain any internal
   product timing only as separate secondary evidence.
-- [ ] Confirm p99, throughput, and resource fields are emitted by analysis.
-- [ ] Run a five-sample pilot over all 19 final cells with the final two
+- [x] Confirm p99, throughput, and resource fields are emitted by analysis.
+- [x] Run a five-sample pilot over all 19 final cells with the final two
   warmups retained.
-- [ ] Confirm operation setup is excluded from operation latency.
-- [ ] Confirm all correctness checks and cleanup gates pass.
-- [ ] Confirm raw observations deterministically regenerate draft tables.
-- [ ] Confirm the projected good-pass duration is <= 1,400 seconds.
+- [x] Confirm operation setup is excluded from operation latency.
+- [x] Confirm all correctness checks and cleanup gates pass.
+- [x] Confirm raw observations deterministically regenerate draft tables.
+- [x] Confirm the projected good-pass duration is <= 1,400 seconds.
 
 **Gate 3:** measurement boundaries, outputs, and runtime are demonstrated.
 
 ### Phase 4 - Protocol lock and freeze
 
-- [ ] Resolve every Gate 0-3 item.
-- [ ] Freeze the product commit/tag and record a clean tree.
-- [ ] Freeze the paper-local benchmark commit and plan hash.
-- [ ] Freeze image and binary digests.
-- [ ] Freeze table columns, metric definitions, seed, trials, and exclusions.
-- [ ] Record protocol version `v1.0` in the log.
+- [x] Resolve every Gate 0-3 item.
+- [x] Freeze the product commit/tag and record a clean tree.
+- [x] Freeze the paper-local benchmark commit and plan hash.
+- [x] Freeze image and binary digests.
+- [x] Freeze table columns, metric definitions, seed, trials, and exclusions.
+- [x] Record protocol version `v1.0` in the log.
 
 **Gate 4:** no scientific decision remains conditional or ambiguous.
 
 ### Phase 5 - Good pass
 
-- [ ] Re-run the fast environment preflight.
-- [ ] Confirm no build, image pull, package install, or source mutation occurs.
-- [ ] Run `paper-good-pass` once with the frozen plan.
-- [ ] Preserve run manifest, raw observations, traces, resources, and logs.
-- [ ] Preserve failed or partial evidence if the run does not complete.
+- [x] Re-run the fast environment preflight.
+- [x] Confirm no build, image pull, package install, or source mutation occurs.
+- [x] Run `paper-good-pass` once with the frozen plan.
+- [x] Preserve run manifest, raw observations, traces, resources, and logs.
+- [x] Preserve failed or partial evidence if the run does not complete.
 - [ ] Confirm all 19 cells have 100 reportable measured trials.
 
-**Gate 5:** one complete, provenance-rich measured corpus exists.
+**Gate 5: FAIL.** Run `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`
+stopped after 853 of 1,938 batches when the mandatory post-response resource
+snapshot hit Windows socket error 10048. TCP/IP Event 4227 confirms local
+endpoint-reuse pressure. The verified archive is `failed_ineligible`; v1.0
+cannot be rerun.
 
 ### Phase 6 - Deterministic analysis and tables
 
-- [ ] Validate the raw corpus before aggregation.
+- [x] Validate the raw corpus before aggregation; validation classifies it
+  `failed_ineligible`.
 - [ ] Generate all four expected tables from archived data.
 - [ ] Confirm every displayed value traces to a run/cell/metric selector.
 - [ ] Confirm no verification/pass column appears in the CLI table.
 - [ ] Confirm negative or unavailable resource fields are disclosed.
 - [ ] Record analysis command, commit, and output hashes.
 
-**Gate 6:** tables regenerate exactly and contain no manual numeric edits.
+**Gate 6: FAIL.** Aggregation is prohibited because Gate 5 did not produce an
+eligible complete corpus. No final tables or numeric-evidence record exist.
 
 ### Phase 7 - Paper handoff
 
-- [ ] Map each table to the exact supported descriptive claim.
-- [ ] Record wording that remains unsafe.
-- [ ] Update the claim-evidence map with run and table identifiers.
+- [x] Map the failed-corpus outcome to the exact supported descriptive claim.
+- [x] Record wording that remains unsafe.
+- [x] Update the claim-evidence map with the failed run identifier and
+  eligibility boundary.
 - [ ] Add numeric-evidence selectors before inserting numbers into LaTeX.
 - [ ] Obtain author review of environment, boundaries, and interpretation.
 
-**Gate 7:** the paper uses only reproducible, scoped evidence.
+**Gate 7: FAIL.** There are no eligible final numbers to hand to the paper;
+the failure-only handoff explicitly prohibits using partial values.
 
 ## Artifact layout
 

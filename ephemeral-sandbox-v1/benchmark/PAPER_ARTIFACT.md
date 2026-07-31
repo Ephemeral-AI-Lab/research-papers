@@ -1,8 +1,12 @@
 # Paper-local benchmark artifact
 
 This directory is the paper-local, runnable benchmark implementation used by
-the Ephemeral Sandbox paper. Its EXP1 revision remains pre-freeze until Gates
-0--3 pass and the local `paper-v1-freeze` commit and annotated tag are created.
+the Ephemeral Sandbox paper. EXP1 protocol v1.0 was frozen at paper commit
+`eb10c26d1bfd632772baf1bc331c985d0231f52d`; the measured product is anchored
+by annotated `paper-v1-freeze` tag object
+`0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`. The sole final attempt failed and
+is ineligible, so this freeze supports provenance but no final performance
+claim.
 
 ## Provenance
 

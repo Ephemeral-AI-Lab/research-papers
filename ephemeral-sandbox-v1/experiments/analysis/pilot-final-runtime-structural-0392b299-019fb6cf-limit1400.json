@@ -1,0 +1,1324 @@
+{
+  "analysis_script_sha256": "sha256:444eafef866c9d8be5a00f63a80eeb3727b6dfddd0faa0128d2f54deb161319f",
+  "decision": "pass_runtime_projection",
+  "decomposition": {
+    "cells": [
+      {
+        "central_projected": {
+          "ceil_ns": 27240701475,
+          "denominator": 1,
+          "numerator_ns": 27240701475
+        },
+        "envelope_projected_ns": 28509628500,
+        "family_id": "command",
+        "fixed": {
+          "leading_ns": 2880014200,
+          "total_ns": 3855060500,
+          "trailing_ns": 975046300
+        },
+        "operation_id": "exec_command",
+        "semantic_sha256": "sha256:5c723b84eeb279b1fbe8c7602bfbdac4a7e79cacfb07ef3fc0ae3a698ae47f1f",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            213835100,
+            217016900,
+            223771000,
+            227926200,
+            225105200
+          ],
+          "pilot_transition_gap_ns": [
+            2436900,
+            2225500,
+            2182400,
+            2372600,
+            2783400,
+            2431700
+          ],
+          "pilot_warmup_active_ns": [
+            772693800,
+            213386800
+          ],
+          "smoke_cold_active_ns": [
+            790412300
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 28974063750,
+          "denominator": 1,
+          "numerator_ns": 28974063750
+        },
+        "envelope_projected_ns": 30733645000,
+        "family_id": "command",
+        "fixed": {
+          "leading_ns": 2893232600,
+          "total_ns": 3883555800,
+          "trailing_ns": 990323200
+        },
+        "operation_id": "exec_command",
+        "semantic_sha256": "sha256:2229844a3f007ed6127c916f6453a85a011f3eb4cc63d750d10d46227d64f5f3",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            238244100,
+            233326800,
+            233324800,
+            236859600,
+            249632300
+          ],
+          "pilot_transition_gap_ns": [
+            2293100,
+            2420000,
+            2342000,
+            2340000,
+            2253300,
+            2214100
+          ],
+          "pilot_warmup_active_ns": [
+            792564400,
+            239030800
+          ],
+          "smoke_cold_active_ns": [
+            821219600
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 26400966400,
+          "denominator": 1,
+          "numerator_ns": 26400966400
+        },
+        "envelope_projected_ns": 27062106000,
+        "family_id": "command",
+        "fixed": {
+          "leading_ns": 2879629000,
+          "total_ns": 3839546800,
+          "trailing_ns": 959917800
+        },
+        "operation_id": "exec_command",
+        "semantic_sha256": "sha256:ebf781b1e09fa308dba03d1deec25abe6c1f0af15fa0cc2ed546b1aae06e877f",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            213656300,
+            214391500,
+            213343100,
+            213338900,
+            212904200
+          ],
+          "pilot_transition_gap_ns": [
+            2184000,
+            2446000,
+            2228100,
+            2158200,
+            2391000,
+            2177500
+          ],
+          "pilot_warmup_active_ns": [
+            768181600,
+            214296700
+          ],
+          "smoke_cold_active_ns": [
+            762436300
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 29473955800,
+          "denominator": 1,
+          "numerator_ns": 29473955800
+        },
+        "envelope_projected_ns": 30645122600,
+        "family_id": "command",
+        "fixed": {
+          "leading_ns": 2889041100,
+          "total_ns": 3921869200,
+          "trailing_ns": 1032828100
+        },
+        "operation_id": "exec_command",
+        "semantic_sha256": "sha256:5d6bc7cfd95c72d367f460e87f636134830c2ae134e26eee580ae0a00c515984",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            238046200,
+            240297000,
+            241055800,
+            247685900,
+            246115000
+          ],
+          "pilot_transition_gap_ns": [
+            2229300,
+            2287600,
+            2246200,
+            2277400,
+            3017200,
+            2278400
+          ],
+          "pilot_warmup_active_ns": [
+            806628500,
+            233918000
+          ],
+          "smoke_cold_active_ns": [
+            824963100
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 56735904200,
+          "denominator": 1,
+          "numerator_ns": 56735904200
+        },
+        "envelope_projected_ns": 58081470900,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2904862600,
+          "total_ns": 3844108800,
+          "trailing_ns": 939246200
+        },
+        "operation_id": "file_write",
+        "semantic_sha256": "sha256:55478faab34c09c9714f7e612066213d3a896ab17ad43cfe9720d71dd960bc1f",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            520990600,
+            504573200,
+            511347400,
+            512633900,
+            510671400
+          ],
+          "pilot_transition_gap_ns": [
+            2208600,
+            2242400,
+            2301000,
+            2228800,
+            2334300,
+            2311500
+          ],
+          "pilot_warmup_active_ns": [
+            951268900,
+            504649400
+          ],
+          "smoke_cold_active_ns": [
+            935241100
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 46671882600,
+          "denominator": 1,
+          "numerator_ns": 46671882600
+        },
+        "envelope_projected_ns": 53050942400,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2876666800,
+          "total_ns": 3817323600,
+          "trailing_ns": 940656800
+        },
+        "operation_id": "file_write",
+        "semantic_sha256": "sha256:d3b121f4e956174dc2e7e2fad099e327e33ab439bfb55ed23c4b7606bfdf9a03",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            460500900,
+            333745700,
+            467088700,
+            329081700,
+            471913400
+          ],
+          "pilot_transition_gap_ns": [
+            2346100,
+            2297100,
+            2244400,
+            2294400,
+            2389200,
+            2307200
+          ],
+          "pilot_warmup_active_ns": [
+            900484800,
+            474251800
+          ],
+          "smoke_cold_active_ns": [
+            885725700
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 48389845575,
+          "denominator": 1,
+          "numerator_ns": 48389845575
+        },
+        "envelope_projected_ns": 59123374900,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2862161000,
+          "total_ns": 3824621800,
+          "trailing_ns": 962460800
+        },
+        "operation_id": "file_edit",
+        "semantic_sha256": "sha256:0535a942cf61b426e2caaf1e2e246c43ec87f91111f2d50102a3ba433c03b9b1",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            531096300,
+            392800700,
+            396842300,
+            415546100,
+            387200000
+          ],
+          "pilot_transition_gap_ns": [
+            2329100,
+            2241400,
+            2220300,
+            2286800,
+            2240600,
+            2282400
+          ],
+          "pilot_warmup_active_ns": [
+            976942000,
+            890508300
+          ],
+          "smoke_cold_active_ns": [
+            942441800
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 43720503700,
+          "denominator": 1,
+          "numerator_ns": 43720503700
+        },
+        "envelope_projected_ns": 52187598600,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2918839000,
+          "total_ns": 3876183400,
+          "trailing_ns": 957344400
+        },
+        "operation_id": "file_edit",
+        "semantic_sha256": "sha256:05d7fb6f43125ef65f10d47af62645ee2778e791b127208f93920ccbf024394b",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            332904200,
+            462986600,
+            326733300,
+            462916800,
+            328109600
+          ],
+          "pilot_transition_gap_ns": [
+            2214500,
+            2191600,
+            2430000,
+            2167600,
+            2224000,
+            2257200
+          ],
+          "pilot_warmup_active_ns": [
+            883662600,
+            458541300
+          ],
+          "smoke_cold_active_ns": [
+            869299100
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 26440725025,
+          "denominator": 1,
+          "numerator_ns": 26440725025
+        },
+        "envelope_projected_ns": 27881877500,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2814743900,
+          "total_ns": 3816858800,
+          "trailing_ns": 1002114900
+        },
+        "operation_id": "file_read",
+        "semantic_sha256": "sha256:04974b33b8fabefec26067ac273a142d7b513c3665a5dd7af23b0c1541f6c75a",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            211915300,
+            220075600,
+            208453100,
+            210013900,
+            213397000
+          ],
+          "pilot_transition_gap_ns": [
+            2222800,
+            2219100,
+            2377500,
+            2170000,
+            2286900,
+            2495500
+          ],
+          "pilot_warmup_active_ns": [
+            902706600,
+            208704700
+          ],
+          "smoke_cold_active_ns": [
+            795913700
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 25320836350,
+          "denominator": 1,
+          "numerator_ns": 25320836350
+        },
+        "envelope_projected_ns": 26575413800,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 2981995200,
+          "total_ns": 3916849400,
+          "trailing_ns": 934854200
+        },
+        "operation_id": "file_read",
+        "semantic_sha256": "sha256:f03cc8f32fafd88c0f85911ec3f27a822840f67fc856af60f898c5c403e2d87e",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            195689600,
+            205239900,
+            200713000,
+            200736700,
+            209399600
+          ],
+          "pilot_transition_gap_ns": [
+            2243100,
+            2250100,
+            2223700,
+            2252500,
+            2252800,
+            2209600
+          ],
+          "pilot_warmup_active_ns": [
+            745535800,
+            197151600
+          ],
+          "smoke_cold_active_ns": [
+            740777000
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 74633235475,
+          "denominator": 1,
+          "numerator_ns": 74633235475
+        },
+        "envelope_projected_ns": 78937026600,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3264789000,
+          "total_ns": 4244460300,
+          "trailing_ns": 979671300
+        },
+        "operation_id": "file_write",
+        "semantic_sha256": "sha256:21fa1b1b6c18dfc47b84c3e476bb1c5a06d8b9636bf08368e9c4317cf286be62",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            564126400,
+            718553500,
+            716199300,
+            705555700,
+            711638500
+          ],
+          "pilot_transition_gap_ns": [
+            2776100,
+            2243500,
+            2259500,
+            2235600,
+            2251700,
+            2194900
+          ],
+          "pilot_warmup_active_ns": [
+            1118364200,
+            722616300
+          ],
+          "smoke_cold_active_ns": [
+            1278415100
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 59017596875,
+          "denominator": 1,
+          "numerator_ns": 59017596875
+        },
+        "envelope_projected_ns": 65895211100,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3221161000,
+          "total_ns": 4153777700,
+          "trailing_ns": 932616700
+        },
+        "operation_id": "file_write",
+        "semantic_sha256": "sha256:3f8f5e708ffcb3aa506ac6f91099696a370c965d9a81f4c3b6867088f1205e8e",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            564445700,
+            454756900,
+            586814100,
+            454259000,
+            590848100
+          ],
+          "pilot_transition_gap_ns": [
+            2226300,
+            2298900,
+            6277200,
+            2341800,
+            3202300,
+            2312000
+          ],
+          "pilot_warmup_active_ns": [
+            1011313100,
+            475705700
+          ],
+          "smoke_cold_active_ns": [
+            979248700
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 83886901650,
+          "denominator": 1,
+          "numerator_ns": 83886901650
+        },
+        "envelope_projected_ns": 87847049200,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3068511400,
+          "total_ns": 4026957400,
+          "trailing_ns": 958446000
+        },
+        "operation_id": "file_edit",
+        "semantic_sha256": "sha256:b2767eff29ef4da9984c36f18dc2c6a60980a0bfe33b93ec331c6655b2246c85",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            805341000,
+            797306500,
+            811257700,
+            794169300,
+            676939400
+          ],
+          "pilot_transition_gap_ns": [
+            2309300,
+            2251500,
+            2249500,
+            2343200,
+            2187700,
+            2263400
+          ],
+          "pilot_warmup_active_ns": [
+            1228829300,
+            702442100
+          ],
+          "smoke_cold_active_ns": [
+            1199277300
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 63130366675,
+          "denominator": 1,
+          "numerator_ns": 63130366675
+        },
+        "envelope_projected_ns": 67045610600,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3101061700,
+          "total_ns": 4068561800,
+          "trailing_ns": 967500100
+        },
+        "operation_id": "file_edit",
+        "semantic_sha256": "sha256:71cf3ce6f552d4b65a5caaa401a0320b9ae9a2867ec9eb1fa6adb8d491bba16a",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            595739700,
+            601501500,
+            591008200,
+            606916300,
+            465967600
+          ],
+          "pilot_transition_gap_ns": [
+            2351500,
+            2332800,
+            2300300,
+            2736200,
+            2215600,
+            2298800
+          ],
+          "pilot_warmup_active_ns": [
+            1004531300,
+            593538500
+          ],
+          "smoke_cold_active_ns": [
+            987554200
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 28743823850,
+          "denominator": 1,
+          "numerator_ns": 28743823850
+        },
+        "envelope_projected_ns": 29744328800,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3031575500,
+          "total_ns": 3980480600,
+          "trailing_ns": 948905100
+        },
+        "operation_id": "file_read",
+        "semantic_sha256": "sha256:9743a6076566c33ad2b68e32670a020d3bf0b33ddcfa9a10060abaae201c9595",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            230204300,
+            236285200,
+            234319300,
+            235133100,
+            237648000
+          ],
+          "pilot_transition_gap_ns": [
+            2558900,
+            2236700,
+            4300000,
+            2376800,
+            2273200,
+            2168600
+          ],
+          "pilot_warmup_active_ns": [
+            782374100,
+            229190200
+          ],
+          "smoke_cold_active_ns": [
+            781943000
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 27306415125,
+          "denominator": 1,
+          "numerator_ns": 27306415125
+        },
+        "envelope_projected_ns": 28463560500,
+        "family_id": "files",
+        "fixed": {
+          "leading_ns": 3084974700,
+          "total_ns": 4033274300,
+          "trailing_ns": 948299600
+        },
+        "operation_id": "file_read",
+        "semantic_sha256": "sha256:714d6eb49ffc10e6c26dd8c8f304b74dd82b214f9b5b445eaba4506e4a7d4dd9",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            222406400,
+            218461000,
+            225891100,
+            216296800,
+            218982900
+          ],
+          "pilot_transition_gap_ns": [
+            2280400,
+            2337900,
+            2248300,
+            2402600,
+            2196300,
+            2223900
+          ],
+          "pilot_warmup_active_ns": [
+            778074700,
+            225174100
+          ],
+          "smoke_cold_active_ns": [
+            799256800
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 31402415375,
+          "denominator": 1,
+          "numerator_ns": 31402415375
+        },
+        "envelope_projected_ns": 32524406100,
+        "family_id": "workspace_lifecycle",
+        "fixed": {
+          "leading_ns": 2858143600,
+          "total_ns": 3784635900,
+          "trailing_ns": 926492300
+        },
+        "operation_id": "create_workspace",
+        "semantic_sha256": "sha256:0e64b768b0d8bec9b56baa54ff6cac9d969c835c0b5e0c11cf3828172d973518",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            262241400,
+            268866000,
+            260911300,
+            259849800,
+            264117600
+          ],
+          "pilot_transition_gap_ns": [
+            2259300,
+            2187100,
+            2165600,
+            2266200,
+            2268800,
+            2184300
+          ],
+          "pilot_warmup_active_ns": [
+            812010700,
+            261699100
+          ],
+          "smoke_cold_active_ns": [
+            799204300
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 48193569775,
+          "denominator": 1,
+          "numerator_ns": 48193569775
+        },
+        "envelope_projected_ns": 50176164700,
+        "family_id": "workspace_lifecycle",
+        "fixed": {
+          "leading_ns": 2880119000,
+          "total_ns": 3827457100,
+          "trailing_ns": 947338100
+        },
+        "operation_id": "create_workspace",
+        "semantic_sha256": "sha256:c69bdeadd954d34c8a837840be76b7a59d462a02ffab4143b534b9d227d65884",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            422513600,
+            419672500,
+            441255800,
+            422855900,
+            430342400
+          ],
+          "pilot_transition_gap_ns": [
+            2431800,
+            2352100,
+            2276900,
+            2394600,
+            2394300,
+            2322700
+          ],
+          "pilot_warmup_active_ns": [
+            980769300,
+            415390100
+          ],
+          "smoke_cold_active_ns": [
+            988757900
+          ]
+        }
+      },
+      {
+        "central_projected": {
+          "ceil_ns": 313057341175,
+          "denominator": 1,
+          "numerator_ns": 313057341175
+        },
+        "envelope_projected_ns": 390538601500,
+        "family_id": "sandbox_lifecycle",
+        "fixed": {
+          "leading_ns": 4504300,
+          "total_ns": 6966000,
+          "trailing_ns": 2461700
+        },
+        "operation_id": "create_sandbox",
+        "semantic_sha256": "sha256:8b77b6a6a688d77ddfac7af0e796f0487ebc002fa44237d909b98c47078c5a91",
+        "source_samples": {
+          "pilot_measured_active_ns": [
+            2489825800,
+            2826637600,
+            2416021000,
+            2422854400,
+            2730702100
+          ],
+          "pilot_transition_gap_ns": [
+            5434900,
+            2289400,
+            2240500,
+            2422400,
+            2492300,
+            2335300
+          ],
+          "pilot_warmup_active_ns": [
+            52429634100,
+            2657308900
+          ],
+          "smoke_cold_active_ns": [
+            53659475300
+          ]
+        }
+      }
+    ],
+    "family_fixed_ns": {
+      "command": 278750600,
+      "files": 302454000,
+      "sandbox_lifecycle": 298739500,
+      "workspace_lifecycle": 275019400
+    },
+    "run_fixed_ns": 80922308300
+  },
+  "display_seconds": {
+    "central_structural": "1170.818322650",
+    "limit": "1400.000000000",
+    "observed_envelope": "1307.100411100",
+    "pilot_elapsed": "276.504428000"
+  },
+  "final_plan": {
+    "cells": 19,
+    "issued_operation_requests": 5610,
+    "measured_trials_per_cell": 100,
+    "plan_hash": "sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b",
+    "sha256": "sha256:4d2389e1782a5075bf4130b3a158b55cc39cc697a1f53593f8c93ff2388e7c92",
+    "trial_batches": 1938,
+    "warmups_per_cell": 2
+  },
+  "gate_3_runtime_pass": true,
+  "inputs": {
+    "pilot": {
+      "archive_content_tree_sha256": "sha256:f81cf711bbb734f04201c7fdc09652e0d59c7cbdecd50fe3676370b1df77b93c",
+      "archive_manifest_sha256": "sha256:c2810ac9014f835c676dce294ba4a164c7cc979c4e9cd49be4c3239bdf9bdbc6",
+      "campaign_manifest_sha256": "sha256:de60036c6fa2bb5d715315e61c36909a50701462a030d9f2af649a079b1033cb",
+      "plan_hash": "sha256:e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f",
+      "provenance": {
+        "analysis_and_archiving_code": {
+          "files": [
+            {
+              "bytes": 37142,
+              "path": "benchmark/backend/benchmark_lab/derivation.py",
+              "sha256": "sha256:14b82867bfca82ab252db5f28567c83ab890b892759c3309f8e75391b8d3d7f1"
+            },
+            {
+              "bytes": 14044,
+              "path": "benchmark/backend/benchmark_lab/reports.py",
+              "sha256": "sha256:17731aa45d2ce86147a1b28fb5b75fde83957bc6d22ca2a1fd1f0d7b98250d50"
+            },
+            {
+              "bytes": 62503,
+              "path": "experiments/scripts/archive_exp1_run.py",
+              "sha256": "sha256:25cca63e4acc035a60384dce11221d6571a10ccd1bdf5b3a39e0e7a0d027426e"
+            },
+            {
+              "bytes": 63181,
+              "path": "experiments/analysis/scripts/generate_exp1_tables.py",
+              "sha256": "sha256:37f2dddec2684b6eb2682c65ebdb4750b3a4f795596045ec05da827f06dff7e3"
+            }
+          ]
+        },
+        "artifact_schemas": {
+          "bounded_evidence": {
+            "read_versions": [
+              1,
+              2
+            ],
+            "schema_name": "eos_benchmark_operation_evidence",
+            "write_version": 2
+          },
+          "definition_snapshot": {
+            "read_versions": [
+              2
+            ],
+            "schema_name": "eos_benchmark_definition_snapshot",
+            "write_version": 2
+          },
+          "environment_metadata": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_environment_metadata",
+            "write_version": 1
+          },
+          "events": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_event",
+            "write_version": 1
+          },
+          "expanded_plan": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_expanded_plan",
+            "write_version": 1
+          },
+          "intent_plan": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_intent_plan",
+            "write_version": 1
+          },
+          "observations": {
+            "read_versions": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "schema_name": "eos_benchmark_observation",
+            "write_version": 5
+          },
+          "run_manifest": {
+            "read_versions": [
+              1,
+              2
+            ],
+            "schema_name": "eos_benchmark_run_manifest",
+            "write_version": 2
+          }
+        },
+        "benchmark_source": {
+          "content_tree_sha256": "sha256:1efeff548dd664580dcb452829d86e1ae114477828a1af65589b7e34cc311b67",
+          "manifest_sha256": "sha256:d96cff9ace92f167004a71da2ec3055342dedde2debdbbdd30978ae36a423ce2"
+        },
+        "definition_snapshot": {
+          "schema_name": "eos_benchmark_definition_snapshot",
+          "schema_version": 2,
+          "sha256": "sha256:cedb67107a75795ce38ee238341896fa41c75852c77d37996c632a969b35da55"
+        },
+        "docker": {
+          "architecture": "x86_64",
+          "cgroup_version": "2",
+          "driver": "overlayfs",
+          "os_type": "linux",
+          "server_version": "29.0.1",
+          "warnings": null
+        },
+        "fixture": {
+          "fixture_hash": "sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7",
+          "manifest_sha256": "sha256:f35b5e9fd04986b4370fd17f09311ff870d7f1abaf02cdd02411cd0d8c4e7be1",
+          "tree_hash": "sha256:d4c2fefbf94a30352f39d701ececaeeb8fad35603e4fb721dd5cf21296258c9f"
+        },
+        "gateway": {
+          "isolated_runtime_per_execution_block": true,
+          "loopback_only": true,
+          "maximum_connections": 256,
+          "mode": "isolated",
+          "readiness_poll_interval_ms": 50,
+          "readiness_probe_timeout_ms": 2000,
+          "readiness_timeout_ms": 60000,
+          "remount_sweep_widths": [
+            1
+          ],
+          "semantic_revision": 1
+        },
+        "host": {
+          "architecture": "x64",
+          "computer_name": "DESKTOP-OLP1ADS",
+          "cpu_model": "AMD Ryzen Threadripper 7960X 24-Cores",
+          "docker_engine_version": "29.0.1",
+          "filesystem": "NTFS",
+          "logical_processors": 48,
+          "monotonic_clock": "time.monotonic_ns",
+          "operating_system": "windows",
+          "os_build_number": 26200,
+          "os_version": "10.0.26200",
+          "processor_logical_processors": 48,
+          "total_memory_bytes": 137438953472,
+          "volume_root": "C:\\"
+        },
+        "image": {
+          "architecture": "amd64",
+          "id": "sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf",
+          "os": "linux",
+          "repo_digests": [
+            "ubuntu@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf"
+          ],
+          "requested": "ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf"
+        },
+        "lifecycle": {
+          "automatic_retries": 0,
+          "failure_revision": 1,
+          "lifecycle_revision": 1,
+          "one_active_campaign": true,
+          "sequential_families": true,
+          "stabilization_revision": 1
+        },
+        "product": {
+          "archive": {
+            "bytes": 5685130,
+            "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299.zip",
+            "sha256": "sha256:2d487a7d42bfb85058ce0f9a2336229e1bda112b940a6854ee25fbd2e604920e"
+          },
+          "binaries": {
+            "daemon": {
+              "bytes": 7171600,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\dist\\sandbox-daemon-linux-amd64",
+              "sha256": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a"
+            },
+            "gateway": {
+              "bytes": 3452928,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-gateway.exe",
+              "sha256": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285"
+            },
+            "manager": {
+              "bytes": 800768,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-manager-cli.exe",
+              "sha256": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed"
+            },
+            "observability": {
+              "bytes": 800256,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-observability-cli.exe",
+              "sha256": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26"
+            },
+            "runtime": {
+              "bytes": 805888,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-runtime-cli.exe",
+              "sha256": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8"
+            }
+          },
+          "branch": "main",
+          "commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+          "dirty": false,
+          "recorded_treatment": {
+            "daemon_binary_hash": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a",
+            "gateway_binary_hash": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285",
+            "manager_cli_binary_hash": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed",
+            "observability_cli_binary_hash": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26",
+            "runtime_cli_binary_hash": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8",
+            "source_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+            "source_diff_hash": null,
+            "source_dirty": false
+          }
+        },
+        "protocol_files": [
+          {
+            "bytes": 24478,
+            "path": "plan/task-packets/exp1-cli-performance-campaign.md",
+            "sha256": "sha256:c021ecdd47cc80b1601171c7c175ed4f42d12dfe51229aa4c36b603b8d0a18ce"
+          },
+          {
+            "bytes": 11529,
+            "path": "experiments/expected_tables.md",
+            "sha256": "sha256:7c1ae3d78a9ca7a5b6cbb4a9cc80bac555d676c5833a40d2846597884f8f50da"
+          },
+          {
+            "bytes": 12623,
+            "path": "benchmark/PAPER_ARTIFACT.md",
+            "sha256": "sha256:90385fda5fc65e7cbe47bd3cea1ad2f97307b248f510ea021aa9b20c2bed9ecb"
+          }
+        ],
+        "sandbox_limits": {
+          "authority": {
+            "capture_boundary": "run_start_before_gateway_and_measurement",
+            "create_request_override": "none",
+            "effective_config_builder": "benchmark_lab.gateway._effective_config preserves the selected profile and resource override fields",
+            "kind": "released_gateway_configuration",
+            "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\config\\windows-amd64.yml",
+            "selector": "manager.docker.resource_profiles.standard with manager.docker nano_cpus/memory_bytes overrides",
+            "sha256": "sha256:987776d700108c8a9a9c1a3ed42b9155a4db46e7dde20765a79ef6df6e13677a"
+          },
+          "memory_bytes": 536870912,
+          "nano_cpus": 1000000000,
+          "pids_limit": 256,
+          "profile": "standard",
+          "vcpus": 1
+        },
+        "treatment": {
+          "daemon_binary_hash": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a",
+          "gateway_binary_hash": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285",
+          "manager_cli_binary_hash": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed",
+          "observability_cli_binary_hash": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26",
+          "runtime_cli_binary_hash": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8",
+          "source_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+          "source_diff_hash": null,
+          "source_dirty": false
+        }
+      },
+      "raw_events_sha256": "sha256:a6994cfc15076e997ad06798a61084adfc2ede2b49b181f85f0be9db7e59676b",
+      "raw_observations_sha256": "sha256:ddadfb11edab4eb3ce6e65512f4876a2a751651ed56c782f340ff6bf3e36a99c",
+      "run_id": "019fb6cf-6021-76d5-ab4f-c6ed53e1d293"
+    },
+    "smoke": {
+      "archive_content_tree_sha256": "sha256:3ad6e3aba681cfdf257939df79a0561a5b73b710a73d46686146bc5780fe8a6b",
+      "archive_manifest_sha256": "sha256:6fc6924f5bf775b4572093d6f5d619c249e2362273b69dc5d1626ec2bb8e21d1",
+      "campaign_manifest_sha256": "sha256:bf301771c5c2fff3ee82687d8ee8982a6c6d8451635664b411a2140afd99a325",
+      "plan_hash": "sha256:1a8364a4612ac16834747d7619be1f63da3857d0223ec181c8a93c6851793937",
+      "provenance": {
+        "analysis_and_archiving_code": {
+          "files": [
+            {
+              "bytes": 37142,
+              "path": "benchmark/backend/benchmark_lab/derivation.py",
+              "sha256": "sha256:14b82867bfca82ab252db5f28567c83ab890b892759c3309f8e75391b8d3d7f1"
+            },
+            {
+              "bytes": 14044,
+              "path": "benchmark/backend/benchmark_lab/reports.py",
+              "sha256": "sha256:17731aa45d2ce86147a1b28fb5b75fde83957bc6d22ca2a1fd1f0d7b98250d50"
+            },
+            {
+              "bytes": 62503,
+              "path": "experiments/scripts/archive_exp1_run.py",
+              "sha256": "sha256:25cca63e4acc035a60384dce11221d6571a10ccd1bdf5b3a39e0e7a0d027426e"
+            },
+            {
+              "bytes": 63181,
+              "path": "experiments/analysis/scripts/generate_exp1_tables.py",
+              "sha256": "sha256:37f2dddec2684b6eb2682c65ebdb4750b3a4f795596045ec05da827f06dff7e3"
+            }
+          ]
+        },
+        "artifact_schemas": {
+          "bounded_evidence": {
+            "read_versions": [
+              1,
+              2
+            ],
+            "schema_name": "eos_benchmark_operation_evidence",
+            "write_version": 2
+          },
+          "definition_snapshot": {
+            "read_versions": [
+              2
+            ],
+            "schema_name": "eos_benchmark_definition_snapshot",
+            "write_version": 2
+          },
+          "environment_metadata": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_environment_metadata",
+            "write_version": 1
+          },
+          "events": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_event",
+            "write_version": 1
+          },
+          "expanded_plan": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_expanded_plan",
+            "write_version": 1
+          },
+          "intent_plan": {
+            "read_versions": [
+              1
+            ],
+            "schema_name": "eos_benchmark_intent_plan",
+            "write_version": 1
+          },
+          "observations": {
+            "read_versions": [
+              1,
+              2,
+              3,
+              4,
+              5
+            ],
+            "schema_name": "eos_benchmark_observation",
+            "write_version": 5
+          },
+          "run_manifest": {
+            "read_versions": [
+              1,
+              2
+            ],
+            "schema_name": "eos_benchmark_run_manifest",
+            "write_version": 2
+          }
+        },
+        "benchmark_source": {
+          "content_tree_sha256": "sha256:1efeff548dd664580dcb452829d86e1ae114477828a1af65589b7e34cc311b67",
+          "manifest_sha256": "sha256:d96cff9ace92f167004a71da2ec3055342dedde2debdbbdd30978ae36a423ce2"
+        },
+        "definition_snapshot": {
+          "schema_name": "eos_benchmark_definition_snapshot",
+          "schema_version": 2,
+          "sha256": "sha256:cedb67107a75795ce38ee238341896fa41c75852c77d37996c632a969b35da55"
+        },
+        "docker": {
+          "architecture": "x86_64",
+          "cgroup_version": "2",
+          "driver": "overlayfs",
+          "os_type": "linux",
+          "server_version": "29.0.1",
+          "warnings": null
+        },
+        "fixture": {
+          "fixture_hash": "sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7",
+          "manifest_sha256": "sha256:f35b5e9fd04986b4370fd17f09311ff870d7f1abaf02cdd02411cd0d8c4e7be1",
+          "tree_hash": "sha256:d4c2fefbf94a30352f39d701ececaeeb8fad35603e4fb721dd5cf21296258c9f"
+        },
+        "gateway": {
+          "isolated_runtime_per_execution_block": true,
+          "loopback_only": true,
+          "maximum_connections": 256,
+          "mode": "isolated",
+          "readiness_poll_interval_ms": 50,
+          "readiness_probe_timeout_ms": 2000,
+          "readiness_timeout_ms": 60000,
+          "remount_sweep_widths": [
+            1
+          ],
+          "semantic_revision": 1
+        },
+        "host": {
+          "architecture": "x64",
+          "computer_name": "DESKTOP-OLP1ADS",
+          "cpu_model": "AMD Ryzen Threadripper 7960X 24-Cores",
+          "docker_engine_version": "29.0.1",
+          "filesystem": "NTFS",
+          "logical_processors": 48,
+          "monotonic_clock": "time.monotonic_ns",
+          "operating_system": "windows",
+          "os_build_number": 26200,
+          "os_version": "10.0.26200",
+          "processor_logical_processors": 48,
+          "total_memory_bytes": 137438953472,
+          "volume_root": "C:\\"
+        },
+        "image": {
+          "architecture": "amd64",
+          "id": "sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf",
+          "os": "linux",
+          "repo_digests": [
+            "ubuntu@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf"
+          ],
+          "requested": "ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf"
+        },
+        "lifecycle": {
+          "automatic_retries": 0,
+          "failure_revision": 1,
+          "lifecycle_revision": 1,
+          "one_active_campaign": true,
+          "sequential_families": true,
+          "stabilization_revision": 1
+        },
+        "product": {
+          "archive": {
+            "bytes": 5685130,
+            "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299.zip",
+            "sha256": "sha256:2d487a7d42bfb85058ce0f9a2336229e1bda112b940a6854ee25fbd2e604920e"
+          },
+          "binaries": {
+            "daemon": {
+              "bytes": 7171600,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\dist\\sandbox-daemon-linux-amd64",
+              "sha256": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a"
+            },
+            "gateway": {
+              "bytes": 3452928,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-gateway.exe",
+              "sha256": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285"
+            },
+            "manager": {
+              "bytes": 800768,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-manager-cli.exe",
+              "sha256": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed"
+            },
+            "observability": {
+              "bytes": 800256,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-observability-cli.exe",
+              "sha256": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26"
+            },
+            "runtime": {
+              "bytes": 805888,
+              "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\bin\\sandbox-runtime-cli.exe",
+              "sha256": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8"
+            }
+          },
+          "branch": "main",
+          "commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+          "dirty": false,
+          "recorded_treatment": {
+            "daemon_binary_hash": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a",
+            "gateway_binary_hash": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285",
+            "manager_cli_binary_hash": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed",
+            "observability_cli_binary_hash": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26",
+            "runtime_cli_binary_hash": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8",
+            "source_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+            "source_diff_hash": null,
+            "source_dirty": false
+          }
+        },
+        "protocol_files": [
+          {
+            "bytes": 24478,
+            "path": "plan/task-packets/exp1-cli-performance-campaign.md",
+            "sha256": "sha256:c021ecdd47cc80b1601171c7c175ed4f42d12dfe51229aa4c36b603b8d0a18ce"
+          },
+          {
+            "bytes": 11529,
+            "path": "experiments/expected_tables.md",
+            "sha256": "sha256:7c1ae3d78a9ca7a5b6cbb4a9cc80bac555d676c5833a40d2846597884f8f50da"
+          },
+          {
+            "bytes": 12623,
+            "path": "benchmark/PAPER_ARTIFACT.md",
+            "sha256": "sha256:90385fda5fc65e7cbe47bd3cea1ad2f97307b248f510ea021aa9b20c2bed9ecb"
+          }
+        ],
+        "sandbox_limits": {
+          "authority": {
+            "capture_boundary": "run_start_before_gateway_and_measurement",
+            "create_request_override": "none",
+            "effective_config_builder": "benchmark_lab.gateway._effective_config preserves the selected profile and resource override fields",
+            "kind": "released_gateway_configuration",
+            "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-0392b299\\config\\windows-amd64.yml",
+            "selector": "manager.docker.resource_profiles.standard with manager.docker nano_cpus/memory_bytes overrides",
+            "sha256": "sha256:987776d700108c8a9a9c1a3ed42b9155a4db46e7dde20765a79ef6df6e13677a"
+          },
+          "memory_bytes": 536870912,
+          "nano_cpus": 1000000000,
+          "pids_limit": 256,
+          "profile": "standard",
+          "vcpus": 1
+        },
+        "treatment": {
+          "daemon_binary_hash": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a",
+          "gateway_binary_hash": "sha256:9f2102d13e9643e57e0988644f9ea61534c469e26f4c705b5b8913e892ff7285",
+          "manager_cli_binary_hash": "sha256:564876d4c11040a254d149622d28d3c01259c997ae6472f247dab05e9e1e72ed",
+          "observability_cli_binary_hash": "sha256:25906c1910119a52d98580c748cdad5886aa118d59eccef1f7aa87265c754f26",
+          "runtime_cli_binary_hash": "sha256:c73a5b3bf4b04df5326391bc77b233904074bde72eabc20f393a0f7031d5c1c8",
+          "source_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+          "source_diff_hash": null,
+          "source_dirty": false
+        }
+      },
+      "raw_events_sha256": "sha256:28f4ea8d5eb8fe44dc66005b1864e508096f47f6fe561bfd1c0bd182f2e30af2",
+      "raw_observations_sha256": "sha256:f6b0c4617efca5a91a8211435cca7c0e3e7dffb94cb47f2e6833381e6847b405",
+      "run_id": "019fb6c5-dab0-7958-b7ba-94f2a9eda944"
+    }
+  },
+  "limit_ns": 1400000000000,
+  "model_revision": 1,
+  "models": {
+    "central_structural": {
+      "ceil_ns": 1170818322650,
+      "denominator": 1,
+      "numerator_ns": 1170818322650
+    },
+    "observed_envelope_ns": 1307100411100,
+    "pilot_elapsed_lower_bound_ns": 276504428000
+  },
+  "pass_conditions": {
+    "central_structural_within_limit": true,
+    "observed_envelope_within_limit": true,
+    "pilot_elapsed_within_limit": true
+  },
+  "purpose": "EXP1 Gate 3 runtime projection; not manuscript evidence",
+  "schema_version": 2,
+  "scientific_use": "Exploratory capacity decision only. No smoke, pilot, or projected value is eligible for manuscript tables."
+}

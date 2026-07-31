@@ -206,3 +206,26 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   The immediate executable task is the reviewed `product_cli` benchmark cohort.
   `paper-env-smoke`, `paper-pilot`, and `paper-good-pass` remain prohibited
   until the implementation and validation gates in the EXP1 packet pass.
+- **2026-07-31 -- implementation and qualification:** Implemented and reviewed
+  the native Windows `product_cli` cohort, fixed all 19 cells to `paper-100m`,
+  added manager-CLI sandbox-create timing, passed the full backend suite, and
+  completed clean CLI-only smoke and five-sample pilot runs. The conservative
+  final projection was 1,307.100411100 seconds against the author-approved
+  1,400-second Gate-3 limit.
+- **2026-07-31 -- freeze:** Froze protocol v1.0 at paper commit
+  `eb10c26d1bfd632772baf1bc331c985d0231f52d`, product commit
+  `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3`, and annotated product tag
+  object `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`. No object was pushed.
+- **2026-07-31 -- final stop condition:** The sole eligible final run
+  `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4` stopped after 853 of 1,938 batches.
+  The product file-read request succeeded, but the mandatory post-response
+  snapshot CLI failed to connect with WSAEADDRINUSE 10048. Windows TCP/IP
+  Event 4227 at the same instant confirms local endpoint-reuse pressure from
+  high-rate connection churn.
+- **2026-07-31 -- preservation and outcome:** Explicit cleanup completed, and
+  the 620,311,242-byte failed corpus was archived and independently verified at
+  `experiments/runs/019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`, content-tree
+  `sha256:7efa643b12aba09f0ba5ecfbed5b5692a166a5c12931490402d3992d92f3ae6a`.
+  It is permanently `failed_ineligible`; Gates 5--7 fail and no partial,
+  pilot, or smoke number may enter the paper. A future attempt requires a
+  protocol amendment, new freeze, and explicit author authorization.
