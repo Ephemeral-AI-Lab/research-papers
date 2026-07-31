@@ -6570,7 +6570,7 @@ must not be used to selectively remove unfavorable cells.
   pilot plan
   `sha256:e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f`;
   reviewed final plan
-  `sha256:391b52b777f32bdfd6266c3974037f5c85cb50c5960e6c2bf5d7ea5a9a78ae0f`;
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`;
   protocol `ephemeral-sandbox-v1-practical-performance-v1.1`; pinned image
   unchanged.
 - **Live result:** the supervised wrapper and benchmark exited 0 with empty
@@ -6660,6 +6660,14 @@ must not be used to selectively remove unfavorable cells.
   central structural projection 1179.784426150 seconds, observed envelope
   1303.732241600 seconds, and limit 1400.000000000 seconds. Every condition is
   true and the decision is `pass_runtime_projection`.
+- **Pre-freeze identity correction:** the first draft of this entry copied a
+  non-authoritative candidate final-plan hash from orchestration notes. The
+  fresh validated expansion, frozen preset inventory, prior protocol records,
+  and both tightened projection outputs agree on final plan hash
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`.
+  The incorrect transcription was corrected before freeze preflight or final
+  launch; no plan, preset, benchmark, archive, projection value, or treatment
+  changed.
 - **Tests/checks:** the first real-archive regression run failed one assertion
   because the test expected an invented decision prefix instead of the
   implementation's exact `pass_runtime_projection`; the assertion was
