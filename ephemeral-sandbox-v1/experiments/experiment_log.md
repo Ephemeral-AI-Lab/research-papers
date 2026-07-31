@@ -6485,3 +6485,73 @@ must not be used to selectively remove unfavorable cells.
   Freeze, tag, and final remain prohibited until pilot archival,
   deterministic table regeneration, the conservative no-more-than-1,400
   second projection, anomaly review, and cleanup pass Gate 3.
+
+### 2026-07-31T13:11:50.680Z - EXP1 v1.1 pilot preflight passed
+
+- **Entry ID:** `preflight-exp1-v1.1-5c48dae1-pilot-118`.
+- **Phase/kind:** EXP1-D strict read-only fast preflight; no pilot clock,
+  gateway, sandbox, source mutation, Docker mutation, pull, build,
+  installation, cleanup, freeze, tag, or final operation occurred.
+- **Independent smoke review:** a read-only independent audit confirmed that
+  the three-minute inventory budget names the earlier two-lifecycle/20-call
+  environment qualifier, not the 19-cell EXP1-C smoke. It decomposed current
+  smoke elapsed into 81.281300 seconds fixture materialization, 52.190791
+  seconds cell setup, 81.999392 seconds cell-active time, and 2.711728 seconds
+  terminal cleanup. The 47.474461-second cold create dominates primary
+  operation time, is protocol-required, and must not be prewarmed or reordered.
+  No amendment or rerun is warranted.
+- **Smoke prerequisite:** two additional verify-only invocations, one by the
+  primary workflow and one independent, exited 0 and reconfirmed run
+  `019fb83a-54bc-79db-b6ac-6189fb28f5f2`: 1,073 files, 29,778,180 bytes,
+  content-tree
+  `sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
+- **Plan:** fresh `paper-pilot` validation exited 0. It is runnable and
+  customized with zero findings/warnings, only `product_cli` and
+  `paper-100m`, exactly 19 cells, 133 trial batches, 385 issued product
+  requests, four execution blocks, two warmups, and five measured trials per
+  cell. Plan SHA-256 is
+  `e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f`.
+- **Treatment/source:** paper frozen scope was clean at commit
+  `d427df75e62751c99b99f42d5eebfc20bff35ff7`; product was clean direct
+  `main` at `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`. Package ZIP remained
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`.
+  Gateway, manager, runtime, observability, daemon, and configuration hashes
+  matched the preregistered v1.1 values.
+- **CLI contract preflight:** gateway, manager, runtime, and observability help
+  exited 0 with empty stderr. Their stdout SHA-256 values were
+  `1a01a7c60c1ee1507b47b39c47ffab5d843184e9f94b5d49ecc89ab424f57934`,
+  `b8c3a96951784a67b8dfd021cc754ec1e58ddd5e3ba83512424721709c576fe5`,
+  `2b2bb48142678f0418d6b01a528e0c79b8de6ab89fafc843d4d660ccd0d7dc5e`,
+  and
+  `090d943792ace5873bf7099e3f185030474efd73a59fa876a56fa46878f56243`.
+- **Host/environment:** `DESKTOP-OLP1ADS`, Windows build 26200, NTFS, 48
+  logical processors, 137,438,953,472 physical-memory bytes, and
+  544,201,162,752 free bytes on `C:`. Docker client/server remained 29.0.1,
+  Linux x86_64, `overlayfs`, cgroup v2. The exact pinned image remained local;
+  no pull was issued.
+- **Preserved baseline:** the same eight old terminal benchmark-runtime
+  records, one pre-existing exited gateway-labeled container, and five
+  pre-existing gateway-labeled volumes remained. The only sandbox-named
+  process was protected gateway PID 62980. Nothing was started, stopped,
+  removed, or relabeled.
+- **Preflight wrapper corrections:** three fail-closed helper defects were
+  retained. A help attempt from the backend subdirectory used a nonexistent
+  relative `.venv` path; a subsequent inventory command requested a
+  nonexistent backend-local `pyproject.toml`; neither started a product or
+  benchmark process. The first aggregate preflight looked for the Linux daemon
+  under nonexistent `libexec` instead of package `dist`; the second
+  incorrectly required the historical runtime-record directory to be empty
+  rather than equal to its known eight-entry baseline. A third aggregate
+  attempt disposed its help process object before retaining the exit code and
+  therefore falsely reported gateway-help failure. Each wrapper stopped
+  before the pilot. Corrected read-only checks then passed; no artifact,
+  source, process, Docker object, or environment state was changed by these
+  helper failures.
+- **Clock discipline/disposition:** after committing this preflight log, one
+  final minimal identity/cleanliness check may run. From pilot command start
+  through terminal artifact and recursive workspace cleanup, no build, test,
+  install, pull, source/log edit, dependency mutation, Docker inspection,
+  recursive workspace scan, or environment reconfiguration is permitted.
+  Exactly one fresh exploratory v1.1 `paper-pilot` is authorized. It remains
+  ineligible for manuscript tables; freeze, tag, and final remain prohibited
+  pending complete Gate-3 audit.
