@@ -14,6 +14,28 @@
 *~
 .DS_Store
 
+# Python bytecode and tool caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
 # Paper-local benchmark runtime state and Python environment
 /ephemeral-sandbox-v1/.benchmark-state/
 /ephemeral-sandbox-v1/.venv/
+
+# Local EXP1 runtime state and large/reproducible generated artifacts
+/ephemeral-sandbox-v1/tmp/
+/ephemeral-sandbox-v1/experiments/runs/
+/ephemeral-sandbox-v1/experiments/diagnostics/
+/ephemeral-sandbox-v1/experiments/exp1-pre-edit-baseline.json
+
+# Exploratory EXP1 projections and table regenerations. The final-v11 table
+# trees and freeze record are intentionally versioned and are not matched here.
+/ephemeral-sandbox-v1/experiments/analysis/paper-*-expanded*.json
+/ephemeral-sandbox-v1/experiments/analysis/paper-*-expanded*.stderr.txt
+/ephemeral-sandbox-v1/experiments/analysis/pilot-*.json
+/ephemeral-sandbox-v1/experiments/analysis/pilot-*-tables-*/

@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-31T13:40:38.895Z",
+  "protocol": {
+    "name": "EXP1 CLI-only focused performance campaign",
+    "id": "ephemeral-sandbox-v1-practical-performance-v1.1",
+    "version": "v1.1",
+    "freeze_state": "frozen",
+    "protocol_files": [
+      {
+        "path": "progress.md",
+        "bytes": 15817,
+        "sha256": "sha256:d7b49d15a2bff5f59b73aefeda6b5bc32423737de34cdd8b78e162e178988b37"
+      },
+      {
+        "path": "plan/task-packets/exp1-cli-performance-campaign.md",
+        "bytes": 25212,
+        "sha256": "sha256:a090d2733e821d6d3990d16155169d3bcd4d1a0f01b85c8f84cccee274bd13d9"
+      },
+      {
+        "path": "experiment_inventory.md",
+        "bytes": 19447,
+        "sha256": "sha256:6ece88800fb7bc20b692d4b2a041434c41b1aa8c0c727c1a90e8e09b42e7dd88"
+      },
+      {
+        "path": "experiments/exp1-v1.1-protocol-amendment.md",
+        "bytes": 9972,
+        "sha256": "sha256:e2f96acede3f0f8ac40e84b0e1945f307df938c58060ad94cde92a2c3f854d01"
+      },
+      {
+        "path": "experiments/environment_setup.md",
+        "bytes": 11551,
+        "sha256": "sha256:9d404fa1623e546b8123deb561ffb94501b3234edf15f8ab72b54020a8b8f213"
+      },
+      {
+        "path": "experiments/expected_tables.md",
+        "bytes": 12021,
+        "sha256": "sha256:6802bb831d5b9ef05d2685f5005a115faecdd06024872d07abff0bc75e6c7eae"
+      },
+      {
+        "path": "experiments/experiment_log.md",
+        "bytes": 407071,
+        "sha256": "sha256:e932fd7cfc2ce11d3545edae39b19c5d7bc75f5761b18ee4fae2314205bca080"
+      },
+      {
+        "path": "benchmark/PAPER_ARTIFACT.md",
+        "bytes": 15092,
+        "sha256": "sha256:c55b85d464c9e1a8fa486f72009481720abe7b4b603f2f0baa4a751a058c9966"
+      },
+      {
+        "path": "paper_state.json",
+        "bytes": 3565,
+        "sha256": "sha256:582f5b2c1e87c5858ea3428ca652211f00c6c85998783c2461a6d3c4decd495b"
+      },
+      {
+        "path": "plan/progress.md",
+        "bytes": 30535,
+        "sha256": "sha256:8a0f34397a238228a0e86c37356283e720408f0f054e6ec1f2aadf8fabfe2d58"
+      }
+    ],
+    "metrics_exclusions_and_stopping_rules": "Frozen by the task packet, v1.1 amendment, inventory, and expected-table contract; no retries, no silent outlier removal, and exactly one eligible v1.1 final attempt.",
+    "seed": 20260712
+  },
+  "paper_source": {
+    "repository_commit": "1680b599129532f72e706b6acb12ef62c63759e2",
+    "branch": "agent/complete-pw3-and-final-host-prep",
+    "frozen_scope_clean": true,
+    "freeze_state": "clean_frozen_commit",
+    "benchmark_source": {
+      "file_count": 213,
+      "bytes": 16451598,
+      "content_tree_sha256": "sha256:c060e397ce3511a7839c71e13506dd4db99c9ad774464d0a0555f6949319dabd"
+    }
+  },
+  "product": {
+    "repository_commit": "5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8",
+    "branch": "main",
+    "clean": true,
+    "transport": {
+      "kind": "windows_named_pipe",
+      "scope": "local_only",
+      "rotation": "per_execution_block",
+      "fallback": "none"
+    },
+    "freeze_tag": {
+      "name": "paper-v1.1-freeze",
+      "object_type": "tag",
+      "tag_object": "834c84534359f37653fb25ac45304091e82c37a6",
+      "peeled_commit": "5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8"
+    },
+    "preserved_v1_tag": {
+      "name": "paper-v1-freeze",
+      "tag_object": "0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d"
+    },
+    "baseline_release": {
+      "name": "v0.1.4",
+      "tag_object": "981b99fec4df576bb4326b3c1a145be4471766ce",
+      "peeled_commit": "b22862550e0a7cb4fe61ce581831e9244cc492b5"
+    },
+    "package": {
+      "path": "C:\\Users\\yifan\\code\\Ephemeral-AI-Lab\\ephemeral-sandbox\\target\\windows-exp1-5c48dae1.zip",
+      "bytes": 5739735,
+      "sha256": "sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506"
+    },
+    "binaries": {
+      "sandbox-gateway.exe": "sha256:42e7642dd025487811abbcd78dcc5513760f2aaa1e6057cfdfa3e74c03748358",
+      "sandbox-manager-cli.exe": "sha256:e1faa2fe0e9f4909fa2d694166784ac65dde40ba82795b7e0c503eb5fea86513",
+      "sandbox-runtime-cli.exe": "sha256:e18827cf765945c958e169748575b89645c730b310ee5ffc1b42c382b44a0e26",
+      "sandbox-observability-cli.exe": "sha256:2b1c13bba36c9486f768824178d1e2ea8d2b1da019bd21cd1f9ea250d5da34c5",
+      "ephemeral-sandbox-daemon": "sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a"
+    }
+  },
+  "environment": {
+    "host": "native Windows x64 DESKTOP-OLP1ADS build 26200",
+    "docker": "Docker Desktop 29.0.1 Linux amd64 engine, overlayfs, cgroup v2",
+    "image": "ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf",
+    "sandbox_limits": {
+      "profile": "standard",
+      "nano_cpus": 1000000000,
+      "vcpus": 1,
+      "memory_bytes": 536870912,
+      "pids_limit": 256
+    }
+  },
+  "fixture": {
+    "profile": "paper-100m",
+    "fixture_hash": "sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7",
+    "tree_hash": "sha256:d4c2fefbf94a30352f39d701ececaeeb8fad35603e4fb721dd5cf21296258c9f",
+    "pilot_manifest_sha256": "sha256:f35b5e9fd04986b4370fd17f09311ff870d7f1abaf02cdd02411cd0d8c4e7be1"
+  },
+  "final_plan": {
+    "preset": "paper-good-pass",
+    "preset_sha256": "sha256:4d7ea2903e7c6e6a2a0d28acec44d5427b3c42008227b2273958b0ad25870ce9",
+    "plan_hash": "sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b",
+    "reviewed_expansion_path": "tmp/validate-paper-good-pass-v11-20260731T1327Z.json",
+    "reviewed_expansion_sha256": "sha256:7c4d2fc4f086e06971146dcdf38028ecd4dff9865745b16b238305594e51138c",
+    "client_cohort": "product_cli",
+    "workspace_profile": "paper-100m",
+    "cell_count": 19,
+    "warmups_per_cell": 2,
+    "measured_trials_per_cell": 100,
+    "trial_batch_count": 1938,
+    "issued_operation_request_count": 5610
+  },
+  "analysis": {
+    "archive_script": {
+      "path": "experiments/scripts/archive_exp1_run.py",
+      "sha256": "sha256:353a45bf8780146b19d61a07ce258fb10b9f01c6ba695de7c264e85efdbb714c"
+    },
+    "table_generator": {
+      "path": "experiments/analysis/scripts/generate_exp1_tables.py",
+      "sha256": "sha256:7fd9c21d99ceb4b9fc3b962977ee9c0d270411ec2c6b76cc88960387a2fcbeb7"
+    },
+    "runtime_projection": {
+      "path": "experiments/scripts/project_exp1_final_runtime.py",
+      "sha256": "sha256:d6d73f75f3a2186eef3f92ae8ef8f176f60133e366d89f6ae69a78ad5aa47781"
+    },
+    "gate3_projection": {
+      "path": "experiments/analysis/pilot-v11-019fb84e-final-runtime-prefreeze.json",
+      "sha256": "sha256:a7b4eda8cd1f15e59bca2e6495cb8b8c36914619e4c812143ac361bdb1803822",
+      "pilot_seconds": "276.094047000",
+      "central_seconds": "1179.784426150",
+      "envelope_seconds": "1303.732241600",
+      "limit_seconds": "1400.000000000",
+      "decision": "pass_runtime_projection"
+    }
+  },
+  "gate4_decision": "pass_protocol_and_source_freeze"
+}

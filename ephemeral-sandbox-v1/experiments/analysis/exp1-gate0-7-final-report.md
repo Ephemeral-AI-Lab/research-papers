@@ -296,8 +296,10 @@ The post-freeze analysis erratum changes only
 commit `538f6c9`. Post-final evidence updates modify this report,
 `exp1-final-handoff.md`, the claim map, experiment inventory, two progress
 trackers, paper state, benchmark artifact note, and the append-only experiment
-log. Generated archives/tables and temporary diagnostics remain outside source
-commits unless explicitly named.
+log. The freeze record and two byte-identical final-v1.1 table trees are
+explicitly versioned with `-text` Git attributes so checkout preserves their
+recorded SHA-256 identities. Large run archives, exploratory tables, and
+temporary diagnostics remain outside source commits.
 
 ## Tests and material commands
 
