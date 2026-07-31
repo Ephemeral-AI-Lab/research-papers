@@ -5,8 +5,12 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
+from .fixtures import native_filesystem_path
 from .models import OwnedPathMarker
 from .paths import BenchmarkRoots, MARKER_NAME, PathContractError, _sync_directory
+
+
+_BINARY_FLAG = getattr(os, "O_BINARY", 0)
 
 
 class OwnershipError(ValueError):
@@ -23,7 +27,11 @@ class OwnershipLedger:
         marker_path = canonical / MARKER_NAME
         payload = json.dumps(marker.model_dump(mode="json"), indent=2, sort_keys=True).encode() + b"\n"
         try:
-            descriptor = os.open(marker_path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+            descriptor = os.open(
+                marker_path,
+                os.O_WRONLY | os.O_CREAT | os.O_EXCL | _BINARY_FLAG,
+                0o600,
+            )
         except OSError as error:
             raise OwnershipError(f"ownership marker already exists or cannot be created: {marker_path}") from error
         try:
@@ -48,7 +56,7 @@ class OwnershipLedger:
             raise OwnershipError("ownership identity mismatch")
         if self._entries.get(canonical) != expected:
             raise OwnershipError("target is absent from the active ownership ledger")
-        shutil.rmtree(canonical)
+        shutil.rmtree(native_filesystem_path(canonical))
         self._entries.pop(canonical)
         _sync_directory(canonical.parent)
 

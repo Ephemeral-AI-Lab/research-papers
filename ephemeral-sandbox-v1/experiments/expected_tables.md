@@ -111,8 +111,12 @@ low latency without its CPU, memory, I/O, or storage context.
 
 Use the maximum observed gauge for peak memory, per-trial counter deltas for
 CPU and block I/O, and the before/after allocated-byte delta for workspace
-storage. If the runtime cannot provide a metric, render `unavailable` and
-explain why; never substitute a different scope.
+storage. The workspace-storage delta is the completed post-operation minus
+completed pre-operation product snapshot of allocated bytes summed across all
+live workspace-session upperdirs; either boundary is unavailable if any
+workspace upperdir walk is incomplete. The immutable host fixture allocation
+gauge is a separate scope and is never substituted. If the runtime cannot
+provide a metric, render `unavailable` and explain why.
 
 ## Aggregation and formatting contract
 

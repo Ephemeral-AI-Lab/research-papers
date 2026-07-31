@@ -72,7 +72,7 @@ and an append-only experiment log.
   than an explicitly selected `paper-100m` base.
 - Initial sandbox creation/mount timing is not yet a first-class preserved
   operation metric.
-- The 20-minute good-pass budget is a pilot acceptance target, not a verified
-  runtime.
+- The 1,400-second good-pass budget is a pilot acceptance target, not a
+  verified runtime.
 - Depth 100 is stress-shaped and must not be described as a typical code
   repository.

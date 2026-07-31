@@ -18,6 +18,7 @@ from .paths import BenchmarkRoots, _sync_directory
 MAX_DOWNLOAD_BYTES = 16 * 1024 * 1024
 MAX_BOUNDED_EVIDENCE_BYTES = 1024 * 1024
 RECOVERY_QUARANTINE_DIRECTORY = ".recovery-quarantine"
+_BINARY_FLAG = getattr(os, "O_BINARY", 0)
 
 
 class ArtifactError(ValueError):
@@ -105,8 +106,8 @@ ARTIFACT_SPECS = {
         "bounded-evidence",
         "application/json",
         "eos_benchmark_operation_evidence",
-        1,
-        frozenset({1}),
+        2,
+        frozenset({1, 2}),
     ),
 }
 
@@ -461,14 +462,32 @@ class ArtifactStore:
         self._replace(self.run_path(run_id) / spec.file_name, content)
 
     def append_record(self, run_id: str, artifact_id: ArtifactId, data: dict[str, Any]) -> None:
+        self.append_records(run_id, artifact_id, [data])
+
+    def append_records(
+        self,
+        run_id: str,
+        artifact_id: ArtifactId,
+        records: list[dict[str, Any]],
+    ) -> None:
         spec = ARTIFACT_SPECS[artifact_id]
         if not spec.journal:
             raise ArtifactError(f"artifact {artifact_id} is not a journal")
+        if not records:
+            return
         path = self.run_path(run_id) / spec.file_name
-        payload = json.dumps(
-            _envelope_value(spec, data), separators=(",", ":"), ensure_ascii=False
-        ).encode() + b"\n"
-        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_APPEND, 0o600)
+        payload = b"".join(
+            json.dumps(
+                _envelope_value(spec, data),
+                separators=(",", ":"),
+                ensure_ascii=False,
+            ).encode()
+            + b"\n"
+            for data in records
+        )
+        descriptor = os.open(
+            path, os.O_WRONLY | os.O_CREAT | os.O_APPEND | _BINARY_FLAG, 0o600
+        )
         try:
             _write_all(descriptor, payload)
             os.fsync(descriptor)
@@ -517,7 +536,7 @@ class ArtifactStore:
                 raise ArtifactError(f"quarantine content conflict at {destination}")
         else:
             self._write_new(destination, tail)
-        descriptor = os.open(path, os.O_WRONLY)
+        descriptor = os.open(path, os.O_WRONLY | _BINARY_FLAG)
         try:
             os.ftruncate(descriptor, complete_length)
             os.fsync(descriptor)
@@ -544,12 +563,15 @@ class ArtifactStore:
         _validate_component(cell_id)
         _validate_component(trial_id)
         run = self.run_path(run_id)
-        evidence = run
-        for component in ("cells", cell_id, "trials", trial_id, "bounded-evidence"):
-            evidence /= component
-            self._ensure_plain_directory(evidence)
+        evidence = run / "bounded-evidence"
+        self._ensure_plain_directory(evidence)
         spec = ARTIFACT_SPECS[ArtifactId.BOUNDED_EVIDENCE]
-        payload = _envelope_bytes(spec, data)
+        if "cell_id" in data or "trial_id" in data:
+            raise ArtifactError("bounded evidence payload duplicates identity fields")
+        payload = _envelope_bytes(
+            spec,
+            {"cell_id": cell_id, "trial_id": trial_id, **data},
+        )
         if len(payload) > MAX_BOUNDED_EVIDENCE_BYTES:
             raise ArtifactError("bounded evidence exceeds the byte cap")
         for secret in forbidden_secrets:
@@ -639,7 +661,11 @@ class ArtifactStore:
 
     def _stage(self, payload: bytes) -> Path:
         temporary = self._roots.tmp / f"artifact-{os.getpid()}-{secrets.token_hex(12)}.tmp"
-        descriptor = os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        descriptor = os.open(
+            temporary,
+            os.O_WRONLY | os.O_CREAT | os.O_EXCL | _BINARY_FLAG,
+            0o600,
+        )
         try:
             _write_all(descriptor, payload)
             os.fsync(descriptor)
@@ -690,11 +716,22 @@ class ArtifactStore:
 
     @staticmethod
     def _evidence_paths(run: Path) -> list[Path]:
+        found: list[Path] = []
+        flat = run / "bounded-evidence"
+        if flat.exists():
+            _require_plain_directory(flat)
+            for path in sorted(flat.iterdir()):
+                if (
+                    path.is_symlink()
+                    or not path.is_file()
+                    or not _EVIDENCE_NAME.fullmatch(path.name)
+                ):
+                    raise ArtifactError(f"unexpected bounded evidence entry: {path}")
+                found.append(path)
         cells = run / "cells"
         if not cells.exists():
-            return []
+            return found
         _require_plain_directory(cells)
-        found: list[Path] = []
         for cell in sorted(cells.iterdir()):
             _validate_component(cell.name)
             _require_plain_directory(cell)

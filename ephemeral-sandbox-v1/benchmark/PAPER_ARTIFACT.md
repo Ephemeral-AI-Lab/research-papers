@@ -1,7 +1,8 @@
 # Paper-local benchmark artifact
 
-This directory is a frozen, runnable snapshot of the benchmark implementation
-used by the Ephemeral Sandbox paper.
+This directory is the paper-local, runnable benchmark implementation used by
+the Ephemeral Sandbox paper. Its EXP1 revision remains pre-freeze until Gates
+0--3 pass and the local `paper-v1-freeze` commit and annotated tag are created.
 
 ## Provenance
 
@@ -12,22 +13,126 @@ used by the Ephemeral Sandbox paper.
 - Import verification: all 171 upstream files matched by SHA-256 immediately
   after copying
 
-Paper-local additions that are not present in the upstream benchmark subtree:
+Paper-local additions that are not present in the imported upstream subtree:
 
-- `PAPER_ARTIFACT.md`
-- `defaults/workspace-profiles/paper-100m.yml`
-- `presets/paper-env-smoke.yml`
-- `presets/paper-good-pass.yml`
+- `PAPER_ARTIFACT.md` records the complete paper-local delta and the qualified
+  execution shape.
+- `defaults/workspace-profiles/paper-100m.yml` defines the fixed 100 MiB,
+  4,000-file, depth-100 paper workspace.
+- `presets/paper-env-smoke.yml`, `presets/paper-pilot.yml`, and
+  `presets/paper-good-pass.yml` define the 19-cell CLI-only smoke, exploratory
+  pilot, and final matrices.
+- `backend/benchmark_lab/product_cli.py` is the native manager/runtime/
+  observability CLI subprocess adapter, including end-to-end timing, exact
+  executable selection, response validation, cancellation/timeout reaping,
+  pre-staged content-file transfer, redacted argv, and retained stdout/stderr
+  metadata.
+- `backend/tests/conftest.py` supplies a fail-closed Windows symlink helper
+  which skips only WinError 1314.
+- `backend/tests/unit/test_product_cli.py` covers argument vectors, token
+  redaction, executable routing, JSON and product errors, stderr, timeout,
+  cancellation, timing, concurrency, and raw CLI evidence.
+- `tests/fixtures/golden/artifacts/operation-evidence-v1-squash.json` is the
+  explicit frozen schema-v1 squash evidence fixture used for compatibility
+  checks.
 
-Paper-local modifications to the upstream snapshot:
+Paper-local modifications to imported upstream files are complete as follows:
 
-- `backend/benchmark_lab/fixtures.py` raises the admitted maximum fixture depth
-  from 64 to the product ceiling of 499 so that the depth-100 paper profile is
-  valid.
-- `backend/tests/unit/test_fixtures.py` verifies admission at depth 100, exact
-  generated path depth, and rejection beyond the new limit.
+- `backend/benchmark_lab/artifacts.py` adds content-addressed, colon-free,
+  bounded evidence v2 storage, durable batch journal appends, and retained
+  schema-v1 corpus reads.
+- `backend/benchmark_lab/catalog.py` validates Windows `.exe` identities and
+  falls back from an unavailable catalog exporter to reviewed released-CLI
+  help probes.
+- `backend/benchmark_lab/derivation.py` raises the derivation revision and
+  records the CLI subprocess timing boundary, executable/evidence provenance,
+  and unavailable-metric reasons required by numeric evidence v2.
+- `backend/benchmark_lab/fixtures.py` admits depth 100, uses extended-length
+  native Windows paths and binary-mode low-level writes, validates the cached
+  fixture tree and reparse/plain-entry identity before reuse, and materializes
+  independent native Windows copies through bounded multithreaded Robocopy
+  with a validated Python fallback while preserving fixed fixture bytes and
+  identity.
+- `backend/benchmark_lab/gateway.py` stages native Windows configuration,
+  launches isolated released gateways, performs readiness through the manager
+  CLI for `product_cli`, scopes readiness request IDs by gateway instance,
+  passes arbitrary tokens with parser-safe equals syntax, fails fast on
+  deterministic product rejection, and cleans long owned paths.
+- `backend/benchmark_lab/metadata.py` records native Windows host, product
+  source, image, daemon, gateway, and three CLI executable identities.
+- `backend/benchmark_lab/models.py` admits the canonical `product_cli` cohort.
+- `backend/benchmark_lab/observability.py` validates daemon self-metric
+  responses used by resource sampling.
+- `backend/benchmark_lab/paths.py` resolves the paper-local source and staged
+  native Windows binary layout safely.
+- `backend/benchmark_lab/planning.py` validates paper-only `product_cli`,
+  expands the distinct manager-CLI sandbox-create/base-mount cell, applies
+  `paper-100m` to every cell, derives exact batch/request counts, and persists
+  the seeded cell permutation for each sequential family execution block.
+- `backend/benchmark_lab/product.py` exposes the product-observability and
+  lifecycle protocol used interchangeably by direct test doubles and the CLI
+  adapter.
+- `backend/benchmark_lab/resource_sampling.py` launches daemon, cgroup,
+  snapshot, filesystem, process, and host-volume collection on fixed 100 ms
+  deadlines, permits at most one expensive collection in flight to bound
+  measurement-induced load, records every missed deadline as explicit
+  unavailability with scheduled and observed collection start/completion
+  offsets, and defers ordered durable persistence to the trial boundary.
+- `backend/benchmark_lab/runner.py` routes all paper operations, verification,
+  observability, and cleanup through `product_cli`; measures batch makespan
+  from the admitted-task barrier release through the maximum validated CLI
+  response end while excluding evidence persistence; commits setup,
+  waiting-at-barrier, and all-tasks-ready events as one ordered durable
+  transaction before release, then batches timestamped in-flight and terminal
+  states after the operation; pre-stages write payloads; emits
+  deterministic checks and bounded evidence; and distinguishes sandbox create
+  from session create.
+- `backend/benchmark_lab/safety.py` removes only marked owned trees using safe
+  native extended-length paths.
+- `backend/benchmark_lab/service.py` requires reviewed product catalog/CLI
+  availability before validation or execution.
+- `backend/benchmark_lab/sessions.py` uses the shared product-access protocol
+  without constructing a direct gateway transport.
+- `backend/benchmark_lab/transport.py` exposes bounded product rejection
+  classification for setup fail-fast behavior.
+- `backend/tests/compatibility/test_artifacts.py` and
+  `backend/tests/unit/test_runner_squash.py` verify schema-v1 compatibility
+  using the explicit frozen evidence fixture and v2 indexing/download.
+- `backend/tests/compatibility/test_reports.py` verifies canonical CSV bytes
+  independently of Git checkout newline conversion.
+- `backend/tests/contract/test_api.py`, `backend/tests/contract/test_planning.py`,
+  and `backend/tests/contract/test_catalog.py` verify public serialization,
+  paper-preset rejection/fallback rules, exact 19-cell expansions, request
+  counts, `paper-100m`, executable probing, and fail-closed catalog behavior.
+- `backend/tests/contract/test_zero_rust_guard.py` excludes the prepared
+  virtual environment while retaining the zero-product-source coupling guard.
+- `backend/tests/integration/test_gateway_lifecycle.py` covers native Windows
+  launch/configuration, CLI readiness, gateway-scoped IDs, leading-hyphen
+  rejection behavior, cleanup, stale recovery, and symlink refusal.
+- `backend/tests/integration/test_runner.py` keeps its fakes aligned with CLI
+  readiness, daemon sampling, explicit gateway cleanup semantics, synchronized
+  barrier timing, validated-response makespan, and write pre-staging.
+- `backend/tests/unit/test_resource_sampling.py` verifies fixed-deadline
+  collection, deferred ordered persistence, and explicit saturation evidence.
+- `backend/tests/unit/test_derivation.py` verifies timing/provenance and
+  numeric-evidence derivation.
+- `backend/tests/unit/test_fixtures.py` verifies depth-100 generation and the
+  revised admission boundary.
+- `backend/tests/unit/test_runner_command.py` verifies the released line-window
+  command representation and command evidence.
+- `backend/tests/unit/test_safety.py` verifies deep Windows cleanup and
+  fail-closed symlink behavior.
+- `defaults/definition-catalog.json` defines the separate sandbox lifecycle
+  create/base-mount operation and EXP1 timing/evidence semantics.
+- `presets/paper-env-smoke.yml` and `presets/paper-good-pass.yml` select only
+  `product_cli`, retain the fixed 19 cells, and apply `paper-100m`; the final
+  preset fixes two warmups and 100 measured trials without retry or outlier
+  removal.
+- `web/src/api/types.ts`, `web/src/components/DefaultPlanLauncher.tsx`, and
+  `web/tests/unit/plan-workflow.test.tsx` expose and verify the `product_cli`
+  cohort in the plan UI.
 
-All other files copied from the upstream snapshot remain unchanged.
+No imported benchmark file outside this list is modified by EXP1.
 
 The upstream test repository remains the engineering source of truth. This
 copy is intentionally frozen so that paper results can be tied to an exact
@@ -62,15 +167,28 @@ its virtual environment and dependencies off-clock. No package installation,
 build, image pull, or source mutation may occur during a pilot or final
 campaign.
 
-The current `paper-env-smoke` and `paper-good-pass` files still select
-`direct_client` and are therefore prohibited. After the `product_cli` cohort
-and presets pass the EXP1 implementation and review gates, the Windows command
-shape from `research-papers\ephemeral-sandbox-v1` is:
+The three paper presets select `product_cli`; `direct_client` and `cli_e2e`
+remain prohibited. The validated pre-freeze product is local clean `main` at
+`bc1e6ee04d4df5541290537994a4bf270fcd36b6`, containing two narrowly scoped
+released-CLI fixes, the pilot-discovered validated shared-base cache
+optimization, and the validated 250-millisecond resource-sampling cadence
+used by both daemon workspace and manager cgroup observability. The daemon
+now wires its existing bounded upperdir collector into that owned cadence and
+the public snapshot's dedicated resource reader. Its staged native Windows
+package and archive are:
+
+- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-bc1e6ee0`
+- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-bc1e6ee0.zip`
+- archive SHA-256
+  `f1bede6d96bdf7907c898c11c6c39865824888086ea6ae9e72518c93fef51240`
+
+From `research-papers\ephemeral-sandbox-v1`, the validated Windows command
+shape is:
 
 ```powershell
 $paper = 'C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1'
 $product = 'C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox'
-$productBin = "$product\target\windows-v0.1.4\bin"
+$productBin = "$product\target\windows-exp1-bc1e6ee0\bin"
 
 Set-Location -LiteralPath $paper
 py -3.13 -m venv .venv
@@ -92,6 +210,14 @@ and the phase gate in
 The paper presets pin the selected Linux AMD64 Ubuntu image by digest. Docker
 Desktop must already contain and independently inspect that exact digest before
 any pilot or final measurement begins.
+
+At the current pre-freeze revision, validation produces:
+
+| preset | plan hash | cells | batches | CLI requests |
+| --- | --- | ---: | ---: | ---: |
+| `paper-env-smoke` | `sha256:1a8364a4612ac16834747d7619be1f63da3857d0223ec181c8a93c6851793937` | 19 | 19 | 55 |
+| `paper-pilot` | `sha256:e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f` | 19 | 133 | 385 |
+| `paper-good-pass` | `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b` | 19 | 1,938 | 5,610 |
 
 ## Paper base workspace
 

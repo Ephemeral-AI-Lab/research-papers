@@ -1,8 +1,10 @@
+import hashlib
 import json
 from pathlib import Path
 
 import pytest
 
+import benchmark_lab.artifacts as artifacts_module
 from benchmark_lab.artifacts import (
     ArtifactError,
     ArtifactId,
@@ -14,6 +16,9 @@ from benchmark_lab.paths import BenchmarkRoots
 
 
 GOLDEN = Path(__file__).parents[3] / "tests/fixtures/golden"
+FROZEN_SQUASH_EVIDENCE = (
+    GOLDEN / "artifacts/operation-evidence-v1-squash.json"
+)
 
 
 def roots(tmp_path: Path) -> BenchmarkRoots:
@@ -156,12 +161,50 @@ def test_store_writes_atomically_and_quarantines_partial_tail(tmp_path: Path) ->
     assert quarantine.read_bytes() == b'{"partial":'
 
 
+def test_journal_batch_append_uses_one_trial_boundary_fsync(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    store = ArtifactStore(roots(tmp_path))
+    store.create_run("run-batch")
+    fsync_calls = 0
+    real_fsync = artifacts_module.os.fsync
+
+    def counted_fsync(descriptor: int) -> None:
+        nonlocal fsync_calls
+        fsync_calls += 1
+        real_fsync(descriptor)
+
+    monkeypatch.setattr(artifacts_module.os, "fsync", counted_fsync)
+    events = [
+        {
+            "sequence": sequence,
+            "run_id": "run-batch",
+            "monotonic_offset_ns": sequence,
+            "data": {"kind": "log", "level": "info", "message": str(sequence)},
+        }
+        for sequence in (1, 2, 3)
+    ]
+
+    store.append_records("run-batch", ArtifactId.EVENTS, events)
+
+    assert fsync_calls == 1
+    assert store.read_records("run-batch", ArtifactId.EVENTS).records == events
+
+
 def test_bounded_evidence_is_content_addressed_and_paths_are_closed(tmp_path: Path) -> None:
     store = ArtifactStore(roots(tmp_path))
     store.create_run("run-1")
     first = store.write_trial_evidence("run-1", "cell:1", "trial-1", {"ok": True})
     second = store.write_trial_evidence("run-1", "cell:1", "trial-1", {"ok": True})
     assert first == second
+    assert ":" not in first.label
+    assert first.label.startswith("bounded-evidence/operation-evidence-")
+    content = store.download_artifact("run-1", first.artifact_id).content
+    assert json.loads(content)["data"] == {
+        "cell_id": "cell:1",
+        "trial_id": "trial-1",
+        "ok": True,
+    }
     with pytest.raises(ArtifactError, match="path component"):
         store.write_trial_evidence("run-1", "../escape", "trial-1", {})
     with pytest.raises(ArtifactError, match="runtime secret"):
@@ -189,7 +232,9 @@ def test_artifact_index_and_download_use_only_opaque_ids(tmp_path: Path) -> None
         with pytest.raises(ArtifactError, match="unknown artifact id"):
             store.download_artifact("run-1", unsafe)
 
-    evidence_path = next((run / "cells").rglob("operation-evidence-*.json"))
+    evidence_path = next(
+        (run / "bounded-evidence").glob("operation-evidence-*.json")
+    )
     evidence_path.rename(evidence_path.with_name("operation-evidence-" + "0" * 64 + ".json"))
     with pytest.raises(ArtifactError, match="digest mismatch"):
         store.list_artifacts("run-1")
@@ -197,15 +242,36 @@ def test_artifact_index_and_download_use_only_opaque_ids(tmp_path: Path) -> None
 
 def test_frozen_bounded_evidence_is_indexable_without_product_access(tmp_path: Path) -> None:
     benchmark_roots = roots(tmp_path)
-    destination = benchmark_roots.results / "run-1"
-    source = GOLDEN / "rust" / "quick-smoke-completed"
-    import shutil
+    destination = benchmark_roots.results / "r"
+    payload = FROZEN_SQUASH_EVIDENCE.read_bytes()
+    digest = hashlib.sha256(payload).hexdigest()
+    relative = Path(
+        "cells/c/trials/t/bounded-evidence"
+    ) / f"operation-evidence-{digest}.json"
+    evidence_path = destination / relative
+    evidence_path.parent.mkdir(parents=True)
+    evidence_path.write_bytes(payload)
 
-    shutil.copytree(source, destination)
-    index = ArtifactStore(benchmark_roots).list_artifacts("run-1")
+    frozen = read_envelope_path(FROZEN_SQUASH_EVIDENCE, ArtifactId.BOUNDED_EVIDENCE)
+    assert frozen["operation"] == "squash_layerstack"
+    assert frozen["evidence"]["manifest_reduced"] is True
+
+    store = ArtifactStore(benchmark_roots)
+    index = store.list_artifacts("r")
     evidence = [item for item in index if item.artifact_id.startswith("bounded_evidence_")]
-    assert len(evidence) == 48
-    assert all(item.size_bytes <= 1024 * 1024 for item in evidence)
+    assert len(evidence) == 1
+    reference = evidence[0]
+    expected_label = relative.as_posix()
+    expected_id = hashlib.sha256(expected_label.encode()).hexdigest()
+    assert reference.artifact_id == f"bounded_evidence_{expected_id}"
+    assert reference.label == expected_label
+    assert reference.sha256 == f"sha256:{digest}"
+    assert reference.size_bytes == len(payload)
+    assert reference.size_bytes <= 1024 * 1024
+
+    download = store.download_artifact("r", reference.artifact_id)
+    assert download.reference == reference
+    assert download.content == payload
 
 
 def test_safe_incomplete_removal_refuses_unknown_entries(tmp_path: Path) -> None:

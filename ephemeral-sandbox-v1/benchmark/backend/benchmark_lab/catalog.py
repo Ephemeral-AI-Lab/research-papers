@@ -14,8 +14,39 @@ from .paths import BenchmarkRoots
 
 
 CATALOG_EXECUTABLE = "sandbox-catalog-export"
+MANAGER_CLI_EXECUTABLE = "sandbox-manager-cli"
+RUNTIME_CLI_EXECUTABLE = "sandbox-runtime-cli"
+OBSERVABILITY_CLI_EXECUTABLE = "sandbox-observability-cli"
 MAX_CATALOG_BYTES = 1024 * 1024
 MAX_CATALOG_ERROR_BYTES = 16 * 1024
+_REVIEWED_CLI_OPERATIONS = {
+    MANAGER_CLI_EXECUTABLE: {
+        "create_sandbox",
+        "destroy_sandbox",
+        "inspect_sandbox",
+        "list_sandboxes",
+        "squash_layerstacks",
+    },
+    RUNTIME_CLI_EXECUTABLE: {
+        "create_workspace_session",
+        "destroy_workspace_session",
+        "exec_command",
+        "file_blame",
+        "file_edit",
+        "file_read",
+        "file_write",
+        "publish_workspace_session",
+    },
+    OBSERVABILITY_CLI_EXECUTABLE: {
+        "cgroup",
+        "daemon",
+        "layerstack",
+        "resources",
+        "snapshot",
+        "topology",
+        "trace",
+    },
+}
 
 
 class CatalogError(ValueError):
@@ -136,8 +167,48 @@ def export_catalog(roots: BenchmarkRoots, *, timeout_seconds: float = 10.0) -> C
     )
 
 
+def probe_released_cli_operations(
+    roots: BenchmarkRoots, *, timeout_seconds: float = 10.0
+) -> frozenset[str]:
+    roots.validate_state()
+    operations: set[str] = set()
+    for executable_name, expected in _REVIEWED_CLI_OPERATIONS.items():
+        executable = _prebuilt_executable(roots, executable_name)
+        completed = subprocess.run(
+            [os.fspath(executable), "help"],
+            cwd=roots.product_bin_dir.parent,
+            env={
+                name: os.environ[name]
+                for name in ("PATH", "SystemRoot", "WINDIR")
+                if name in os.environ
+            },
+            stdin=subprocess.DEVNULL,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout_seconds,
+            check=False,
+        )
+        if (
+            completed.returncode != 0
+            or completed.stderr
+            or len(completed.stdout) > MAX_CATALOG_BYTES
+        ):
+            raise CatalogError(
+                f"released CLI catalog probe failed: {executable_name}"
+            )
+        text = completed.stdout.decode("utf-8", "strict")
+        missing = sorted(operation for operation in expected if operation not in text)
+        if missing:
+            raise CatalogError(
+                f"released CLI catalog omitted reviewed operations: {missing}"
+            )
+        operations.update(expected)
+    return frozenset(operations)
+
+
 def _prebuilt_executable(roots: BenchmarkRoots, name: str) -> Path:
-    path = roots.product_bin_dir / name
+    file_name = f"{name}.exe" if os.name == "nt" and not name.endswith(".exe") else name
+    path = roots.product_bin_dir / file_name
     try:
         metadata = path.lstat()
     except OSError as error:

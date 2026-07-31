@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pytest
 
+from benchmark_lab.fixtures import native_filesystem_path
 from benchmark_lab.models import OwnedPathMarker
 from benchmark_lab.paths import BenchmarkRoots, MARKER_NAME
 from benchmark_lab.safety import OwnershipError, OwnershipLedger
@@ -34,6 +35,26 @@ def test_deletion_requires_exact_marker_and_active_ledger(tmp_path: Path) -> Non
     assert not target.exists()
 
 
+def test_deletion_supports_deep_owned_tree_on_windows(tmp_path: Path) -> None:
+    test, product, binaries = repositories(tmp_path)
+    roots = BenchmarkRoots.resolve(test, product, binaries, initialize=True)
+    target = roots.runs / "run-1" / "trial-1"
+    target.mkdir(parents=True)
+    ledger = OwnershipLedger(roots)
+    ledger.register(target, marker())
+
+    deepest = target
+    while len(str(deepest / "segment")) <= 280:
+        deepest /= "segment"
+    native_deepest = native_filesystem_path(deepest)
+    native_deepest.mkdir(parents=True)
+    (native_deepest / "sentinel").write_text("owned")
+
+    ledger.remove(target, marker())
+
+    assert not target.exists()
+
+
 def test_outside_paths_roles_and_corrupt_markers_fail_closed(tmp_path: Path) -> None:
     test, product, binaries = repositories(tmp_path)
     roots = BenchmarkRoots.resolve(test, product, binaries, initialize=True)
@@ -54,7 +75,9 @@ def test_outside_paths_roles_and_corrupt_markers_fail_closed(tmp_path: Path) -> 
     assert target.exists()
 
 
-def test_symlink_target_never_gains_cleanup_authority(tmp_path: Path) -> None:
+def test_symlink_target_never_gains_cleanup_authority(
+    tmp_path: Path, symlink_or_skip
+) -> None:
     test, product, binaries = repositories(tmp_path)
     roots = BenchmarkRoots.resolve(test, product, binaries, initialize=True)
     outside = roots.tmp / "outside"
@@ -62,20 +85,22 @@ def test_symlink_target_never_gains_cleanup_authority(tmp_path: Path) -> None:
     sentinel = outside / "sentinel"
     sentinel.write_text("keep")
     link = roots.runs / "linked"
-    link.symlink_to(outside, target_is_directory=True)
+    symlink_or_skip(link, outside, target_is_directory=True)
     with pytest.raises(OwnershipError, match="symlink"):
         OwnershipLedger(roots).register(link, marker())
     assert sentinel.read_text() == "keep"
 
 
-def test_symlink_ancestor_is_rejected_even_when_it_points_inside_role(tmp_path: Path) -> None:
+def test_symlink_ancestor_is_rejected_even_when_it_points_inside_role(
+    tmp_path: Path, symlink_or_skip
+) -> None:
     test, product, binaries = repositories(tmp_path)
     roots = BenchmarkRoots.resolve(test, product, binaries, initialize=True)
     real = roots.runs / "real"
     target = real / "trial-1"
     target.mkdir(parents=True)
     link = roots.runs / "linked"
-    link.symlink_to(real, target_is_directory=True)
+    symlink_or_skip(link, real, target_is_directory=True)
     with pytest.raises(OwnershipError, match="crosses a symlink"):
         OwnershipLedger(roots).register(link / "trial-1", marker())
     assert not (target / MARKER_NAME).exists()

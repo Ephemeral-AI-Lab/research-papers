@@ -103,7 +103,7 @@ const operationDefinition: DefinitionsResponse["catalog"]["operations"][number] 
   isolation: "session_mode_dependent",
   cleanup: "resolve_from_isolation",
   product_access: { kind: "public_gateway", action: "exec_command" },
-  supported_cohorts: ["direct_client", "cli_e2e"],
+  supported_cohorts: ["direct_client", "product_cli"],
   security_class: "bounded_shell",
   factors,
   checks: [],
@@ -355,6 +355,6 @@ describe("typed plan workflow", () => {
     const cohort = screen.getByRole("combobox", { name: "Client cohort" }) as HTMLInputElement;
 
     expect(cohort.value).toBe("Direct client");
-    expect(screen.queryByText("CLI end to end")).toBeNull();
+    expect(screen.queryByText("Product CLI")).toBeNull();
   });
 });

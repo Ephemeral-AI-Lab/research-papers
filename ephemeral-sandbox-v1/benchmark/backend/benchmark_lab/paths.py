@@ -10,6 +10,7 @@ from .models import StateMarker
 
 MARKER_NAME = ".ownership.json"
 ROLE_NAMES = ("fixtures", "runs", "results", "runtime", "tmp")
+_BINARY_FLAG = getattr(os, "O_BINARY", 0)
 
 
 class PathContractError(ValueError):
@@ -127,7 +128,9 @@ def _overlap(left: Path, right: Path) -> bool:
 
 def _write_new_json(path: Path, value: dict[str, object]) -> None:
     payload = json.dumps(value, indent=2, sort_keys=True).encode() + b"\n"
-    descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+    descriptor = os.open(
+        path, os.O_WRONLY | os.O_CREAT | os.O_EXCL | _BINARY_FLAG, 0o600
+    )
     try:
         os.write(descriptor, payload)
         os.fsync(descriptor)
@@ -137,6 +140,8 @@ def _write_new_json(path: Path, value: dict[str, object]) -> None:
 
 
 def _sync_directory(path: Path) -> None:
+    if os.name == "nt":
+        return
     descriptor = os.open(path, os.O_RDONLY)
     try:
         os.fsync(descriptor)

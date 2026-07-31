@@ -19,14 +19,16 @@ from .statistics import (
 
 
 _FAMILY_LABELS = {
+    "sandbox_lifecycle": "Sandbox Lifecycle",
     "command": "Command",
     "files": "File Operations",
     "workspace_lifecycle": "Workspace Lifecycle",
     "layer_stack": "LayerStack",
 }
+_REPORT_DERIVATION_REVISION = 4
 _DERIVED = {
     "batch_makespan_ns": ("Batch makespan", "Barrier release until the last issued product request reaches a terminal response.", "nanoseconds", "mean", "lower_is_preferred", "runner_monotonic_batch_barrier"),
-    "request_latency_ns": ("Request latency", "One issued product request from send until its final response is decoded.", "nanoseconds", "mean", "lower_is_preferred", "raw_asyncio_socket_monotonic"),
+    "request_latency_ns": ("Request latency", "One issued product request across the declared client-cohort boundary.", "nanoseconds", "mean", "lower_is_preferred", "client_cohort_monotonic_boundary"),
     "throughput_ops_s": ("Throughput", "Successful issued product requests divided by batch makespan seconds.", "operations_per_second", "mean", "higher_is_preferred", "successful_requests_per_batch_makespan"),
     "setup_ns": ("Setup", "Harness setup time outside the primary operation window.", "nanoseconds", "mean", "descriptive_only", "runner_monotonic_lifecycle"),
     "verify_ns": ("Verification", "Correctness verification time outside the primary operation window.", "nanoseconds", "mean", "descriptive_only", "runner_monotonic_lifecycle"),
@@ -42,10 +44,20 @@ _RESOURCE_TEXT = {
     "sandbox_block_read_bytes": ("Sandbox block reads", "Sandbox cumulative block-read byte counter delta over the trial window."),
     "sandbox_block_write_bytes": ("Sandbox block writes", "Sandbox cumulative block-write byte counter delta over the trial window."),
     "workspace_logical_bytes": ("Workspace logical bytes", "Maximum logical file bytes in the named workspace scope."),
-    "workspace_allocated_bytes": ("Workspace allocated bytes", "Maximum allocated filesystem bytes in the named workspace scope."),
+    "workspace_allocated_bytes": (
+        "Host fixture allocated bytes",
+        "Maximum allocated filesystem bytes in the immutable host fixture workspace; "
+        "this gauge is not a live session/upperdir delta and is explicitly unavailable "
+        "when host metadata lacks allocated-block counts.",
+    ),
     "workspace_file_count": ("Workspace files", "Maximum file count in the workspace scope."),
     "layerstack_bytes": ("LayerStack bytes", "Maximum allocated LayerStack storage reported by the product."),
-    "upperdir_bytes": ("Upperdir bytes", "Maximum allocated bytes in live workspace upperdirs."),
+    "upperdir_bytes": (
+        "Live workspace upperdir allocated delta",
+        "Completed post-operation minus completed pre-operation allocated filesystem "
+        "bytes, summed across all live workspace-session upperdirs reported completely "
+        "by the product; unavailable if either boundary is incomplete.",
+    ),
     "host_free_bytes": ("Host free space", "Minimum free bytes on the benchmark volume."),
 }
 def build_report(
@@ -63,7 +75,14 @@ def build_report(
     operation_defs = {item["id"]: item for item in definitions["operations"]}
     metric_defs = {item["id"]: item for item in definitions["metrics"]}
     cells = [
-        _cell_report(cell, records_by_cell[cell["cell_id"]], plan, operation_defs[cell["operation_id"]], metric_defs)
+        _cell_report(
+            cell,
+            records_by_cell[cell["cell_id"]],
+            plan,
+            operation_defs[cell["operation_id"]],
+            metric_defs,
+            environment["client_cohort"],
+        )
         for cell in plan["cells"]
     ]
     measured = sum(cell["counts"]["measured_attempted"] for cell in cells)
@@ -104,7 +123,9 @@ def build_report(
         warnings.append({"code": "missing_correctness_observations", "message": "One or more registered checks lacks a measured-trial verdict."})
     treatment = environment["treatment"]
     return BenchmarkReportV4.model_validate({
-        "schema_version": 4, "report_derivation_revision": 3, "run_id": run_id,
+        "schema_version": 4,
+        "report_derivation_revision": _REPORT_DERIVATION_REVISION,
+        "run_id": run_id,
         "state": state, "provisional": state not in {"completed", "failed", "cancelled"},
         "correctness_verdict": correctness, "design_counts": design,
         "research_question": f'How does {plan["canonical_plan"]["name"]} behave under its declared factors?',
@@ -126,6 +147,7 @@ def utc_now() -> str:
 def _cell_report(
     cell: dict[str, Any], records: list[dict[str, Any]], plan: dict[str, Any],
     operation_def: dict[str, Any], metric_defs: dict[str, dict[str, Any]],
+    client_cohort: str,
 ) -> dict[str, Any]:
     trials = [record["data"] for record in records if record["record"] == "trial"]
     measured = {item["trial_id"]: item for item in trials if not item["warmup"]}
@@ -135,7 +157,9 @@ def _cell_report(
     phases = [record["data"] for record in records if record["record"] == "phase"]
     checks = [record["data"] for record in records if record["record"] == "check" and record["data"]["trial_id"] in measured]
     operation_evidence = [record["data"] for record in records if record["record"] == "operation" and record["data"]["trial_id"] in measured]
-    metrics = _derived_metrics(cell["cell_id"], measured, eligible, requests, plan)
+    metrics = _derived_metrics(
+        cell["cell_id"], measured, eligible, requests, plan, client_cohort
+    )
     metrics.extend(_resource_metrics(cell["cell_id"], measured, eligible, resources, metric_defs, plan))
     metrics.sort(key=lambda item: item["identity"]["id"])
     status_counts = Counter(item["status"] for item in measured.values())
@@ -179,7 +203,7 @@ def _cell_report(
 
 def _derived_metrics(
     cell_id: str, measured: dict[str, dict[str, Any]], eligible: set[str],
-    requests: list[dict[str, Any]], plan: dict[str, Any],
+    requests: list[dict[str, Any]], plan: dict[str, Any], client_cohort: str,
 ) -> list[dict[str, Any]]:
     metrics = []
     request_attempts = sum(item.get("request_count", 0) for item in measured.values())
@@ -187,7 +211,7 @@ def _derived_metrics(
         (item["trial_id"], item["request_id"], item["latency_ns"], None, item["latency_ns"])
         for item in requests if item["trial_id"] in eligible and item["status"] == "success"
     ]
-    metrics.append(_metric(_derived_identity("request_latency_ns"), request_attempts, request_attempts - len(request_points), request_points, cell_id, plan))
+    metrics.append(_metric(_derived_identity("request_latency_ns", client_cohort), request_attempts, request_attempts - len(request_points), request_points, cell_id, plan))
     for metric_id, field in (("batch_makespan_ns", "latency_ns"), ("setup_ns", "setup_ns"), ("verify_ns", "verify_ns"), ("teardown_ns", "teardown_ns")):
         points = [(trial_id, None, item.get(field), None, item.get(field)) for trial_id, item in measured.items() if trial_id in eligible and item.get(field) is not None]
         metrics.append(_metric(_derived_identity(metric_id), len(measured), len(measured) - len(eligible), points, cell_id, plan))
@@ -217,23 +241,34 @@ def _resource_metrics(
             if trial_id not in eligible:
                 continue
             readings = sorted(grouped[(trial_id, metric_id)], key=lambda item: item["monotonic_offset_ns"])
-            value, reason = _aggregate_resource(readings, definition["aggregation"])
+            value, reason = _aggregate_resource(
+                readings,
+                definition["aggregation"],
+                definition["kind"],
+            )
             points.append((trial_id, None, value, reason, int(value) if value is not None and value.is_integer() else None))
         identity = _resource_identity(definition, grouped)
         output.append(_metric(identity, len(measured), len(measured) - len(eligible), points, cell_id, plan))
     return output
 
 
-def _aggregate_resource(readings: list[dict[str, Any]], aggregation: str) -> tuple[float | None, str | None]:
+def _aggregate_resource(
+    readings: list[dict[str, Any]],
+    aggregation: str,
+    kind: str,
+) -> tuple[float | None, str | None]:
     if not readings:
         return None, "resource observation was not emitted"
     available = [item for item in readings if item["value"]["availability"] == "available"]
     if aggregation == "delta":
         if len(available) < 2 or available[0] is not readings[0] or available[-1] is not readings[-1]:
-            return None, _unavailable_reason(readings, "counter window lacks available boundary samples")
+            return None, _unavailable_reason(
+                readings,
+                "delta window lacks available boundary samples",
+            )
         first = float(available[0]["value"]["value"])
         last = float(available[-1]["value"]["value"])
-        if last < first:
+        if kind == "monotonic_counter" and last < first:
             return None, "monotonic counter reset during the trial window"
         return last - first, None
     if not available:
@@ -271,16 +306,32 @@ def _metric(
     }
 
 
-def _derived_identity(metric_id: str) -> dict[str, Any]:
+def _derived_identity(
+    metric_id: str, client_cohort: str | None = None
+) -> dict[str, Any]:
     label, help_text, unit, aggregation, direction, source = _DERIVED[metric_id]
-    return {"id": metric_id, "label": label, "help": help_text, "semantic_revision": 1, "unit": unit, "scope": "operation", "kind": "gauge", "availability": "explicit_unavailable", "aggregation": aggregation, "direction": direction, "source": source, "ratio_scale": True, "report_derivation_revision": 3}
+    if metric_id == "request_latency_ns":
+        if client_cohort == "product_cli":
+            source = "product_cli_subprocess_monotonic_spawn_to_validated_json"
+            help_text = (
+                "One native product CLI invocation from immediately before "
+                "subprocess creation through exit, pipe collection, and "
+                "one-line JSON schema validation; evidence persistence is excluded."
+            )
+        else:
+            source = "raw_asyncio_socket_monotonic"
+            help_text = (
+                "One issued product request from send until its final response "
+                "is decoded."
+            )
+    return {"id": metric_id, "label": label, "help": help_text, "semantic_revision": 1, "unit": unit, "scope": "operation", "kind": "gauge", "availability": "explicit_unavailable", "aggregation": aggregation, "direction": direction, "source": source, "ratio_scale": True, "report_derivation_revision": _REPORT_DERIVATION_REVISION}
 
 
 def _resource_identity(definition: dict[str, Any], grouped: dict[tuple[str, str], list[dict[str, Any]]]) -> dict[str, Any]:
     metric_id = definition["id"]
     label, help_text = _RESOURCE_TEXT[metric_id]
     source = next((readings[0]["source"] for (trial, identifier), readings in grouped.items() if identifier == metric_id and readings), resource_metric_source(metric_id))
-    return {**definition, "label": label, "help": help_text, "source": source, "ratio_scale": True, "report_derivation_revision": 3}
+    return {**definition, "label": label, "help": help_text, "source": source, "ratio_scale": True, "report_derivation_revision": _REPORT_DERIVATION_REVISION}
 
 
 def _check_summary(definition: dict[str, Any], checks: list[dict[str, Any]]) -> dict[str, Any]:
@@ -447,7 +498,75 @@ def _methods(plan: dict[str, Any], definitions: dict[str, Any], environment: dic
         for identifier, spec in ARTIFACT_SPECS.items()
         if identifier in PRODUCER_ARTIFACT_IDS
     }
-    return {"schema_version": 4, "report_derivation_revision": 3, "artifact_reader_revision": 3, "plan_schema_version": plan["schema_version"], "plan_seed": plan["canonical_plan"]["seed"], "cell_order": "randomized_blocks", "resource_sample_interval_ms": plan["canonical_plan"]["protocol"]["resource_interval_ms"], "design_counts": design, "fixture_generator_revision": 2, "fixture_hashes": fixture_hashes, "producer": {"package": "ephemeralos-benchmark", "version": "0.1.0"}, "artifact_schemas": artifact_schemas, "operation_authorities": authorities, "metric_revisions": [{"metric_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in sorted(definitions["metrics"], key=lambda item: item["id"])], "derived_metric_revisions": [{"metric_id": item, "semantic_revision": 1} for item in _DERIVED], "check_revisions": [{"check_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in checks], "phase_revisions": [{"phase_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in phases], "environment": environment, "raw_time_unit": "nanoseconds", "monotonic_clock": "time.monotonic_ns", "quantile_interpolation": "Hyndman-Fan Type 7", "confidence_interval": "10,000-resample deterministic percentile bootstrap", "bootstrap_resamples": 10_000, "outlier_policy": "Tukey 1.5 IQR flag only; never excluded", "warmup_policy": "warmups retained but excluded from aggregates", "failure_policy": "only successful, verified, cleanup-valid measured trials are reportable", "resource_policy": "explicit unavailable observations; never zero-filled", "comparison_policy": "versioned scientific compatibility before aggregation"}
+    treatment = environment["treatment"]
+    product_cli = environment["client_cohort"] == "product_cli"
+    return {
+        "schema_version": 4,
+        "report_derivation_revision": _REPORT_DERIVATION_REVISION,
+        "artifact_reader_revision": 3,
+        "plan_schema_version": plan["schema_version"],
+        "plan_seed": plan["canonical_plan"]["seed"],
+        "cell_order": "randomized_blocks",
+        "resource_sample_interval_ms": plan["canonical_plan"]["protocol"]["resource_interval_ms"],
+        "design_counts": design,
+        "fixture_generator_revision": 2,
+        "fixture_hashes": fixture_hashes,
+        "producer": {"package": "ephemeralos-benchmark", "version": "0.1.0"},
+        "artifact_schemas": artifact_schemas,
+        "operation_authorities": authorities,
+        "metric_revisions": [{"metric_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in sorted(definitions["metrics"], key=lambda item: item["id"])],
+        "derived_metric_revisions": [{"metric_id": item, "semantic_revision": 1} for item in _DERIVED],
+        "check_revisions": [{"check_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in checks],
+        "phase_revisions": [{"phase_id": item["id"], "semantic_revision": item["semantic_revision"]} for item in phases],
+        "environment": environment,
+        "primary_timing_boundary": {
+            "client_cohort": environment["client_cohort"],
+            "request_latency_ns": (
+                "time.monotonic_ns immediately before native CLI subprocess "
+                "creation through exit, stdout/stderr collection, and validated "
+                "one-line JSON response; evidence persistence excluded"
+                if product_cli
+                else "time.monotonic_ns around one raw asynchronous gateway request"
+            ),
+            "batch_makespan_ns": (
+                "time.monotonic_ns from runner barrier release through terminal "
+                "completion of every issued client-cohort request"
+            ),
+        },
+        "cli_evidence": (
+            {
+                "directory": "cli-subprocesses",
+                "per_invocation": [
+                    "sanitized argv metadata",
+                    "raw stdout",
+                    "raw stderr",
+                ],
+                "credential_policy": "gateway authentication tokens are redacted",
+            }
+            if product_cli
+            else None
+        ),
+        "executable_identities": {
+            key: treatment.get(key)
+            for key in (
+                "daemon_binary_hash",
+                "gateway_binary_hash",
+                "manager_cli_binary_hash",
+                "runtime_cli_binary_hash",
+                "observability_cli_binary_hash",
+            )
+        },
+        "raw_time_unit": "nanoseconds",
+        "monotonic_clock": "time.monotonic_ns",
+        "quantile_interpolation": "Hyndman-Fan Type 7",
+        "confidence_interval": "10,000-resample deterministic percentile bootstrap",
+        "bootstrap_resamples": 10_000,
+        "outlier_policy": "Tukey 1.5 IQR flag only; never excluded",
+        "warmup_policy": "warmups retained but excluded from aggregates",
+        "failure_policy": "only successful, verified, cleanup-valid measured trials are reportable",
+        "resource_policy": "explicit unavailable observations; never zero-filled",
+        "comparison_policy": "versioned scientific compatibility before aggregation",
+    }
 
 
 def _factor_value(value: Any) -> dict[str, Any]:

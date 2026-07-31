@@ -75,7 +75,7 @@ class RunManifestCore(StrictModel):
 
 class BenchmarkReportV4(StrictModel):
     schema_version: Literal[4]
-    report_derivation_revision: Literal[3]
+    report_derivation_revision: Literal[3, 4]
     run_id: str = Field(min_length=1)
     state: Literal[
         "planned",
@@ -111,7 +111,7 @@ class BenchmarkReportV4(StrictModel):
 
 class RunDerivedSummaryV4(StrictModel):
     schema_version: Literal[4]
-    report_derivation_revision: Literal[3]
+    report_derivation_revision: Literal[3, 4]
     run_id: str = Field(min_length=1)
     plan_hash: str = Field(min_length=1)
     state: Literal[

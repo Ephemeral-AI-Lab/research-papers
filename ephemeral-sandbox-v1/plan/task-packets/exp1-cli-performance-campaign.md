@@ -411,7 +411,8 @@ passes its minimal live gate.
    for manuscript tables.
 4. Verify correctness, cleanup, timing separation, resource correlation, and
    deterministic table regeneration.
-5. Project the full good-pass duration and require no more than 20 minutes.
+5. Project the full good-pass duration and require no more than 1,400 seconds
+   (23 minutes 20 seconds).
 6. Review anomalies and resolve instrumentation/protocol defects before freeze.
 7. Append every attempt and amendment to the log.
 

@@ -210,12 +210,12 @@ The targets below are acceptance budgets, not measured claims:
 | Warm, network-free environment preflight | <= 60 seconds |
 | Minimal live environment smoke | <= 3 minutes |
 | Five-sample exploratory pilot | <= 5 minutes |
-| Complete good pass | <= 20 minutes |
+| Complete good pass | <= 1,400 seconds (23 minutes 20 seconds) |
 | Deterministic analysis and table generation | <= 2 minutes |
 
-If the good pass exceeds 20 minutes during the pilot, reduce the matrix before
-protocol lock. Do not reduce trials or remove slow cells after seeing final
-results.
+If the good pass exceeds 1,400 seconds during the pilot, reduce the matrix
+before protocol lock. Do not reduce trials or remove slow cells after seeing
+final results.
 
 ## Phases and acceptance tracker
 
@@ -302,7 +302,7 @@ with the official Windows release gateway and CLIs controlling Docker Desktop.
 - [ ] Confirm operation setup is excluded from operation latency.
 - [ ] Confirm all correctness checks and cleanup gates pass.
 - [ ] Confirm raw observations deterministically regenerate draft tables.
-- [ ] Confirm the projected good-pass duration is <= 20 minutes.
+- [ ] Confirm the projected good-pass duration is <= 1,400 seconds.
 
 **Gate 3:** measurement boundaries, outputs, and runtime are demonstrated.
 

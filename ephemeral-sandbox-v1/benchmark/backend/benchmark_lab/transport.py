@@ -82,6 +82,7 @@ class TimedGatewayResponse:
     response_sha256: str
     value: Any
     started_ns: int | None = None
+    transport_evidence: dict[str, Any] | None = None
 
 
 class GatewayClient:
