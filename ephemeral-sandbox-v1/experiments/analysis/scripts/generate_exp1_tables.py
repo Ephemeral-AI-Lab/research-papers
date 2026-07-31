@@ -1091,9 +1091,25 @@ def _table_one(
     cpu_model = _first(host, [("cpu_model",), ("processor_model",)])
     logical_processors = _first(host, [("logical_processors",), ("logical_cpu_count",)])
     host_os_name = host.get("operating_system") or run_host.get("operating_system")
-    host_os_edition = _first(host, [("os_edition",), ("operating_system_edition",)])
-    host_os_build = _first(host, [("os_build",), ("build_number",)])
-    host_os_parts = [host_os_name, host_os_edition]
+    host_os_caption = host.get("os_caption") or run_host.get("os_caption")
+    host_os_edition = _first(
+        host,
+        [("os_edition",), ("operating_system_edition",)],
+    ) or _first(run_host, [("os_edition",), ("operating_system_edition",)])
+    host_os_build = _first(
+        host,
+        [("os_build_number",), ("os_build",), ("build_number",)],
+    ) or _first(
+        run_host,
+        [("os_build_number",), ("os_build",), ("build_number",)],
+    )
+    # The canonical Windows capture stores a full OS caption, so do not prefix it
+    # with the generic operating-system family (for example, "windows").
+    host_os_parts = (
+        [host_os_caption]
+        if host_os_caption is not None
+        else [host_os_name, host_os_edition]
+    )
     if host_os_build is not None:
         host_os_parts.append(f"build {host_os_build}")
     host_os_display = (
@@ -1278,7 +1294,7 @@ def _table_one(
             name for name, value, _, _, _ in fields if value in (None, "unavailable")
         ]
         required_qualification_facts = {
-            "host OS edition": host_os_edition,
+            "host OS caption/edition": host_os_caption or host_os_edition,
             "host OS build": host_os_build,
             "CPU model": cpu_model,
             "logical processor count": logical_processors,

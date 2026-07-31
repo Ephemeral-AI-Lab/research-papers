@@ -649,6 +649,59 @@ def test_frozen_final_candidate_uses_exact_final_contract(tmp_path: Path) -> Non
     assert product_field["value"]["freeze_tag"]["peeled_commit"] == PRODUCT_COMMIT
 
 
+def test_frozen_final_candidate_accepts_canonical_host_os_fields(
+    tmp_path: Path,
+) -> None:
+    archive = _build_archive(tmp_path / "archive", disposition="final")
+
+    def use_canonical_host_fields(value: dict[str, Any]) -> None:
+        host = value["recorded_run_environment"]["host"]
+        host["os_caption"] = "Synthetic Windows 11 Pro"
+        host["os_build_number"] = int(host.pop("os_build"))
+        host.pop("os_edition")
+
+    _mutate_json(archive / "environment-preflight.txt", use_canonical_host_fields)
+    _refresh_archive_manifest(archive, disposition="final")
+    output = tmp_path / "output"
+
+    generator.generate(archive, output)
+
+    tables = json.loads((output / "tables.json").read_text(encoding="utf-8"))
+    host_os = next(
+        field
+        for field in tables["tables"]["environment"]["fields"]
+        if field["field"] == "Host OS"
+    )
+    assert host_os["display"] == "Synthetic Windows 11 Pro build 99999"
+
+
+@pytest.mark.parametrize(
+    "missing_key,expected_field",
+    [
+        ("os_caption", "host OS caption/edition"),
+        ("os_build_number", "host OS build"),
+    ],
+)
+def test_frozen_final_candidate_requires_canonical_host_os_fields(
+    tmp_path: Path, missing_key: str, expected_field: str
+) -> None:
+    archive = _build_archive(tmp_path / "archive", disposition="final")
+
+    def use_incomplete_canonical_host_fields(value: dict[str, Any]) -> None:
+        host = value["recorded_run_environment"]["host"]
+        host["os_caption"] = host.pop("os_edition")
+        host["os_build_number"] = int(host.pop("os_build"))
+        host.pop(missing_key)
+
+    _mutate_json(
+        archive / "environment-preflight.txt", use_incomplete_canonical_host_fields
+    )
+    _refresh_archive_manifest(archive, disposition="final")
+
+    with pytest.raises(generator.GenerationError, match=expected_field):
+        generator.generate(archive, tmp_path / "output")
+
+
 def test_frozen_final_candidate_requires_ntfs(tmp_path: Path) -> None:
     archive = _build_archive(tmp_path / "archive", disposition="final")
     _mutate_json(
@@ -858,6 +911,17 @@ def test_v11_final_generation_requires_v11_tag_and_discloses_transport(
 ) -> None:
     archive = _build_archive(tmp_path / "archive", disposition="final")
     _mutate_json(
+        archive / "environment-preflight.txt",
+        lambda value: (
+            value["recorded_run_environment"]["host"].update(
+                os_caption="Synthetic Windows 11 Pro",
+                os_build_number=99999,
+            ),
+            value["recorded_run_environment"]["host"].pop("os_edition"),
+            value["recorded_run_environment"]["host"].pop("os_build"),
+        ),
+    )
+    _mutate_json(
         archive / "campaign-manifest.json",
         lambda value: (
             value["protocol"].update(
@@ -916,6 +980,8 @@ def test_v11_final_generation_requires_v11_tag_and_discloses_transport(
 
     table1_header, table1_rows = _markdown_table(output / "table-1-environment.md")
     assert table1_header == ["Field", "Archived value", "Evidence source"]
+    host_os_row = next(row for row in table1_rows if row[0] == "Host OS")
+    assert host_os_row[1] == "Synthetic Windows 11 Pro build 99999"
     transport_row = next(
         row for row in table1_rows if row[0] == "Gateway transport"
     )
