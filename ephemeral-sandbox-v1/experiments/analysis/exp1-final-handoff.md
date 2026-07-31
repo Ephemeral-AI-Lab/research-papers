@@ -1,93 +1,137 @@
-# EXP1 final evidence handoff
+# EXP1 v1.1 final evidence handoff
 
 Status date: 2026-07-31.
 
 ## Outcome
 
-EXP1 protocol v1.0 was frozen and its sole eligible `paper-good-pass` was run
-once. Run `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4` failed at the mandatory
-post-response resource boundary after 853 of 1,938 trial batches. The immutable
-archive is verified and classified `failed_ineligible`.
+EXP1 v1.1 completed Gates 0--7. The sole eligible final run
+`019fb86c-096e-7589-a0a4-a6d6ef5d7f8b` contains exactly 19 cells, 1,938
+batches, 38 warmups, 1,900 successful/reportable measured trials, and 5,610
+issued product requests. Correctness passed, report warnings are empty, and
+all product, correctness, infrastructure, cleanup, and missing-latency failure
+counts are zero.
 
-Gates 0 through 4 pass. Gate 5 fails. Gates 6 and 7 consequently fail because
-the protocol forbids aggregating a partial final corpus or inserting its
-numbers into the paper.
+The immutable archive is:
 
-## Claim mapping
+`C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\experiments\runs\019fb86c-096e-7589-a0a4-a6d6ef5d7f8b`
 
-| Claim target | Safe wording | Evidence boundary |
-|---|---|---|
-| RQ3 final latency/resource result | “EXP1 v1.0 did not produce a paper-eligible final performance result.” | The sole final attempt failed before all 19 cells reached 100 reportable trials. |
-| Campaign execution | “The frozen native-Windows `product_cli` smoke and five-sample pilot completed, but both remain qualification/exploratory evidence.” | Smoke and pilot values are permanently ineligible for manuscript tables. |
-| Final failure | “The sole final attempt stopped during a required resource observation after the measured file-read request itself succeeded.” | Failed trial 34 is `infrastructure_failed`, `product_succeeded: true`, `reportable: false`, and cleanup restored the baseline. |
-| Failure cause | “A new observability CLI connection hit Windows TCP endpoint-reuse pressure: the CLI recorded WSAEADDRINUSE 10048 and the System log emitted TCP/IP Event 4227 at the same instant.” | This is a scoped failure diagnosis, not a product-throughput or universal Windows limit. |
-| Cleanup/provenance | “The failed corpus, frozen source/tag identities, and clean post-run proof were preserved and independently verified.” | The archive is `failed_ineligible`; preservation does not make partial metrics eligible. |
+It contains 82,051 files and 3,139,214,747 bytes with content tree
+`sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+Its raw subtree is bound by
+`sha256:561dd3bd8ac1a7106fcf970acdcd6972a76da24fa07da147e4f19d49c83f3981`.
 
-The WSAEADDRINUSE connection failure is primary archive evidence. Event 4227
-was retrieved read-only from the Windows System log after the run and preserved
-separately in `exp1-final-system-event-4227.json`; it was not retroactively
-inserted into the immutable run archive.
+The earlier v1.0 final remains `failed_ineligible`; no v1.0, qualifier, smoke,
+pilot, projection, or partial-final value is included in this handoff.
 
-## Wording that remains unsafe
+## Analysis identity and erratum
 
-- Any latency, throughput, p99, RSS, CPU, I/O, storage, or scaling number from
-  the failed final corpus.
-- Any table or aggregate derived from the smoke, pilot, or partial final.
-- “Ephemeral Sandbox is fast,” “scales,” “is cheap,” “beats a baseline,” or
-  any broader superiority statement.
-- A claim that Windows has a universal 6,760-connection or 16,384-connection
-  ceiling. The run establishes one endpoint-reuse failure in the frozen host
-  and workload only.
-- A claim that all dynamic ports were simultaneously exhausted. The evidence
-  establishes WSAEADDRINUSE and Event 4227 endpoint-reuse pressure, not complete
-  instantaneous occupancy of the range.
-- A claim that the product file-read operation failed or returned incorrect
-  content. The product request succeeded; the mandatory evidence boundary
-  failed before verification.
+The measurement freeze records table generator
+`sha256:7fd9c21d99ceb4b9fc3b962977ee9c0d270411ec2c6b76cc88960387a2fcbeb7`.
+Its first post-final invocation failed before output because it did not accept
+the archive's canonical `os_caption` and `os_build_number` keys.
 
-## Numeric-evidence decision
+Post-freeze analysis-only correction commit
+`538f6c98233863957082620329203348ddaa781c` has generator hash
+`sha256:ff93953a6b8b94f10bc35138356a3039f6709a28ff0860d05c0da25e2064727b`.
+The correction changes only Table 1 host-field compatibility. Against the
+frozen pilot archive, numeric evidence, numeric provenance, and Tables 2--4
+remain byte-identical. The final archive was not changed and the final was not
+rerun.
 
-No final table or numeric-evidence v2 record is generated. There is no eligible
-numeric selector to hand to LaTeX. The diagnostic counts in
-`exp1-final-failure-diagnostic.json` describe campaign completion and failure
-provenance only; they are not performance results.
+## Deterministic outputs
 
-## Evidence-group disclosure
+Primary output:
 
-The archive contains 7,992 committed CLI invocation records and one additional
-incomplete raw projection group. Basename
-`766ed434998f2dc7c002bac6dd08c3d642cf1ec416eb2d2cc7df65a6906471a0`
-has a valid cgroup JSON stdout and empty stderr, but no metadata commit marker.
-This is consistent with its concurrent cgroup request finishing while the
-snapshot exception unwound the resource-boundary gather, but the exact race is
-not directly logged and is not claimed as proven. It does not restore the
-missing snapshot boundary or make the trial reportable.
+`C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\experiments\analysis\final-v11-019fb86c-tables-a`
 
-## Immutable evidence
+Independent repeat:
 
-- Archive:
-  `experiments/runs/019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`
-- Archive content tree:
-  `sha256:7efa643b12aba09f0ba5ecfbed5b5692a166a5c12931490402d3992d92f3ae6a`
-- Archive manifest:
-  `sha256:5e0a3c4f7c864df8070a668d2f373b75bece3c2a57cc4340cd89ece292cc7927`
-- Campaign manifest:
-  `sha256:8eefbec9772406943bb1baa2476b181c7436a6fafd7a6d7984874e8889f96982`
-- Failure diagnostic:
-  `experiments/analysis/exp1-final-failure-diagnostic.json`
-- Post-run primary System-event capture:
-  `experiments/analysis/exp1-final-system-event-4227.json`,
-  `sha256:b6eac476b6ecf8c20de529be5c5ca8de297874ae9273c65a4baaf6ffc34ac89d`
-- Frozen paper commit:
-  `eb10c26d1bfd632772baf1bc331c985d0231f52d`
-- Frozen product commit:
-  `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3`
-- Annotated product tag object:
-  `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`
+`C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\experiments\analysis\final-v11-019fb86c-tables-b`
 
-## Required next decision
+Both directories contain the same nine files and 231,047 bytes. Every path,
+byte count, and SHA-256 matches. Output tree:
+`sha256:27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04`.
 
-Do not relaunch v1.0. A future attempt must first choose and document a
-scientifically acceptable remedy for high-rate CLI connection churn, create a
-new protocol/source/environment freeze, and receive explicit author
-authorization. The failed archive must remain immutable and cannot be replaced.
+Use these artifacts:
+
+- `table-1-environment.md` for the tested environment and workload;
+- `table-2-startup.md` for sandbox/workspace startup and first no-op;
+- `table-3-cli-operations.md` for the 16 public CLI rows;
+- `table-4-resources.md` for the seven preregistered resource rows;
+- `numeric-provenance.csv` for the 153 raw source/hash/selector/aggregate
+  bindings;
+- `numeric-evidence.json` as the
+  `ai-research-writing/numeric-evidence-v2` import registry;
+- `output-manifest.json` for generator, archive, protocol, and output hashes.
+
+## RQ3 claim mapping
+
+| Result family | Supported wording | Direct evidence | Boundary |
+|---|---|---|---|
+| Environment and treatment | "The result uses native Windows build 26200, Docker Desktop 29.0.1, a pinned Ubuntu 24.04 image, `paper-100m`, and local Windows named pipes rotated per execution block." | Table 1, campaign/run/environment manifests. | One disclosed host and treatment only. |
+| Startup | "In the tested environment, sandbox create plus base mount had p50/p95/p99 1,659.811/1,749.739/1,794.902 ms." | Table 2 and `table2.create_sandbox.none.c1.*` numeric selectors. | Not a cold-machine, remote, or cross-platform result. |
+| Workspace/first command | "Session create and first no-op values are those in Table 2 for concurrency 1 or 5." | Table 2 and matching numeric selectors. | Session create is distinct from sandbox create. |
+| CLI latency | "For each fixed operation/payload/concurrency row, end-to-end native CLI p50/p95/p99 is the value in Table 3." | Table 3; `batch_makespan_ns` selectors over 100 reportable trials. | Includes native process launch, CLI/gateway transport, validation, and process exit. |
+| CLI throughput | "Mean completed-operation throughput changed between concurrency 1 and 5 as shown in Table 3." | Table 3; `throughput_ops_s` selectors. | Describe change; do not claim linear scaling or improved per-request latency. |
+| Resources | "Peak/mean resource observations for the seven preregistered rows are those in Table 4." | Table 4 and matching daemon/cgroup/upperdir selectors. | Sampled/available metrics only; unavailable values are not zero. |
+| Completeness | "The sole v1.1 final completed all 1,900 measured trials with zero classified failures." | Report counts, campaign manifest, archive verifier. | Does not establish broader reliability. |
+
+Every displayed table value has a unique numeric-provenance row. No table
+contains a verification/pass column, and no number was manually copied into
+LaTeX during this campaign.
+
+## Supported representative sentences
+
+- "Sandbox create plus base mount had p50/p95/p99 latency of
+  1,659.811/1,749.739/1,794.902 ms in the tested environment."
+- "No-op native CLI throughput changed from 37.28 operations/s at concurrency
+  1 to 107.61 operations/s at concurrency 5; p50 batch makespan changed from
+  26.719 to 45.998 ms."
+- "At concurrency 5, the 256-KiB file-edit row had p50/p95/p99
+  187.357/208.008/294.392 ms and mean throughput 26.36 operations/s."
+- "For the preregistered 256-KiB/concurrency-5 resource rows, peak measured
+  sandbox memory was 14.977 MiB for read, 54.270 MiB for write, and 66.715 MiB
+  for edit."
+
+## Unsafe wording
+
+- "Ephemeral Sandbox is fast/scalable/cheap" without the tested-environment
+  qualifier and exact workload.
+- Any superiority or competitive-baseline claim.
+- Any claim beyond concurrency 1 and 5, the fixed payloads, `paper-100m`, the
+  pinned image, this host, or this source identity.
+- Any causal interpretation that concurrency improves individual latency.
+- Any performance use of v1.0, qualifier, smoke, pilot, projection, setup,
+  verification, teardown, partial, or unavailable evidence.
+- Any security, isolation, publication correctness, fault tolerance,
+  multi-agent quality, or productivity conclusion from EXP1.
+
+## Unavailable and excluded evidence
+
+Final failures, report warnings, and excluded final trials: none.
+
+Explicitly unavailable at the reportable-trial level:
+
+- the frozen OS caption's localized edition suffix is represented literally
+  as `???`; Table 1 preserves that archived string. A later read-only registry
+  query found `EditionID=Core`, but it is external context and is not inserted
+  into the archive-derived table;
+- LayerStack allocated storage: 1,900/1,900;
+- host workspace allocated blocks: 1,900/1,900;
+- create-sandbox daemon/sandbox CPU and block-I/O deltas: 100/1,900 each,
+  because no sandbox-scoped pre-create baseline can exist;
+- sandbox current and peak memory before the resource ring exists: 50/1,900
+  each.
+
+These values remain unavailable. Table 4's workspace column is the separately
+defined, available `upperdir_bytes` delta.
+
+## Cleanup and next action
+
+The final workspace/runtime are absent, no owned process/container/volume
+remains, product `main` is clean at `5c48dae1`, and protected gateway PID 62980
+is alive and untouched. Nothing was pushed.
+
+There is no remaining EXP1 blocker. The next external action is author review
+of the generated tables and bounded sentences before evidence-backed values
+are imported into `main.tex`.

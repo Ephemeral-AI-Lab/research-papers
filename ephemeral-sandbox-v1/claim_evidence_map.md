@@ -1,6 +1,6 @@
 # Ephemeral Sandbox v1 claim–evidence map
 
-Status date: 2026-07-31. Source rows still point to baseline commit [`b22862550e0a7cb4fe61ce581831e9244cc492b5`](https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/b22862550e0a7cb4fe61ce581831e9244cc492b5), while EXP1 froze the measured product at `0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3` with annotated `paper-v1-freeze` tag object `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d`. The sole final EXP1 attempt failed and is `failed_ineligible`; no performance, resource, productivity, or multi-agent workflow result is paper-ready.
+Status date: 2026-07-31. Source rows still point to baseline commit [`b22862550e0a7cb4fe61ce581831e9244cc492b5`](https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/b22862550e0a7cb4fe61ce581831e9244cc492b5), while the completed EXP1 v1.1 measurement froze product commit `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8` with annotated `paper-v1.1-freeze` tag object `834c84534359f37653fb25ac45304091e82c37a6`. The sole v1.1 final completed and now supports the bounded RQ3 latency, throughput, and resource rows below. The earlier v1.0 final remains `failed_ineligible`, and EXP1 does not support competitive, security, productivity, or multi-agent workflow claims.
 
 ## Evidence levels
 
@@ -75,11 +75,26 @@ The detailed variable definitions, derivations, and measurement matrix are in [`
 |---|---|---|---|
 | Isolation correctness | Two or more leased sessions from controlled bases; cross-session file/process/network probes; cleanup and compaction during a lease; isolated and shared network profiles. | Visibility matrix, namespace identity, leakage failures, cleanup state, exact manifest/lease IDs. | Not yet run with v1-freeze provenance. |
 | Publication correctness | Disjoint stale-base writes, same-path clean text merge, binary/structural conflict, protected/drop cases, concurrent publishers, injected storage faults, cleanup faults. | Accepted/rejected paths and reasons, exact pre/post manifest root/version, layer count/digest, unrelated-path leakage, retry behavior. | Unit/integration coverage exists; paper-grade matrix/fault run still required. |
-| Latency/resource scaling | 1/2/4/8/... concurrent workers on fixed no-op, command, capture, publish, and conflict workloads; independently vary \(L,S,U,C,F,B_p\), merge line/edit-distance shape, lease age, and storage backend; use warmups and repeated measured runs. | Start/exec/capture/publish/squash latency distributions, writer wait/hold, CPU, RSS/PSS, I/O, logical/allocated/shared/exclusive storage, retained history, queue/retry/conflict rates, failures. | The focused CLI-only EXP1 smoke and pilot passed but are ineligible. The sole frozen final failed during a mandatory resource boundary after Windows reported WSAEADDRINUSE 10048 and TCP/IP Event 4227. Its verified archive is `failed_ineligible`, so no paper-ready distribution exists. |
+| Latency/resource scaling | 1/2/4/8/... concurrent workers on fixed no-op, command, capture, publish, and conflict workloads; independently vary \(L,S,U,C,F,B_p\), merge line/edit-distance shape, lease age, and storage backend; use warmups and repeated measured runs. | Start/exec/capture/publish/squash latency distributions, writer wait/hold, CPU, RSS/PSS, I/O, logical/allocated/shared/exclusive storage, retained history, queue/retry/conflict rates, failures. | The focused CLI-only EXP1 v1.1 final completed 19 cells and 1,900 measured trials at concurrency 1/5. Its archive-derived startup, public-CLI, and seven preregistered resource rows are paper-ready only within the fixed tested environment. It does not cover publication, conflict, squash, deeper scaling, competitive baselines, or multi-agent useful work. |
 | Multi-agent workflow effect | Shared mutable directory vs Git worktrees vs Ephemeral on overlap-controlled tasks, same models/prompts/budgets/tooling/integration tests and matched seeds/repeats. Instantiate both structured-team workloads with explicit dependencies/handoffs and exploratory-swarm workloads with redundant or competing proposals. | Verification-passing durably accepted units per time/cost, conflict/retry/integration time, stale or duplicated work, selection cost, and clean textual publishes that fail tests. | Not run. |
 | Operational attribution/recovery | Correlated requests through accept, reject, retry, cleanup failure, daemon restart. | Availability/correctness of base, request, paths, result and audit; unknown/missing attribution rate; recovery time/state. | Source exposes pieces; best-effort audit and restart behavior need measurement. |
 
 Every reported number must archive: source/tag and tag object, benchmark-repository commit, dirty status, OS/kernel/filesystem, hardware, runtime/cgroup settings, toolchain, binary/image digests, workload commit, exact commands/environment, seeds/repeats, raw NDJSON/logs, exclusions, and analysis-code commit.
+
+### Completed focused RQ3 evidence
+
+| Claim ID | Candidate paper sentence | Evidence/status | Boundary |
+|---|---|---|---|
+| E1 | In the tested environment, sandbox create plus base mount had p50/p95/p99 latency of 1,659.811/1,749.739/1,794.902 ms. | Final Table 2; selectors `table2.create_sandbox.none.c1.p50_ms`, `.p95_ms`, and `.p99_ms` in `experiments/analysis/final-v11-019fb86c-tables-a/numeric-provenance.csv`; final archive `019fb86c-096e-7589-a0a4-a6d6ef5d7f8b`. | One native-Windows/Docker Desktop host, pinned image, `paper-100m`, product/benchmark freeze, and end-to-end native CLI boundary. |
+| E2 | No-op native CLI mean throughput changed from 37.28 operations/s at concurrency 1 to 107.61 operations/s at concurrency 5; p50 batch makespan changed from 26.719 to 45.998 ms. | Final Table 3 and matching `table3.exec_command.noop.c{1,5}.*` numeric selectors. | Descriptive change only; not linear scaling, improved individual latency, or a competitive result. |
+| E3 | For the preregistered 256-KiB/concurrency-5 rows, peak measured sandbox memory was 14.977 MiB for read, 54.270 MiB for write, and 66.715 MiB for edit. | Final Table 4 and matching `sandbox_memory_peak_bytes` selectors. | Sampled resource metric for three fixed rows; LayerStack and host allocated-block metrics remain unavailable. |
+| E4 | The sole v1.1 final completed 1,900/1,900 measured trials with zero product, correctness, infrastructure, cleanup, or missing-primary-latency failures. | Final `report.json`, campaign manifest, and independently verified archive. | Completeness of this campaign only; not broader product reliability. |
+
+All 153 final numeric values are registered in
+`experiments/analysis/final-v11-019fb86c-tables-a/numeric-evidence.json` before
+LaTeX import. The frozen table reader's canonical-host compatibility defect and
+post-freeze correction are disclosed in the final handoff; numeric evidence
+and Tables 2--4 were proven byte-identical on the frozen pilot corpus.
 
 ## Claims to avoid or state explicitly as limitations
 
@@ -93,17 +108,17 @@ Every reported number must archive: source/tag and tag object, benchmark-reposit
 | Serializable snapshot isolation | A leased stable view and path-level validation do not establish database serializability. |
 | Semantic merge correctness | Bounded line merge and fingerprints do not prove behavioral compatibility. |
 | Atomic data + attribution + cleanup | Only resolved data publication is committed at the manifest boundary; audit/accounting/cleanup are separate. |
-| Cheap, fast, scalable, or productivity-improving | No paper-ready measurements; the sole frozen EXP1 final is a preserved failed corpus and cannot support numeric claims. |
+| Cheap, fast, scalable, or productivity-improving | EXP1 v1.1 supplies bounded descriptive values for one fixed host/workload at concurrency 1/5, not a universal adjective, cost result, competitive comparison, or productivity claim. |
 | Linear-time or safely memory-bounded merge | The current byte limit does not eliminate edit-distance/line-count-dependent trace growth. |
 | \(O(1)\) reflink publication or storage | Clone work/allocation is filesystem- and extent-dependent, LayerStack 2.0 is not a v1 capability, and the Windows feasibility cell failed. |
 | Universal agent-count threshold | The useful limit depends on workload, runtime, models, orchestration, verification, and resources. |
 
 ## Current blockers
 
-1. The sole EXP1 v1.0 final failed during a mandatory post-response resource observation because a fresh observability CLI connection hit Windows TCP endpoint-reuse pressure. Its partial archive is ineligible; any new final requires a protocol amendment, a new freeze, and explicit author authorization.
+1. EXP1 v1.1 itself has no remaining execution or analysis blocker. The next editorial action is author review before importing numeric-evidence-backed rows into LaTeX.
 2. Attribution is best-effort rather than atomically coupled to publication; the paper must decide whether to weaken “attributable” or change/test the implementation before freeze.
 3. Explicit versus implicit protected-drop policy needs maintainer confirmation.
 4. In-memory lease/substitution behavior across daemon restart needs fault testing.
 5. Claim Plane's full manuscript needs a complete novelty audit.
 6. The merge implementation needs adversarial CPU/RSS characterization or a stricter independent resource bound.
-7. No eligible final isolation, fault, scaling, resource, or multi-agent workflow dataset exists.
+7. Eligible final isolation, publication/fault, competitive scaling, and multi-agent workflow datasets remain absent. EXP1 covers only its focused RQ3 slice.

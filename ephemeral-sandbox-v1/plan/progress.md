@@ -322,3 +322,46 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   fixed 1400-second limit. Gate 3 passes. The scoped clean v1.1 freeze is the
   next gate; the sole eligible final remains prohibited until freeze and
   strict final preflight pass.
+- **2026-07-31 -- v1.1 freeze and final preflight passed:** The measurement
+  source froze at paper commit
+  `1680b599129532f72e706b6acb12ef62c63759e2`, product clean direct `main`
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`, and annotated local
+  `paper-v1.1-freeze` tag object
+  `834c84534359f37653fb25ac45304091e82c37a6`. Freeze record
+  `exp1-v11-freeze-record-1680b59-5c48dae1.json` hashes to
+  `5b8ca3962f479f1776be0298acbbe7620b683a334c1964889b031122a0ffdc32`.
+  A fresh strict final validation passed 19 cells, 1,938 batches, 5,610
+  requests, `product_cli`, `paper-100m`, four named-pipe blocks, and zero
+  findings/warnings. Gate 4 passed and exactly one final was authorized.
+- **2026-07-31 -- sole v1.1 final and Gate 5 passed:** Run
+  `019fb86c-096e-7589-a0a4-a6d6ef5d7f8b` completed all 19 cells, 1,938
+  batches, 38 warmups, 1,900 successful/reportable measured trials, 5,610
+  issued requests, and 4,800 correctness checks with zero classified failure,
+  report warning, or stderr byte. Its immutable archive contains 82,051 files
+  and 3,139,214,747 bytes at content tree
+  `sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`;
+  independent verification passed. Cleanup removed all owned runtime/workspace
+  state, and protected PID 62980 remained alive and untouched.
+- **2026-07-31 -- post-freeze Table-1 compatibility erratum:** The frozen
+  generator failed closed because it recognized synthetic `os_edition` and
+  `os_build` keys but not the archive's canonical verified `os_caption` and
+  `os_build_number`. The archive was not mutated and the final was not rerun.
+  Local correction commit `538f6c98233863957082620329203348ddaa781c`
+  changes only this reader compatibility, preserves missing-field failure,
+  and has generator SHA-256
+  `ff93953a6b8b94f10bc35138356a3039f6709a28ff0860d05c0da25e2064727b`.
+  The frozen generator identity
+  `7fd9c21d99ceb4b9fc3b962977ee9c0d270411ec2c6b76cc88960387a2fcbeb7`
+  remains disclosed. Replay on the frozen pilot proved numeric evidence,
+  numeric provenance, and Tables 2--4 byte-identical; only intended Table 1
+  host presentation changed.
+- **2026-07-31 -- Gates 6--7 and EXP1 complete:** Corrected final generation
+  into two fresh directories produced nine files/231,047 bytes each, with all
+  paths and hashes byte-identical at output tree
+  `sha256:27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04`.
+  Numeric-evidence v2 contains 153 unique selector-bound values; archive
+  source hashes and all output-manifest entries reverified. The claim map,
+  inventory, handoff, final Gate report, root/plan trackers, paper state, and
+  append-only log now define supported and unsafe wording. EXP1 has no
+  remaining execution or analysis blocker. Author review before LaTeX import
+  is the next external editorial action; broader paper work remains.

@@ -2,15 +2,15 @@
 
 **Active protocol ID:** `ephemeral-sandbox-v1-practical-performance-v1.1`
 
-**Status:** v1.1 local-IPC qualifier passed; fresh smoke pending
+**Status:** v1.1 Gates 0--7 complete; final evidence ready for author review
 
 **Last updated:** 2026-07-31
 **Primary tracker:** the phase checklists in this document  
 **Run log:** [`experiments/experiment_log.md`](experiments/experiment_log.md)
 
-The original specification below is the immutable v1.0 protocol record. Its
-sole final attempt failed and remains permanently ineligible. New work is
-governed by the
+The fixed study design below originated in v1.0, whose sole final attempt
+failed and remains permanently ineligible. The completed treatment and active
+Gate decisions are governed by the
 [`EXP1 v1.1 local-IPC protocol amendment`](experiments/exp1-v1.1-protocol-amendment.md),
 which changes only the scientific treatment's CLI-to-gateway transport to an
 isolated Windows named pipe per gateway execution block and preserves all
@@ -18,13 +18,16 @@ other scientific choices. Its sole schema clarification adds a non-numeric
 `Gateway transport` provenance row; measured table definitions are unchanged.
 The v1.0 and v1.1 corpora must never be pooled or numerically compared.
 
-The preregistered v1.1 qualification passed on 2026-07-31 with 25,000/25,000
-strict native CLI invocations, zero gateway-owned TCP endpoints, zero new
-System/Tcpip 4227/4231 events, and all fixed resource/cleanup gates satisfied.
-This is qualification-only evidence, not a performance result. The retained
-evidence and hashes are recorded in
-[`experiments/experiment_log.md`](experiments/experiment_log.md); fresh smoke,
-pilot, projection, freeze, and final gates remain prospective.
+The preregistered v1.1 qualification, fresh smoke, five-sample pilot,
+conservative runtime projection, product/paper freeze, strict final preflight,
+sole final, immutable archival, deterministic tables, numeric-evidence v2, and
+claim handoff all passed on 2026-07-31. The final run is
+`019fb86c-096e-7589-a0a4-a6d6ef5d7f8b`; its archive tree is
+`sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+The retained evidence, hashes, post-freeze analysis compatibility erratum, and
+Gate decisions are recorded in
+[`experiments/experiment_log.md`](experiments/experiment_log.md) and the
+[`final Gate report`](experiments/analysis/exp1-gate0-7-final-report.md).
 
 ## Purpose and claim boundary
 
@@ -336,9 +339,15 @@ with the official Windows release gateway and CLIs controlling Docker Desktop.
 - [x] Freeze the paper-local benchmark commit and plan hash.
 - [x] Freeze image and binary digests.
 - [x] Freeze table columns, metric definitions, seed, trials, and exclusions.
-- [x] Record protocol version `v1.0` in the log.
+- [x] Record active protocol version `v1.1` and preserve historical v1.0.
 
-**Gate 4:** no scientific decision remains conditional or ambiguous.
+**Gate 4: PASS.** Measurement source was frozen at paper commit
+`1680b599129532f72e706b6acb12ef62c63759e2`, product commit
+`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`, and annotated tag object
+`834c84534359f37653fb25ac45304091e82c37a6`. No scientific decision remained
+conditional. The later canonical-host reader correction is a separately
+identified post-freeze analysis erratum and did not alter the measurement
+freeze.
 
 ### Phase 5 - Good pass
 
@@ -347,38 +356,44 @@ with the official Windows release gateway and CLIs controlling Docker Desktop.
 - [x] Run `paper-good-pass` once with the frozen plan.
 - [x] Preserve run manifest, raw observations, traces, resources, and logs.
 - [x] Preserve failed or partial evidence if the run does not complete.
-- [ ] Confirm all 19 cells have 100 reportable measured trials.
+- [x] Confirm all 19 cells have 100 reportable measured trials.
 
-**Gate 5: FAIL.** Run `019fb6e5-c00b-7b02-8a3c-d76bd1346eb4`
-stopped after 853 of 1,938 batches when the mandatory post-response resource
-snapshot hit Windows socket error 10048. TCP/IP Event 4227 confirms local
-endpoint-reuse pressure. The verified archive is `failed_ineligible`; v1.0
-cannot be rerun.
+**Gate 5: PASS.** The sole v1.1 final
+`019fb86c-096e-7589-a0a4-a6d6ef5d7f8b` completed exactly 19 cells, 1,938
+batches, 38 warmups, 1,900 successful/reportable measured trials, and 5,610
+issued requests with zero classified failure or warning. The 3,139,214,747-byte
+archive was independently verified at content tree
+`sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+The earlier v1.0 failed run remains immutable and ineligible.
 
 ### Phase 6 - Deterministic analysis and tables
 
-- [x] Validate the raw corpus before aggregation; validation classifies it
-  `failed_ineligible`.
-- [ ] Generate all four expected tables from archived data.
-- [ ] Confirm every displayed value traces to a run/cell/metric selector.
-- [ ] Confirm no verification/pass column appears in the CLI table.
-- [ ] Confirm negative or unavailable resource fields are disclosed.
-- [ ] Record analysis command, commit, and output hashes.
+- [x] Validate the immutable v1.1 raw corpus before aggregation.
+- [x] Generate all four expected tables from archived data twice.
+- [x] Confirm every displayed value traces to a run/cell/metric selector.
+- [x] Confirm no verification/pass column appears in the CLI table.
+- [x] Confirm negative or unavailable resource fields are disclosed.
+- [x] Record analysis command, frozen/corrected identities, and output hashes.
 
-**Gate 6: FAIL.** Aggregation is prohibited because Gate 5 did not produce an
-eligible complete corpus. No final tables or numeric-evidence record exist.
+**Gate 6: PASS.** Two nine-file generations are byte-identical at output tree
+`sha256:27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04`.
+Numeric-evidence v2 contains 153 unique selector-bound values. A frozen-reader
+schema mismatch was corrected only for canonical host metadata; the original
+and corrected generator identities are both disclosed, Tables 2--4 and numeric
+artifacts were proven unaffected, and the archive remained unchanged.
 
 ### Phase 7 - Paper handoff
 
-- [x] Map the failed-corpus outcome to the exact supported descriptive claim.
+- [x] Map every final result family to exact supported descriptive wording.
 - [x] Record wording that remains unsafe.
-- [x] Update the claim-evidence map with the failed run identifier and
-  eligibility boundary.
-- [ ] Add numeric-evidence selectors before inserting numbers into LaTeX.
+- [x] Update the claim-evidence map with the final run and eligibility boundary.
+- [x] Add numeric-evidence selectors before inserting numbers into LaTeX.
 - [ ] Obtain author review of environment, boundaries, and interpretation.
 
-**Gate 7: FAIL.** There are no eligible final numbers to hand to the paper;
-the failure-only handoff explicitly prohibits using partial values.
+**Gate 7: PASS.** The claim-mapped final handoff, supported/unsafe wording,
+unavailable fields, exclusions, table hashes, and 153-row numeric provenance
+are complete. Author review remains the next manuscript action, not an
+experiment execution blocker; no number was manually inserted into LaTeX.
 
 ## Artifact layout
 

@@ -8,13 +8,19 @@ by annotated `paper-v1-freeze` tag object
 is ineligible, so this freeze supports provenance but no final performance
 claim.
 
-Active v1.1 work is governed by
+Completed v1.1 work is governed by
 [`../experiments/exp1-v1.1-protocol-amendment.md`](../experiments/exp1-v1.1-protocol-amendment.md).
 It retains one fresh native CLI subprocess per measured request but replaces
 loopback TCP with one isolated Windows named pipe per gateway execution block.
-The v1.1 product candidate is clean direct `main` commit
-`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; qualification, smoke, pilot,
-projection, and a new freeze remain pending. No v1.1 performance result exists.
+The v1.1 product is clean direct `main` commit
+`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`, annotated tag object
+`834c84534359f37653fb25ac45304091e82c37a6`. Qualification, smoke, pilot,
+projection, measurement freeze, sole final, immutable archival, deterministic
+analysis, and numeric handoff passed. Final run
+`019fb86c-096e-7589-a0a4-a6d6ef5d7f8b` is archive-derived into
+`../experiments/analysis/final-v11-019fb86c-tables-a`; its exact identities and
+post-freeze Table-1 reader compatibility erratum are in the
+[`final Gate report`](../experiments/analysis/exp1-gate0-7-final-report.md).
 
 ## Provenance
 
@@ -208,7 +214,7 @@ build, image pull, or source mutation may occur during a pilot or final
 campaign.
 
 The three paper presets select `product_cli`; `direct_client` and `cli_e2e`
-remain prohibited. The v1.1 prequalification product is local clean `main` at
+remain prohibited. The frozen v1.1 product is local clean `main` at
 `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`. It retains the earlier
 released-CLI, shared-base-cache, and resource-sampling repairs and adds the
 no-fallback local-IPC treatment plus TCP endpoint compatibility. Its staged
@@ -248,7 +254,7 @@ The paper presets pin the selected Linux AMD64 Ubuntu image by digest. Docker
 Desktop must already contain and independently inspect that exact digest before
 any pilot or final measurement begins.
 
-At the current pre-freeze revision, validation produces:
+At the frozen v1.1 revision, validation produces:
 
 | preset | plan hash | cells | batches | CLI requests |
 | --- | --- | ---: | ---: | ---: |

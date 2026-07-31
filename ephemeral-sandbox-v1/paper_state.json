@@ -14,13 +14,16 @@
     "experiments/environment_setup.md",
     "experiments/exp1-v1.1-protocol-amendment.md",
     "experiments/expected_tables.md",
-    "experiments/experiment_log.md"
+    "experiments/experiment_log.md",
+    "experiments/analysis/exp1-final-handoff.md",
+    "experiments/analysis/exp1-gate0-7-final-report.md",
+    "experiments/analysis/final-v11-019fb86c-tables-a/numeric-evidence.json"
   ],
   "blockers": [
-    "EXP1 v1.1 is authorized and replaces loopback TCP with local Windows named-pipe IPC. Product candidate 5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8 is clean and packaged. The preregistered 25,000-invocation qualifier, fresh 19-cell smoke, five-sample pilot, archive verification, deterministic exploratory analysis, anomaly review, and no-more-than-1,400-second projection passed. The new paper-v1.1-freeze, strict frozen preflight, and exactly one final remain incomplete. No elevated or host-network action is required.",
+    "EXP1 v1.1 Gates 0--7 are complete. The sole final run 019fb86c-096e-7589-a0a4-a6d6ef5d7f8b, immutable archive, deterministic four-table output, 153-entry numeric-evidence v2 registry, claim handoff, and disclosed post-freeze Table-1 host-schema compatibility erratum all passed. Author review before importing selected values into LaTeX is the next editorial action, not an experiment blocker.",
     "experiment_inventory.md preserves the frozen v1.0 failure and links the active focused v1.1 RQ3 amendment, but this does not replace the broader RQ1-RQ5 evaluation charter.",
-    "The v1.0 product_cli smoke, pilot, and failed final remain ineligible. The v1.1 qualifier and smoke are qualification-only, and its pilot plus runtime projection are exploratory/ineligible; no eligible final v1.1 performance corpus, final performance table, or numeric-evidence record has been generated.",
-    "Eligible final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
+    "The v1.0 product_cli smoke, pilot, and failed final remain ineligible. The v1.1 qualifier and smoke are qualification-only, and its pilot plus runtime projection remain exploratory/ineligible; only the sole completed v1.1 final and its corrected-generator archive-derived outputs are eligible within the focused RQ3 boundary.",
+    "Eligible final isolation, publication/fault, competitive baseline, broader scaling, and useful-work measurements are absent. EXP1 v1.1 supplies only its bounded startup, public-CLI, and preregistered resource rows.",
     "Author names and affiliations are unresolved.",
     "The four supplied concept figures are drafting-stage review assets; recorded topology, resolution, grayscale-contrast, and style-family disparities require PW7 repair or an explicit submission-stage waiver.",
     "Publication attribution remains best-effort after data commit rather than transactionally coupled to publication.",

@@ -6693,3 +6693,213 @@ must not be used to selectively remove unfavorable cells.
   committing the scoped checker/evidence update and creating the authorized
   annotated local `paper-v1.1-freeze` identity. The sole eligible final run
   remains prohibited until that freeze and strict final preflight pass.
+
+### 2026-07-31T13:40:38.895Z - EXP1 v1.1 measurement freeze and final preflight passed
+
+- **Entry ID:** `freeze-preflight-exp1-v1.1-1680b59-5c48dae1-120`.
+- **Phase/kind:** EXP1-E Gate-4 measurement freeze and strict read-only
+  final preflight. No final benchmark clock began during this entry.
+- **Paper freeze:** measurement source is clean frozen commit
+  `1680b599129532f72e706b6acb12ef62c63759e2` on
+  `agent/complete-pw3-and-final-host-prep`. Its benchmark source inventory is
+  213 files, 16,451,598 bytes, content-tree
+  `sha256:c060e397ce3511a7839c71e13506dd4db99c9ad774464d0a0555f6949319dabd`.
+- **Product freeze:** clean direct `main` commit
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; annotated local
+  `paper-v1.1-freeze` tag object
+  `834c84534359f37653fb25ac45304091e82c37a6`, peeled to the same commit.
+  Historical `paper-v1-freeze` tag object
+  `0b4aaec5f13b0e52772b2adb7ca2807ee2223e6d` remained unchanged. Nothing was
+  pushed.
+- **Package/treatment:** package ZIP remained 5,739,735 bytes at
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`.
+  Gateway, manager, runtime, observability, daemon, Windows configuration,
+  named-pipe transport, image, fixture, sandbox limits, and host identities
+  all matched the accepted pilot and preregistration.
+- **Freeze record:** created
+  `experiments\analysis\exp1-v11-freeze-record-1680b59-5c48dae1.json`, 6,888
+  bytes,
+  `sha256:5b8ca3962f479f1776be0298acbbe7620b683a334c1964889b031122a0ffdc32`.
+  It verifies the exact ten protocol files, product/package/binaries/tag,
+  paper source, image, fixture, final plan, archive/projection scripts, and
+  frozen table generator
+  `sha256:7fd9c21d99ceb4b9fc3b962977ee9c0d270411ec2c6b76cc88960387a2fcbeb7`.
+- **Strict final plan:** fresh expanded output
+  `tmp\validate-paper-good-pass-v11-frozen-20260731T1342Z.json` is 42,157
+  bytes,
+  `sha256:b5dd979532151f0964b031072a54c6e73f00e74f94a3948b2fc2eda0633a1880`.
+  Validation exited 0 with empty stderr, zero findings/warnings, exactly 19
+  cells, 1,938 batches, 5,610 requests, two warmups plus 100 measured trials,
+  only `product_cli` and `paper-100m`, and plan
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`.
+- **Host/baseline:** host identity, Docker Desktop 29.0.1 Linux AMD64 engine,
+  `overlayfs`, cgroup v2, pinned local image, 543,051,427,840 free bytes, one
+  pre-existing exited container, five pre-existing volumes, and protected
+  gateway PID 62980 matched the frozen baseline. No earlier v1.1 final
+  existed.
+- **Read-only helper failures retained:** two `rg` free-space searches
+  returned exit 1 despite producing the needed read-only context; one
+  PowerShell `rg` command had an unterminated quote; and one Docker Go-template
+  `join` expression failed to parse before corrected JSON inspection. None
+  started or changed a process, Docker object, source file, archive, package,
+  host setting, or protected resource.
+- **Disposition:** Gate 4 passes. Exactly one `paper-good-pass` v1.1 final is
+  authorized under the frozen identities and no other final attempt is
+  permitted.
+
+### 2026-07-31T14:12:41.290Z - Sole EXP1 v1.1 final and immutable archive passed
+
+- **Entry ID:** `final-exp1-v1.1-019fb86c-gate5-pass-121`.
+- **Phase/kind:** EXP1-F sole frozen final, fail-closed terminal cleanup,
+  immutable archive creation, and independent verify-only replay. The final
+  was launched once and was not rerun.
+- **Run/timing:** run `019fb86c-096e-7589-a0a4-a6d6ef5d7f8b`; manifest start
+  `2026-07-31T13:45:18.307991Z`; end
+  `2026-07-31T14:05:29.554460Z`; exact corpus elapsed 1,211.246469 seconds,
+  below the fixed 1,400-second envelope. The supervisor completed at
+  `2026-07-31T14:12:41.2897460Z` after owned deep-workspace cleanup. Benchmark
+  and supervisor exited 0; both stderr captures are empty.
+- **Terminal corpus:** state `completed`, correctness `pass`, report ready and
+  non-provisional, warnings empty. Exactly 19 cells, 1,938 attempted batches,
+  38 warmups, 1,900 measured attempts, 1,900 successful/reportable measured
+  trials, and 5,610 issued requests. Product, correctness, infrastructure,
+  cleanup, and missing-primary-latency failure counts are all zero. All
+  4,800 correctness checks passed.
+- **CLI/transport:** four execution blocks are exclusively
+  `windows_named_pipe`, `local_only`, and `per_execution_block`. All 26,692
+  native CLI invocation records have unique request IDs, return code 0,
+  passed response validation and authentication redaction, and zero stderr
+  bytes. No TCP fallback, retry, or pacing appears.
+- **Observations:** 76,276 retained observations: 1,938 trial, 1,938
+  operation, 5,610 request, 4,896 check, and 61,894 resource observations.
+  Raw events are 45,659,053 bytes and raw observations are 67,045,771 bytes.
+- **Unavailable fields:** the final report preserves LayerStack allocated
+  storage and host workspace allocated-block counts as unavailable for all
+  1,900 reportable trials. Create-sandbox counter deltas are unavailable for
+  100 trials because a sandbox-scoped pre-create baseline cannot exist;
+  sandbox current/peak memory is unavailable for 50 trials before its ring
+  exists. No unavailable value is encoded as zero. The complete raw
+  observation availability counts remain in `failures.md` and
+  `resources/resource-summary.json`.
+- **Cleanup:** the owned workspace and benchmark runtime were removed. No
+  matching product process, run- or gateway-labeled container or volume
+  remains. Product is clean direct `main` at the frozen commit. Protected
+  gateway PID 62980 remained alive and untouched; the pre-existing container
+  and volume baseline remained unchanged.
+- **Archive:** creation completed successfully after 872 seconds at
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\experiments\runs\019fb86c-096e-7589-a0a4-a6d6ef5d7f8b`.
+  The archive contains 82,051 files and 3,139,214,747 bytes, content-tree
+  `sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+  Its raw subtree contains 82,025 files and 2,964,792,876 bytes, tree
+  `sha256:561dd3bd8ac1a7106fcf970acdcd6972a76da24fa07da147e4f19d49c83f3981`.
+  Archive-manifest SHA-256 is
+  `239dbedb781f2e427fb61b316629ea57393d1a92a3be56a45bd107e998d9131c`;
+  campaign-manifest SHA-256 is
+  `93dd241e38c48b2a3f337d66065492f101d8945f7189c2f6402a32fa0fd7e7cf`.
+- **Independent verification:** immediate verify-only replay exited 0 in 36
+  seconds with the identical file count, byte count, run ID, and content tree.
+  A later post-analysis replay again returned the same identity. The archive
+  remained immutable.
+- **Monitoring/read-only attempts:** one progress helper queried the
+  observations file before it existed and emitted a `Get-Item` error; it did
+  not change state. The first post-final report aggregate exceeded a 10-second
+  helper timeout; an identical read-only aggregation with a 60-second limit
+  succeeded. Neither condition affected the benchmark, corpus, archive, or
+  final-attempt count.
+- **Disposition:** Gate 5 passes with one complete provenance-rich corpus.
+  The final cannot be relaunched; Gate 6 may analyze only the immutable
+  archive.
+
+### 2026-07-31T14:44:57.843Z - Post-freeze analysis erratum, deterministic tables, and Gates 6--7 passed
+
+- **Entry ID:** `analysis-handoff-exp1-v1.1-019fb86c-pass-122`.
+- **Initial fail-closed result:** the frozen generator's first final invocation
+  exited 1 before creating its requested output directory:
+  `ERROR: final archive lacks required environment fields: host OS edition,
+  host OS build`. The archive already contained canonical verified
+  `os_caption` and `os_build_number` in both campaign and preflight evidence;
+  the reader accepted only synthetic legacy aliases `os_edition` and
+  `os_build` for final eligibility. The pilot did not expose this because
+  exploratory output tolerates missing qualification fields.
+- **Protocol decision:** an independent read-only blocker audit concluded
+  that the only defensible path was a narrow post-final analysis-only schema
+  compatibility correction. Rerunning would violate the exactly-one-final
+  rule, and editing the archive would violate immutability. The correction
+  does not change a metric, selector, aggregate, exclusion, eligibility rule,
+  raw value, or Tables 2--4. It is explicitly an erratum and is not described
+  as the frozen generator passing unchanged.
+- **Correction identity:** local paper commit
+  `538f6c98233863957082620329203348ddaa781c` accepts canonical caption/build,
+  retains legacy aliases, avoids duplicated OS-family presentation, and
+  fails closed if caption/edition or build evidence is absent. Corrected
+  generator SHA-256 is
+  `ff93953a6b8b94f10bc35138356a3039f6709a28ff0860d05c0da25e2064727b`;
+  frozen identity remains
+  `7fd9c21d99ceb4b9fc3b962977ee9c0d270411ec2c6b76cc88960387a2fcbeb7`.
+- **Tests:** targeted analysis tests passed 22/22. The final complete
+  `experiments\analysis\tests` plus `benchmark\backend\tests` run passed 380
+  with five expected Windows-symlink-privilege skips in 59.86 seconds.
+  Python compilation and scoped `git diff --check` passed.
+- **Numeric-neutrality proof:** corrected-generator replay on immutable pilot
+  `019fb84e-aef1-7fdc-9a56-1adbe712f30d` produced byte-identical
+  `numeric-evidence.json`, `numeric-provenance.csv`, Table 2, Table 3, and
+  Table 4 relative to the frozen-generator pilot output. Parsed Tables 2--4
+  structures are identical; only intended non-numeric Table 1 host display
+  changed.
+- **Final generation:** fresh outputs
+  `experiments\analysis\final-v11-019fb86c-tables-a` and `...-tables-b`
+  each contain nine files and 231,047 bytes. All paths, byte counts, and
+  SHA-256 values are identical; output content-tree is
+  `sha256:27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04`.
+  Output-manifest SHA-256 is
+  `a77b30469c3d46c26ed045f748f09313a646ef13b571f40c45a7a31f7a72505e`;
+  tables JSON is
+  `c8aaa13c58d0dad900f3d08d6a926d7736c281bacdb665e3976da269cbdab3dd`.
+- **Numeric provenance:** schema
+  `ai-research-writing/numeric-evidence-v2` contains 153 entries and the CSV
+  contains 153 rows, with 153 unique IDs, no duplicate, missing ID, or numeric
+  mismatch. All four archive source hashes, all report selectors'
+  `reportable_measured` scope, and all output-manifest hashes independently
+  verified.
+- **Archive immutability after analysis:** verify-only replay exited 0 and
+  reproduced 82,051 files, 3,139,214,747 bytes, and original tree
+  `sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+- **Post-final helper failures retained:** the venv has no Ruff module, so a
+  requested format/lint invocation failed without changing files; Python
+  compile, tests, and diff checks supplied the applicable validation. A
+  PowerShell output-tree helper used unavailable `Convert.FromHexString` and
+  `Convert.ToHexString`; a compatible byte converter then produced the output
+  tree above. Two preliminary PowerShell numeric audits falsely reported 153
+  and then five mismatches because of single-object `.Count` behavior and
+  PowerShell JSON floating-point coercion; an exact Python CSV/JSON audit
+  verified 153/153 values. Other read-only inspections included an `rg`
+  no-match exit, a nonexistent `backend` directory query, a path-separator
+  pattern miss, and an initially unquoted PowerShell tag-peel expression;
+  corrected checks succeeded. None mutated the archive, source treatment,
+  Docker, host settings, or protected PID, and no final was rerun.
+- **Host-caption disclosure:** the canonical archived caption is literally
+  `Microsoft Windows 11 ???`; the localized edition suffix was not preserved
+  legibly by the frozen capture. Build 26200, version, architecture, computer
+  name, and the remaining host identity are present. A post-run read-only
+  registry query reported `EditionID=Core`, `CompositionEditionID=Core`, and
+  build 26200. That external context was not inserted into the immutable
+  archive or substituted into Table 1, which preserves the exact archived
+  caption.
+- **Handoff:** `claim_evidence_map.md`, `experiment_inventory.md`,
+  `progress.md`, `plan/progress.md`, `paper_state.json`,
+  `benchmark/PAPER_ARTIFACT.md`, `exp1-final-handoff.md`, and the required
+  Gate report now bind the final run, outputs, supported wording, unsafe
+  wording, exclusions, unavailable fields, cleanup, and erratum. No numeric
+  result was manually inserted into LaTeX.
+- **Generated-byte preservation:** repository `core.autocrlf=true` and the
+  generated JSON/CSV/Markdown paths have no explicit binary/eol attribute.
+  Staging the freeze record or deterministic table trees could therefore
+  normalize their bytes and break the recorded SHA-256 identities on
+  checkout. Those byte-exact artifacts remain untracked at their reported
+  local paths beside the immutable archive; only source/human evidence
+  documents are included in the post-final Git commit.
+- **Disposition:** Gates 6 and 7 pass. EXP1 v1.1 and the complete focused
+  CLI-only performance campaign are finished. There is no remaining EXP1
+  execution or analysis blocker. The next external action is author review of
+  generated tables and bounded wording before LaTeX import; broader paper
+  work remains outside this campaign.

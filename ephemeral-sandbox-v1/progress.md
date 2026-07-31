@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-31
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, and the v1.1 local-IPC qualifier, smoke, five-sample pilot, archive verification, deterministic exploratory analysis, anomaly review, and <=1,400-second projection passed. The v1.1 freeze is next.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible; and the focused EXP1 v1.1 local-IPC campaign has completed Gates 0--7, including its sole final, immutable archive, deterministic tables, numeric-evidence v2, and claim handoff. Broader paper experiments and manuscript work remain.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -10,7 +10,7 @@ Use this tracker as the authoritative task list for the preprint. A checked item
 
 - [x] Identify the paper’s primary contribution: leased, copy-on-write workspaces with conflict-aware atomic publication.
 - [x] Define the initial experimental baseline: upstream `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5`.
-- [ ] Freeze the active EXP1 v1.1 paper snapshot with an annotated
+- [x] Freeze the active EXP1 v1.1 paper snapshot with an annotated
   `paper-v1.1-freeze` tag after qualification, smoke, pilot, and projection.
   Preserve the existing v1.0 `paper-v1-freeze` tag unchanged.
 - [x] Complete an initial design inventory and claim-boundary review.
@@ -97,8 +97,21 @@ trial batches, 95 measured trials, 385 issued requests, correctness, resource
 correlation, warning, transport, cleanup, archive, and deterministic
 exploratory-analysis gates. The conservative observed-envelope projection is
 1303.732241600 seconds against the fixed 1400-second limit. Pilot and projected
-values remain exploratory and ineligible. Gate 3 passes; the scoped v1.1
-freeze is now the next gate.
+values remain exploratory and ineligible. Gate 3 passed and authorized the
+subsequent scoped v1.1 freeze.
+
+The authorized v1.1 freeze then passed at paper measurement commit
+`1680b599129532f72e706b6acb12ef62c63759e2`, product commit
+`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`, and annotated tag object
+`834c84534359f37653fb25ac45304091e82c37a6`. The sole final
+`019fb86c-096e-7589-a0a4-a6d6ef5d7f8b` completed all 19 cells and 1,900
+measured trials without a classified failure. Its immutable archive tree is
+`sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986`.
+After a disclosed post-freeze Table-1 host-schema compatibility erratum, two
+final nine-file analyses are byte-identical at output tree
+`sha256:27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04`;
+all 153 numeric values have raw selectors. EXP1 Gates 0--7 pass. Author review
+before LaTeX import is the next editorial action, not an experiment blocker.
 
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
@@ -134,8 +147,9 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - [x] Run and archive a fresh v1.1 five-sample pilot, deterministically
   regenerate exploratory tables, review anomalies, and pass the fixed
   no-more-than-1,400-second projection.
-- [ ] Freeze v1.1 and run exactly one eligible final if the strict frozen
-  preflight passes.
+- [x] Freeze v1.1, pass strict frozen preflight, execute exactly one eligible
+  final, verify its immutable archive, regenerate all four tables twice, and
+  complete numeric-evidence/claim handoff.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.
@@ -157,7 +171,9 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - [x] Create a workspace-to-publication sequence review draft; final visual repair is deferred to PW7.
 - [x] Create lifecycle and reconciliation review drafts; lifecycle is revalidated against Section 6 and final visual repair is deferred to PW7.
 - [ ] Complete PW7 submission-final figure normalization, topology review, label audit, and style-family decision.
-- [ ] Generate result figures/tables from archived measurement data.
+- [x] Generate the four focused EXP1 v1.1 result tables from archived data;
+  retain numeric-evidence v2 and a byte-identical independent regeneration.
+- [ ] Generate result figures from archived data if the manuscript uses them.
 - [ ] Write core sections: system model, design, implementation, and evaluation.
 - [ ] Write framing sections: abstract, introduction, related work, limitations/future evolution, conclusion.
 - [ ] Create `ARTIFACTS.md` and archive code/data needed to reproduce every result.
@@ -175,17 +191,17 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 
 ## Active blockers and constraints
 
-- There is no eligible v1 final performance corpus. The sole final archive is
-  `failed_ineligible`; do not state performance conclusions from it.
+- The focused EXP1 v1.1 final corpus is eligible within its bounded RQ3 scope;
+  the earlier v1.0 final remains `failed_ineligible` and must not be pooled or
+  quoted as a result.
 - Existing test source is not proof of a passing v1 test run; rerun and archive results.
 - The prior scripted ten-lane run predates v1 and has incomplete provenance; it is exploratory only.
 - The accepted-work unit, structured-team and exploratory-swarm workloads, matched baseline policy, and final experiment protocol are not yet locked.
-- The reviewed `product_cli` cohort exists, and the sole v1.0 final hit Windows
-  TCP endpoint-reuse pressure during a mandatory observability boundary.
-  V1.1 is authorized and amended; its qualifier, smoke, pilot, archive,
-  deterministic exploratory analysis, anomaly review, and projection passed.
-  The new freeze and strict frozen preflight must still pass before the one
-  new final.
+- The reviewed `product_cli` cohort and permanent local named-pipe treatment
+  passed qualification, smoke, pilot, projection, freeze, strict preflight,
+  sole final, archive, deterministic analysis, and handoff. EXP1 has no
+  remaining execution/analysis blocker; author review is required before
+  importing selected result rows into the manuscript.
 - Focused RQ3 timing is end-to-end native CLI subprocess latency, including
   process launch and CLI-to-gateway transport. Product-reported internal timing
   may be retained only as a separate secondary field.
