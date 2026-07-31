@@ -229,3 +229,17 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   It is permanently `failed_ineligible`; Gates 5--7 fail and no partial,
   pilot, or smoke number may enter the paper. A future attempt requires a
   protocol amendment, new freeze, and explicit author authorization.
+- **2026-07-31 -- v1.1 read-only forensics:** Independent archive and
+  primary-source audits identified 7,993 client-to-gateway TCP attempts. Of
+  3,836 observability attempts, 3,626 were mandatory and only 210 periodic;
+  reducing resource cadence cannot address the mandatory failed boundary.
+  Frozen client and gateway code each implement one request per fresh TCP
+  connection.
+- **2026-07-31 -- remediation proposal:** Recorded
+  `experiments/analysis/exp1-v1.1-remediation-decision.{md,json}`. The
+  recommended EXP1-preserving option is an active-store-only IPv4 dynamic-port
+  expansion, followed by a 20,000-connection same-rate ineligible qualifier,
+  fresh smoke/pilot, no-more-than-1,400-second projection, v1.1
+  source/environment freeze, and exactly one newly authorized final. No
+  network, source, Git, Docker, or live-run mutation occurred. Explicit author
+  authorization and an elevated host action remain the exact blocker.

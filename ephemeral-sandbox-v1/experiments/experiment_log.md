@@ -6014,3 +6014,125 @@ must not be used to selectively remove unfavorable cells.
   future attempt requires a scientifically documented protocol amendment, a
   new source/environment freeze, and explicit author authorization; it cannot
   replace this immutable failed archive.
+
+### 2026-07-31T07:39:16.055Z - Read-only v1.1 endpoint-pressure remedy audit
+
+- **Entry ID:** `exp1-v1.1-endpoint-remediation-proposal-110`.
+- **Phase/kind:** post-failure archive forensics, frozen source-path audit,
+  primary Microsoft documentation review, host TCP configuration read, and
+  protocol-remediation decision package. This is diagnostic planning only:
+  no source, product, network setting, registry value, Git object, Docker
+  resource, protected process, frozen archive, or live benchmark was changed.
+- **Independent audits:** three user-authorized read-only subagents separately
+  reviewed Windows primary sources, the immutable final archive, and
+  product/paper remedy options. Two recommended connection reuse as the
+  long-term engineering fix. One recommended per-cell gateway blocks as the
+  smallest paper-only amendment; root extended that audit with the accepted
+  pilot's cells that the failed final never reached and found a 4,532-call
+  projected worst cell, slightly above the failed endpoint's 4,398 committed
+  calls. Per-cell rotation is therefore retained as a fallback requiring a
+  stronger qualifier, not accepted as sufficient by itself.
+- **Exact connection inventory:** the archive identifies 7,993
+  client-to-gateway TCP attempts: 7,992 committed schema-2 metadata records
+  plus the exact valid cgroup orphan projection. Manager accounts for 328;
+  runtime 3,829; observability 3,836. Exact operations are create/destroy/
+  inspect/list sandbox 110/110/102/6; create/destroy session 208/208;
+  exec 1,224; file read 1,567; file write 622; cgroup 1,918; snapshot 1,918.
+  The committed trace spans 589.946 seconds; the diagnostic average is 13.549
+  attempts/second.
+- **Failure-centered rates:** exact 10/30/60/120/240-second windows contain
+  186/657/1,349/3,145/6,760 attempts, or
+  18.600/21.900/22.483/26.208/28.167 attempts/second. Maximum rolling rates
+  were 43.700/42.767/41.667/33.100/28.404 attempts/second. The failure
+  occurred near the maximum sustained 240-second count, not the short-window
+  rate peak. These are failure-diagnostic counts, not performance results or
+  a universal threshold.
+- **Resource split:** 3,626 connections were mandatory and 210 periodic;
+  mandatory traffic is 94.53% of observability and periodic traffic only
+  2.63% of all attempts. There are 1,705 mandatory and 105 periodic retained
+  14-metric batches. The absent 1,706th mandatory batch is the failed final
+  snapshot. All 1,917 complete cgroup/snapshot pairs overlapped; the 1,918th is
+  the failed snapshot plus its valid cgroup sibling. Removing periodic cadence
+  cannot solve the mandatory failure and would weaken the frozen resource
+  construct.
+- **Endpoint and projected demand:** committed endpoints carried 2,878
+  command, 4,398 files, and 716 sandbox-lifecycle calls. Proportional
+  trial-scoped extrapolation from the accepted seven-trial pilot to 102 trials
+  gives a diagnostic 26,392 total calls: files 20,578; command 2,856;
+  workspace lifecycle 2,244; sandbox lifecycle 714. The largest single
+  projected cell is the concurrency-5 256-KiB file-edit cell at 4,532 calls.
+  Periodic/freshness polls make these structural estimates rather than exact
+  final counts.
+- **Frozen mechanism:** product
+  `crates/sandbox-operations/client/src/client.rs`,
+  `sha256:61ed900ae92a6911649390966b7dc47aec9eff98898f1942305c77ef4740edcc`,
+  creates a fresh `TcpStream::connect` and shuts down its write side per
+  request. Gateway
+  `crates/sandbox-gateway/src/gateway/connection.rs`,
+  `sha256:0cd590e9e3bc3db0c3c4eb0cd878bda44b7085487f3a91c5a514604b49be8a8b`,
+  reads one request and shuts down after its response. Retaining a client
+  object cannot pool this protocol; actual persistence requires product and
+  CLI redesign and is a separate treatment.
+- **Read-only host state:** all reported TCP profiles use dynamic range
+  49,152 plus 16,384 and auto-reuse range 0 plus 0. IPv4 and IPv6 `netsh`
+  ranges agree. `TcpTimedWaitDelay`, `MaxUserPort`, and
+  `StrictTimeWaitSeqCheck` are not explicitly configured in the inspected
+  registry key; no default duration is asserted. A transport-filter query
+  returned Windows access denied, and the read-only Windows principal check
+  reports `IsAdministrator: false`.
+- **Candidate decisions:** removing all periodic sampling saves only 210
+  connections and is rejected. Removing observed baseline repolls plus all
+  periodic sampling saves 424, 5.30%, and is not evidence of safety. Combining
+  cgroup/snapshot into one product operation would save 1,918 observed calls,
+  24.00%, and removes the incomplete-pair shape but requires a new product
+  schema and has no validated safe threshold. Serializing the pair saves zero
+  calls. Persistent multiplexing is the preferred product fix but changes the
+  frozen timing construct if used for measured calls. TIME_WAIT reduction,
+  `SO_REUSEADDR`, pacing, sleeps, retries, and reboot-only recovery are
+  rejected for the first amendment.
+- **Recommended campaign path:** pending explicit author authorization, use an
+  elevated active-store-only IPv4 range of 1,025 plus 64,511 through the
+  current boot. This preserves every measured one-shot subprocess/transport
+  boundary and changes no product operation, metric, cell, payload, trial,
+  exclusion, or analysis schema. It is a disclosed experiment workaround,
+  not the long-term product fix. The exact proposed command, not run, is
+  `netsh interface ipv4 set dynamicportrange protocol=tcp startport=1025
+  numberofports=64511 store=active`; exact rollback, also not run, is
+  `startport=49152 numberofports=16384 store=active`. IPv6, TIME_WAIT,
+  auto-reuse, routing, firewall, Docker, and protected resources would remain
+  unchanged.
+- **Required qualification before freeze:** capture elevated pre-state and
+  event cursor; apply/verify only the active IPv4 range; wait for prior state
+  to quiesce; run an ineligible strict same-endpoint native-CLI qualifier for
+  at least 700 seconds and 20,000 successful connections at no less than the
+  failed run's sustained 240-second rate; capture BOUND/TIME_WAIT and Event
+  4227/4231 evidence; fail on any transport error/event; clean up and quiesce;
+  then repeat complete smoke/pilot, deterministic exploratory regeneration,
+  cleanup, and the no-more-than-1,400-second projection. Only then may v1.1
+  source/environment identities be frozen and exactly one new final
+  separately authorized. The active range must be restored after archival,
+  including on failure.
+- **Primary documentation:** Microsoft port-exhaustion/Event-4227 guidance,
+  dynamic-range support, `netsh` active/persistent store, SQL connection-pool
+  guidance, Winsock error definitions, TCP-setting WMI documentation, and
+  `SO_REUSEADDR` safety guidance are linked in the decision package. Microsoft
+  characterizes range expansion as mitigation and recommends addressing
+  connection churn/pooling for the long term.
+- **Recorded read-only attempts:** one source inspection requested a
+  nonexistent `sandbox-operations/client/src/transport.rs` beside the actual
+  `client.rs`; the missing read changed nothing. `Get-NetTransportFilter`
+  failed with access denied and establishes the external elevation boundary.
+  A `netsh ... set dynamicport tcp ?` help probe returned a missing-parameter
+  diagnostic plus authoritative syntax; no setting argument was supplied and
+  no mutation occurred. One broad request-ID categorization initially counted
+  create-sandbox mandatory samples and freshness repolls as periodic; the
+  independent resource-observation audit corrected the accepted split to
+  3,626 mandatory and 210 periodic.
+- **Artifacts/blocker:**
+  `experiments/analysis/exp1-v1.1-remediation-decision.json` and `.md` retain
+  the complete machine/human decision. Both JSON state files parse; scoped
+  diff and encoding checks pass; operation, resource-split, range-arithmetic,
+  and required-marker consistency checks exit 0. The exact remaining blocker
+  is one author decision approving or rejecting the host-wide active-store
+  IPv4 mutation and the complete qualifier/refreeze/one-final sequence. No
+  step of that sequence is implied by earlier v1.0 authorization.

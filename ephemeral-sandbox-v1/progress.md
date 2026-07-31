@@ -69,6 +69,17 @@ may enter the paper, and v1.0 must not be rerun. The broader RQ1--RQ5
 experiment lane still requires its own accepted-work, workload, baseline,
 fault, and useful-work decisions.
 
+A read-only v1.1 remediation audit is complete. It found 7,993 identifiable
+client-to-gateway TCP attempts, of which only 210 were optional periodic
+samples; removing sampling therefore cannot remedy the mandatory failure. The
+recommended campaign-preserving path is a temporary active-store IPv4
+dynamic-port expansion, followed by a same-rate ineligible qualifier, fresh
+smoke/pilot, new protocol/environment freeze, and one newly authorized final.
+No host/source setting was changed and no live probe was run. The exact
+proposal and alternatives are in
+[`experiments/analysis/exp1-v1.1-remediation-decision.md`](experiments/analysis/exp1-v1.1-remediation-decision.md);
+explicit author authorization and an elevated host action remain required.
+
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
 ## 3. Correctness evaluation
