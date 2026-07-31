@@ -2,7 +2,7 @@
 
 **Active protocol ID:** `ephemeral-sandbox-v1-practical-performance-v1.1`
 
-**Status:** v1.1 local-IPC treatment authorized; qualification pending
+**Status:** v1.1 local-IPC qualifier passed; fresh smoke pending
 
 **Last updated:** 2026-07-31
 **Primary tracker:** the phase checklists in this document  
@@ -17,6 +17,14 @@ isolated Windows named pipe per gateway execution block and preserves all
 other scientific choices. Its sole schema clarification adds a non-numeric
 `Gateway transport` provenance row; measured table definitions are unchanged.
 The v1.0 and v1.1 corpora must never be pooled or numerically compared.
+
+The preregistered v1.1 qualification passed on 2026-07-31 with 25,000/25,000
+strict native CLI invocations, zero gateway-owned TCP endpoints, zero new
+System/Tcpip 4227/4231 events, and all fixed resource/cleanup gates satisfied.
+This is qualification-only evidence, not a performance result. The retained
+evidence and hashes are recorded in
+[`experiments/experiment_log.md`](experiments/experiment_log.md); fresh smoke,
+pilot, projection, freeze, and final gates remain prospective.
 
 ## Purpose and claim boundary
 

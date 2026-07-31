@@ -6357,3 +6357,64 @@ must not be used to selectively remove unfavorable cells.
   and table hardening are ready for a scoped clean paper commit. The live
   qualifier remains prohibited until that commit exists and the qualifier's
   own product-global and paper-scoped clean checks pass.
+
+### 2026-07-31T12:48:54.009Z - EXP1 v1.1 local-IPC qualifier passed
+
+- **Entry ID:** `exp1-v1.1-ipc-qualification-pass-116`.
+- **Disposition:** `qualification_only`; `performance_evidence: false`. No
+  value from this attempt is eligible for a manuscript table, projection, or
+  performance claim.
+- **Bound identities:** paper prequalification commit
+  `50d068d3ed55a7dfd8a9be9f8a3d52f064610866`; product clean direct `main`
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; package ZIP
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`;
+  fixed host `DESKTOP-OLP1ADS`, Windows build 26200, x64, 48 logical
+  processors, 137,438,953,472 bytes physical memory.
+- **Qualification identity:** `718cf58dace44dba83bed54601854bc9`;
+  endpoint
+  `npipe://./pipe/ephemeral-sandbox-exp1-ipc-718cf58dace44dba83bed54601854bc9`;
+  isolated gateway PID 12132. The protected v1.0 gateway PID 62980 remained
+  alive and untouched.
+- **Strict workload result:** exactly 25,000 attempted and successful native
+  manager-CLI `list_sandboxes` processes in exactly 5,000 concurrency-5
+  batches; zero failed invocations. Independent NDJSON verification found
+  25,000 lines, 25,000 unique request IDs, 25,000 unique batch/slot pairs, and
+  zero records that deviated from exit 0, empty stderr, the expected 17-byte
+  stdout hash, or the qualification-only flags.
+- **No-TCP/event gates:** all 53 readiness/cadence/pre-stop/post-cleanup TCP
+  samples found zero gateway-owned endpoints. The conservative System/Tcpip
+  query from record 88541 through 88548 found zero new 4227/4231 events.
+  `tcp_used: false`; no fallback, retry, or pacing was permitted.
+- **Resource gates:** all 52 required process samples were present. Peak and
+  final handle growth above readiness were both 0 against the fixed cap 32.
+  Peak and final private-byte growth were both 389,120 bytes, and peak/final
+  RSS growth were both 475,136 bytes, against fixed 16,777,216-byte caps.
+- **Cleanup:** isolated gateway process exit and PID-file removal both
+  validated; termination mode `terminate`; gateway return code 1 is the
+  recorded Windows termination status and is accepted by the preregistered
+  stop schema. The isolated PID is no longer alive; protected PID 62980
+  remains alive. CLI stderr capture is empty.
+- **Primary evidence:** active directory
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1\.benchmark-state\results\qualification-only\exp1-ipc-718cf58dace44dba83bed54601854bc9`.
+  `summary.json` SHA-256
+  `5219f09cfe58627a44dd46443c148758483b02b56125fc4a5126a30387e1d286`;
+  manifest
+  `599c8054ea1ca8517acb778648c86deca70ae20228f94fb5cc73b79fc6b7e880`;
+  host evidence
+  `83ce2faee1126340798747ce54b14d5c2ea2f541a1f7dba509e72e88fd7842ce`;
+  invocations NDJSON
+  `1605d176d6bb791ffa726ef5474e70537571719b26798356fc81bfb4de5fb9f8`.
+- **Retained copy:** four files, 18,405,217 total bytes, copied with zero
+  SHA-256 mismatch to
+  `experiments\diagnostics\exp1-v11-ipc-qualification-718cf58dace44dba83bed54601854bc9`;
+  compressed archive size 951,312 bytes, SHA-256
+  `2c4f87dc5bb123157f76e6be58b769bafef8943aba36ee8e9202601b50e62a02`.
+- **Wrapper evidence limitation:** the detached `Start-Process` object was not
+  retained after process termination, so its OS-level wrapper exit code is
+  unavailable. The exact CLI stdout object byte-for-byte parses equal to
+  `summary.json`, reports `status: passed` with no gate failure, and its
+  stderr file is zero bytes. All 25,000 scientifically relevant child process
+  exit codes are directly present and equal to zero.
+- **Next gate:** commit this append-only result/tracker update, then run one
+  fresh complete 19-cell v1.1 smoke. Pilot, projection, freeze, and final
+  remain prohibited until smoke passes.

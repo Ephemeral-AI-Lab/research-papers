@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-31
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, and the authorized v1.1 local-IPC campaign is at its pre-measurement qualification gate.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, the v1.1 local-IPC qualifier passed, and the fresh smoke gate is next.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -83,6 +83,12 @@ preregisters an ineligible 25,000-call concurrency-5 qualifier before fresh
 smoke, pilot, a no-more-than-1,400-second projection, a new freeze, and exactly
 one final. No v1.1 measurement has started.
 
+The exact v1.1 qualifier subsequently passed: all 25,000 invocations completed
+successfully in 5,000 concurrency-5 batches, with zero gateway-owned TCP
+endpoints, zero new TCP/IP 4227/4231 events, bounded gateway resource growth,
+and validated cleanup. The retained evidence remains qualification-only. Fresh
+smoke is now the next gate; no v1.1 performance measurement has started.
+
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
 ## 3. Correctness evaluation
@@ -112,9 +118,9 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - [x] Lock protocol `v1.0`, freeze product/benchmark/image/binary identities,
   and launch the sole 19-cell `paper-good-pass` after every prior gate passed.
   The run failed and therefore produced no eligible final result.
-- [ ] Pass the preregistered v1.1 local-IPC qualifier, then run and archive a
-  fresh smoke and five-sample pilot, freeze v1.1, and run exactly one eligible
-  final if every preceding gate passes.
+- [x] Pass and retain the preregistered v1.1 local-IPC qualifier.
+- [ ] Run and archive a fresh smoke and five-sample pilot, freeze v1.1, and
+  run exactly one eligible final if every preceding gate passes.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.
@@ -161,8 +167,8 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - The accepted-work unit, structured-team and exploratory-swarm workloads, matched baseline policy, and final experiment protocol are not yet locked.
 - The reviewed `product_cli` cohort exists, and the sole v1.0 final hit Windows
   TCP endpoint-reuse pressure during a mandatory observability boundary.
-  V1.1 is authorized and amended, but its qualifier, fresh smoke/pilot,
-  projection, and new freeze must pass before the one new final.
+  V1.1 is authorized and amended, and its qualifier passed; fresh smoke/pilot,
+  projection, and new freeze must still pass before the one new final.
 - Focused RQ3 timing is end-to-end native CLI subprocess latency, including
   process launch and CLI-to-gateway transport. Product-reported internal timing
   may be retained only as a separate secondary field.

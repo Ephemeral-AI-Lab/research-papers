@@ -279,3 +279,15 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   cleanup, exact provenance, and the unchanged postqualification
   smoke/pilot/1,400-second/freeze/one-final sequence. The historical elevated
   IPv4-range proposal is explicitly superseded and was never applied.
+- **2026-07-31 -- v1.1 IPC qualifier passed:** Qualification
+  `718cf58dace44dba83bed54601854bc9` completed exactly 25,000/25,000
+  manager-CLI `list_sandboxes` calls in 5,000 concurrency-5 batches. All
+  invocation records passed; request IDs were unique; the isolated gateway
+  owned no TCP endpoint; the System/Tcpip cursor interval contained no new
+  4227/4231 event; peak/final handle growth was zero; peak/final private and
+  RSS growth were 389,120 and 475,136 bytes; and stop/PID-file cleanup passed.
+  The evidence is qualification-only. A checksum-verified retained ZIP at
+  `experiments/diagnostics/exp1-v11-ipc-qualification-718cf58dace44dba83bed54601854bc9.zip`
+  has SHA-256
+  `2c4f87dc5bb123157f76e6be58b769bafef8943aba36ee8e9202601b50e62a02`.
+  Fresh v1.1 smoke is the next gate.

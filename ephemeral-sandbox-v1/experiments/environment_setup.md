@@ -1,6 +1,6 @@
 # Environment qualification
 
-**Status:** base environment qualified on 2026-07-30; v1.1 IPC qualification pending
+**Status:** base environment qualified; v1.1 IPC qualification passed on 2026-07-31
 
 **Scope:** environment correctness only; no performance experiment
 
@@ -26,6 +26,14 @@ The exact package hashes and preregistered 25,000-invocation gate are in the
 amendment. The TCP examples and v0.1.4 package identities below are retained
 only as the historical v1.0 environment record; they are not commands or
 inputs for v1.1.
+
+The v1.1 qualifier passed all workload, identity, event-log, owned-TCP,
+resource-growth, and cleanup gates. Its retained archive is
+`experiments\diagnostics\exp1-v11-ipc-qualification-718cf58dace44dba83bed54601854bc9.zip`,
+SHA-256
+`2c4f87dc5bb123157f76e6be58b769bafef8943aba36ee8e9202601b50e62a02`.
+The archive is qualification-only and supplies no manuscript performance
+value.
 
 ## Historical v1.0 environment record (do not execute for v1.1)
 
