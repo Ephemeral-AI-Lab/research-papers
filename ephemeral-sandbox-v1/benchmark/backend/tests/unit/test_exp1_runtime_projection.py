@@ -16,6 +16,9 @@ SPEC.loader.exec_module(projection)
 
 SMOKE_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb5e4-3f62-7760-bc3f-e7501502ec74"
 PILOT_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb5f1-d73a-7128-9bab-d75dd229c020"
+V11_SMOKE_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb83a-54bc-79db-b6ac-6189fb28f5f2"
+V11_PILOT_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb84e-aef1-7fdc-9a56-1adbe712f30d"
+V11_FINAL_PLAN = PAPER_ROOT / "tmp/validate-paper-good-pass-v11-20260731T1327Z.json"
 
 
 def test_v11_projection_rejects_unsafe_named_pipe_endpoint() -> None:
@@ -49,17 +52,13 @@ def test_v11_projection_rejects_unsafe_named_pipe_endpoint() -> None:
             }
         ],
     }
-    plan = {
-        "execution_blocks": [{"block_id": "block-1", "family_id": "runtime"}]
-    }
+    plan = {"execution_blocks": [{"block_id": "block-1", "family_id": "runtime"}]}
 
     with pytest.raises(
         projection.ProjectionError,
         match="execution-block endpoint evidence is unsafe",
     ):
-        projection._validate_protocol_transport(
-            campaign, manifest, plan, "v1.1"
-        )
+        projection._validate_protocol_transport(campaign, manifest, plan, "v1.1")
 
 
 def _plan(role: str) -> dict:
@@ -163,6 +162,28 @@ def _trials(
     return tuple(trials)
 
 
+def _protocol_file(path: str, marker: str) -> dict:
+    return {
+        "path": path,
+        "bytes": len(marker),
+        "sha256": f"sha256:{marker * 64}",
+    }
+
+
+def _v11_provenance(marker: str = "a") -> dict:
+    return {
+        "same": True,
+        "freeze_state": {
+            "protocol": "pre_freeze",
+            "paper_git": "pre_freeze_worktree",
+        },
+        "protocol_files": [
+            _protocol_file(path, marker)
+            for path in sorted(projection.V11_PROTOCOL_FILE_PATHS)
+        ],
+    }
+
+
 def _profile(role: str) -> projection.RunProfile:
     raw_plan = _plan(role)
     semantics = projection._validate_plan(raw_plan, role=role)
@@ -198,7 +219,11 @@ def _profile(role: str) -> projection.RunProfile:
         )
     return projection.RunProfile(
         role=role,
-        identity={"run_id": role, "provenance": {"same": True}},
+        identity={
+            "run_id": role,
+            "protocol_version": "v1.1",
+            "provenance": _v11_provenance(),
+        },
         plan=semantics,
         elapsed_ns=1_000 if role == "smoke" else 900,
         run_residual_ns=100 if role == "smoke" else 101,
@@ -229,6 +254,136 @@ def _reviewed_final_plan_from_pilot() -> dict:
     return final
 
 
+def test_cross_run_allows_only_prefreeze_status_hash_evolution():
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    for entry in pilot.identity["provenance"]["protocol_files"]:
+        if entry["path"] in projection.V11_PREFREEZE_MUTABLE_STATUS_PATHS:
+            entry.update(_protocol_file(entry["path"], "b"))
+
+    projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+def test_cross_run_rejects_scientific_protocol_hash_drift():
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    path = "experiments/exp1-v1.1-protocol-amendment.md"
+    for entry in pilot.identity["provenance"]["protocol_files"]:
+        if entry["path"] == path:
+            entry.update(_protocol_file(path, "b"))
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="provenance identities drifted",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+def test_cross_run_rejects_invalid_or_duplicate_protocol_identity():
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    ledger = smoke.identity["provenance"]["protocol_files"][0]
+    smoke.identity["provenance"]["protocol_files"].append(copy.deepcopy(ledger))
+    pilot.identity["provenance"] = copy.deepcopy(smoke.identity["provenance"])
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="protocol-file identity is invalid",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+@pytest.mark.parametrize("invalid", [None, [], "not-a-list"])
+def test_cross_run_rejects_missing_protocol_file_identity(invalid):
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    smoke.identity["provenance"]["protocol_files"] = invalid
+    pilot.identity["provenance"]["protocol_files"] = copy.deepcopy(invalid)
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="protocol-file identity",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+def test_cross_run_rejects_extra_protocol_file_identity():
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    extra = _protocol_file("unexpected.md", "a")
+    smoke.identity["provenance"]["protocol_files"].append(extra)
+    pilot.identity["provenance"]["protocol_files"].append(copy.deepcopy(extra))
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="protocol-file identity set is invalid",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+def test_cross_run_rejects_non_prefreeze_status():
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    smoke.identity["provenance"]["freeze_state"]["protocol"] = "frozen"
+    pilot.identity["provenance"] = copy.deepcopy(smoke.identity["provenance"])
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="freeze-state identity is invalid",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+@pytest.mark.parametrize(
+    "category",
+    [
+        "benchmark_source",
+        "analysis_and_archiving_code",
+        "artifact_schemas",
+        "definition_snapshot",
+        "docker",
+        "fixture",
+        "gateway",
+        "host",
+        "image",
+        "lifecycle",
+        "product",
+        "sandbox_limits",
+        "treatment",
+    ],
+)
+def test_cross_run_rejects_non_status_provenance_drift(category):
+    smoke = _profile("smoke")
+    pilot = _profile("pilot")
+    smoke.identity["provenance"][category] = {"identity": "same"}
+    pilot.identity["provenance"][category] = {"identity": "different"}
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="provenance identities drifted",
+    ):
+        projection.validate_cross_run(smoke, pilot, _plan("final"))
+
+
+def test_projection_archive_rejects_non_prefreeze_campaign():
+    campaign = {
+        "protocol": {
+            "freeze_state": "frozen",
+            "files": [
+                _protocol_file(path, "a")
+                for path in sorted(projection.V11_PROTOCOL_FILE_PATHS)
+            ],
+        },
+        "paper_git": {"freeze_state": "frozen_worktree"},
+    }
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="not in the pre-freeze state",
+    ):
+        projection._validate_prefreeze_campaign(campaign, "v1.1")
+
+
 def test_structural_projection_uses_exact_arithmetic_and_fixed_units_once():
     result = projection.project_structural(
         _profile("smoke"),
@@ -251,6 +406,35 @@ def test_structural_projection_uses_exact_arithmetic_and_fixed_units_once():
     assert result["models"]["observed_envelope_ns"] == 82_861
     assert result["gate_3_runtime_pass"] is True
     assert projection.render_json(result) == projection.render_json(result)
+
+
+def test_v11_smoke_and_pilot_archives_pass_reviewed_runtime_gate():
+    smoke = projection.load_run_profile(
+        V11_SMOKE_ARCHIVE,
+        "smoke",
+        protocol_version="v1.1",
+    )
+    pilot = projection.load_run_profile(
+        V11_PILOT_ARCHIVE,
+        "pilot",
+        protocol_version="v1.1",
+    )
+    result = projection.project_structural(
+        smoke,
+        pilot,
+        projection.load_json(V11_FINAL_PLAN),
+        final_plan_sha256=projection.sha256_file(V11_FINAL_PLAN),
+        script_sha256="sha256:test-script",
+    )
+
+    assert result["display_seconds"] == {
+        "pilot_elapsed": "276.094047000",
+        "central_structural": "1179.784426150",
+        "observed_envelope": "1303.732241600",
+        "limit": "1400.000000000",
+    }
+    assert result["gate_3_runtime_pass"] is True
+    assert result["decision"] == "pass_runtime_projection"
 
 
 def test_accepted_smoke_and_pilot_archives_still_fail_runtime_gate():

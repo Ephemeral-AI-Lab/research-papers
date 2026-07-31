@@ -300,3 +300,25 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   `sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
   It is qualification-only. A strict preflight and one fresh five-sample
   v1.1 pilot are now authorized; freeze and final remain prohibited.
+- **2026-07-31 -- v1.1 pilot and Gate 3 passed:** Fresh exploratory run
+  `019fb84e-aef1-7fdc-9a56-1adbe712f30d` completed all 19 cells, 133 trial
+  batches, 38 warmups, 95 measured trials, and 385 issued requests with zero
+  product, correctness, infrastructure, cleanup, or primary-latency failures.
+  Its immutable 177,813,974-byte archive has content-tree
+  `sha256:e951342a73d94b2f21aec76d1926bd2b1fc196303fabde5ced01d6c3ab5a4da9`.
+  Two nine-file exploratory table generations are byte-identical at
+  `sha256:f3e2e0c4d6f39622f23251c2661eb270689cd980cd00730c53ae8a600067858e`.
+  These values remain ineligible for the manuscript.
+- **2026-07-31 -- projection correction and decision:** A fail-closed
+  cross-run check initially treated mandatory evidence/status tracker updates
+  as scientific drift. Independent recursive comparison proved all scientific
+  identities identical. The corrected checker masks only byte/hash identity
+  for four exact pre-freeze status paths, enforces pre-freeze state and the
+  exact ten-file v1.1 set, and rejects all other drift. Full benchmark and
+  analysis tests pass 377 with five expected Windows symlink skips. Repeated
+  projection outputs are byte-identical at
+  `sha256:a7b4eda8cd1f15e59bca2e6495cb8b8c36914619e4c812143ac361bdb1803822`;
+  the conservative observed envelope is 1303.732241600 seconds against the
+  fixed 1400-second limit. Gate 3 passes. The scoped clean v1.1 freeze is the
+  next gate; the sole eligible final remains prohibited until freeze and
+  strict final preflight pass.

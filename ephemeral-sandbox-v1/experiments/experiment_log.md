@@ -6555,3 +6555,133 @@ must not be used to selectively remove unfavorable cells.
   Exactly one fresh exploratory v1.1 `paper-pilot` is authorized. It remains
   ineligible for manuscript tables; freeze, tag, and final remain prohibited
   pending complete Gate-3 audit.
+
+### 2026-07-31T13:37:01.222Z - EXP1 v1.1 pilot and Gate 3 passed
+
+- **Entry ID:** `pilot-exp1-v1.1-5c48dae1-gate3-pass-119`.
+- **Phase/kind:** EXP1-D live five-sample exploratory pilot, immutable
+  archival, deterministic exploratory analysis, anomaly review, runtime
+  projection, and pre-freeze checker correction. Pilot and projected values
+  remain permanently ineligible for manuscript tables or performance claims.
+- **Bound identities:** run `019fb84e-aef1-7fdc-9a56-1adbe712f30d`; clean
+  paper commit `4b962228813c43e57bfcad6d2dae7bde0e71d9d5`; clean product direct
+  `main` commit `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; package ZIP
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`;
+  pilot plan
+  `sha256:e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f`;
+  reviewed final plan
+  `sha256:391b52b777f32bdfd6266c3974037f5c85cb50c5960e6c2bf5d7ea5a9a78ae0f`;
+  protocol `ephemeral-sandbox-v1-practical-performance-v1.1`; pinned image
+  unchanged.
+- **Live result:** the supervised wrapper and benchmark exited 0 with empty
+  stderr. Manifest start `2026-07-31T13:13:14.786824Z`, end
+  `2026-07-31T13:17:50.880871Z`, exact corpus elapsed 276.094047 seconds,
+  within the five-minute pilot budget. The wrapper completed recursive owned
+  cleanup at `2026-07-31T13:22:21.9399141Z` and retained benchmark exit 0.
+- **Terminal corpus:** state `completed`, correctness `pass`, report ready and
+  non-provisional; exactly 19 cells, 133 trial batches, 38 warmups, 95
+  successful measured trials, and 385 issued product requests. Raw evidence
+  contains 133 trial, 133 operation, 385 request, 336 passed correctness-check,
+  and 4,214 resource observations. All measured cells have exactly five
+  reportable trials; product, correctness, infrastructure, cleanup, and
+  missing-primary-latency failure counts are zero. Report warnings are empty.
+- **CLI/transport evidence:** four execution blocks are exclusively
+  `windows_named_pipe`, `local_only`, and `per_execution_block`; no TCP
+  endpoint or fallback appears. All 1,903 captured native CLI invocations have
+  unique request IDs, return code 0, passed response validation and
+  authentication redaction, and emitted zero stderr bytes.
+- **Resource correlation and unavailable fields:** all 4,214 resource records
+  carry a trial ID and cover all 133 trial IDs; all 385 request records have
+  unique request IDs. Eighteen cells have five aligned measured CPU/latency
+  pairs. The create-sandbox cell has zero CPU pairs because a sandbox-scoped
+  pre-create counter baseline is inapplicable, recorded explicitly rather
+  than zero-filled. Of 4,214 resource observations, 678 are explicitly
+  unavailable: 301 `layerstack_bytes` readings because the product does not
+  report LayerStack allocation, 301 `workspace_allocated_bytes` readings
+  because host metadata lacks allocated block counts, 14 each for daemon CPU,
+  sandbox CPU, block-read, and block-write deltas where the pre-create
+  baseline is inapplicable, and 10 each for current/peak sandbox memory before
+  the resource ring exists. These are preregistered boundary limitations, not
+  missing or uncorrelated samples.
+- **Cleanup:** the owned run worktree and runtime were removed. Archive proof
+  records no matching product process, run- or gateway-labeled container or
+  volume, and an exact clean product checkout. Protected gateway PID 62980
+  remained alive and untouched.
+- **Immutable pilot archive:** creation and verify-only replay exited 0 and
+  agreed at
+  `experiments\runs\019fb84e-aef1-7fdc-9a56-1adbe712f30d`: 5,879 files,
+  177,813,974 bytes, content-tree
+  `sha256:e951342a73d94b2f21aec76d1926bd2b1fc196303fabde5ced01d6c3ab5a4da9`.
+  Archive-manifest SHA-256 is
+  `eb7f674dabd09491de4d6ad44aa8476d4e9f9e7393033aa416cd2415e2222dd9`;
+  campaign-manifest SHA-256 is
+  `f102bd2f0f5e6a5802f8460836780900f3d3cdcb523abdb254573dfab40109eb`.
+  Disposition is `pilot`, eligibility `exploratory_ineligible`, and freeze
+  state `pre_freeze`.
+- **Deterministic exploratory tables:** generation into
+  `experiments\analysis\pilot-v11-019fb84e-tables-a` and
+  `experiments\analysis\pilot-v11-019fb84e-tables-b` succeeded. Each output
+  contains nine files and 229,557 bytes; outputs are byte-identical with
+  content-tree
+  `sha256:f3e2e0c4d6f39622f23251c2661eb270689cd980cd00730c53ae8a600067858e`.
+  They are validation artifacts only and cannot enter the manuscript.
+- **Projection attempts retained:** the first attempt incorrectly supplied
+  preset YAML to a command requiring expanded-plan JSON and failed with a
+  JSON parse error before producing output. Fresh final validation then
+  produced
+  `tmp\validate-paper-good-pass-v11-20260731T1327Z.json` (42,157 bytes,
+  `sha256:7c4d2fc4f086e06971146dcdf38028ecd4dff9865745b16b238305594e51138c`).
+  The second attempt failed closed because four mandatory evidence/status
+  files evolved between smoke and pilot. No projection output was produced by
+  either failed attempt.
+- **Projection defect and correction:** an independent read-only recursive
+  provenance audit proved that every scientific identity matched and only
+  `progress.md`, `experiments/experiment_log.md`, `paper_state.json`, and
+  `plan/progress.md` changed. The six immutable scientific/protocol files and
+  every benchmark, analysis/archive, schema, definition, Docker, fixture,
+  gateway/transport, host, image, lifecycle, product/package/binary, limit,
+  and treatment identity were byte-identical. The checker now normalizes only
+  byte count and SHA-256 for those exact four pre-freeze status paths, retains
+  their original identities in output, requires `pre_freeze` and
+  `pre_freeze_worktree`, requires the exact ten-file v1.1 protocol set, and
+  rejects missing, extra, duplicate, malformed, frozen, or scientific drift.
+  This does not claim general append-prefix verification; Git history proves
+  the exact observed status evolution.
+- **Projection validation:** the initial narrowly corrected output
+  `experiments\analysis\pilot-v11-019fb84e-final-runtime.json` is retained but
+  superseded by the tightened-checker outputs
+  `pilot-v11-019fb84e-final-runtime-prefreeze.json` and
+  `pilot-v11-019fb84e-final-runtime-prefreeze-repeat.json`. The final pair are
+  byte-identical at 48,311 bytes and
+  `sha256:a7b4eda8cd1f15e59bca2e6495cb8b8c36914619e4c812143ac361bdb1803822`;
+  analysis-script SHA-256 is
+  `d6d73f75f3a2186eef3f92ae8ef8f176f60133e366d89f6ae69a78ad5aa47781`.
+  Exact exploratory scheduling values are pilot 276.094047000 seconds,
+  central structural projection 1179.784426150 seconds, observed envelope
+  1303.732241600 seconds, and limit 1400.000000000 seconds. Every condition is
+  true and the decision is `pass_runtime_projection`.
+- **Tests/checks:** the first real-archive regression run failed one assertion
+  because the test expected an invented decision prefix instead of the
+  implementation's exact `pass_runtime_projection`; the assertion was
+  corrected without changing behavior. Targeted projection tests then passed
+  26/26. Full benchmark plus analysis tests passed 377 with five expected
+  Windows-symlink-privilege skips in 52.24 seconds. Offline Ruff 0.16.1
+  formatting, format check, and scoped `E,F,I` lint passed; `git diff
+  --check` passed with only line-ending notices. Earlier attempts to invoke a
+  nonexistent venv Ruff executable/module failed without mutation; a broad
+  Ruff policy run exposed three pre-existing UP035/RUF007 findings, so no
+  unrelated policy rewrite was made.
+- **Read-only helper failures retained:** monitoring once queried
+  `StartTime.ToUniversalTime()` across processes lacking accessible start
+  times and emitted null-value errors; a directory-listing `foreach` pipeline
+  had a PowerShell syntax error; neither changed state. During this audit,
+  Windows PowerShell rejected unsupported `ConvertFrom-Json -Depth`, and a
+  follow-up initially indexed `cells` above the report envelope's `data`
+  object; corrected read-only queries produced the counts above. No live
+  gateway, sandbox, Docker object, archive, source identity, or protected PID
+  was altered by these helper errors.
+- **Disposition:** Gate 3 passes for the exact v1.1 treatment. No unresolved
+  scientific or instrumentation decision remains. Gate 4 may proceed by
+  committing the scoped checker/evidence update and creating the authorized
+  annotated local `paper-v1.1-freeze` identity. The sole eligible final run
+  remains prohibited until that freeze and strict final preflight pass.

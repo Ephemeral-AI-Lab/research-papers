@@ -63,9 +63,7 @@ PROTOCOLS = {
     },
     "v1.1": {
         "id": "ephemeral-sandbox-v1-practical-performance-v1.1",
-        "environment_identity": (
-            "isolated_windows_named_pipe_per_execution_block"
-        ),
+        "environment_identity": ("isolated_windows_named_pipe_per_execution_block"),
     },
 }
 V11_GATEWAY_TRANSPORT = {
@@ -73,8 +71,29 @@ V11_GATEWAY_TRANSPORT = {
     "scope": "local_only",
     "rotation": "per_execution_block",
 }
-SAFE_NPIPE_ENDPOINT = re.compile(
-    r"npipe://\./pipe/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\Z"
+SAFE_NPIPE_ENDPOINT = re.compile(r"npipe://\./pipe/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\Z")
+SHA256_IDENTITY = re.compile(r"sha256:[0-9a-f]{64}\Z")
+V11_PREFREEZE_MUTABLE_STATUS_PATHS = frozenset(
+    {
+        "progress.md",
+        "experiments/experiment_log.md",
+        "paper_state.json",
+        "plan/progress.md",
+    }
+)
+V11_PROTOCOL_FILE_PATHS = frozenset(
+    {
+        "progress.md",
+        "plan/task-packets/exp1-cli-performance-campaign.md",
+        "experiment_inventory.md",
+        "experiments/exp1-v1.1-protocol-amendment.md",
+        "experiments/environment_setup.md",
+        "experiments/expected_tables.md",
+        "experiments/experiment_log.md",
+        "benchmark/PAPER_ARTIFACT.md",
+        "paper_state.json",
+        "plan/progress.md",
+    }
 )
 
 
@@ -236,13 +255,11 @@ def _validate_protocol_transport(
 ) -> None:
     protocol = _required_dict(campaign.get("protocol"), "protocol")
     expected_version = (
-        protocol_version
-        if protocol_version == "v1.1"
-        else "pre-freeze-exp1"
+        protocol_version if protocol_version == "v1.1" else "pre-freeze-exp1"
     )
-    if (
-        protocol.get("version") != expected_version
-        or protocol.get("id") not in (PROTOCOLS[protocol_version]["id"], None)
+    if protocol.get("version") != expected_version or protocol.get("id") not in (
+        PROTOCOLS[protocol_version]["id"],
+        None,
     ):
         raise ProjectionError("archive protocol version is invalid")
     environment = _required_dict(manifest.get("environment"), "run environment")
@@ -339,6 +356,8 @@ def _identity(campaign: dict[str, Any], manifest: dict[str, Any]) -> dict[str, A
     fixture = _required_dict(campaign.get("fixture"), "fixture")
     product = _required_dict(campaign.get("product"), "product")
     image = _required_dict(campaign.get("image"), "image")
+    protocol = _required_dict(campaign.get("protocol"), "protocol")
+    paper_git = _required_dict(campaign.get("paper_git"), "paper Git")
     return {
         "benchmark_source": {
             key: benchmark_source.get(key)
@@ -365,14 +384,84 @@ def _identity(campaign: dict[str, Any], manifest: dict[str, Any]) -> dict[str, A
         "sandbox_limits": campaign.get("sandbox_limits"),
         "definition_snapshot": campaign.get("definition_snapshot"),
         "artifact_schemas": campaign.get("artifact_schemas"),
-        "protocol_files": _required_dict(campaign.get("protocol"), "protocol").get(
-            "files"
-        ),
+        "protocol_files": protocol.get("files"),
+        "freeze_state": {
+            "protocol": protocol.get("freeze_state"),
+            "paper_git": paper_git.get("freeze_state"),
+        },
         "analysis_and_archiving_code": campaign.get("analysis_and_archiving_code"),
         "treatment": manifest.get("treatment"),
         "lifecycle": manifest.get("fixed_lifecycle_policy"),
         "gateway": manifest.get("gateway_policy"),
     }
+
+
+def _validated_protocol_files(
+    value: Any,
+    *,
+    protocol_version: str,
+) -> list[dict[str, Any]]:
+    if not isinstance(value, list):
+        raise ProjectionError("cross-run protocol-file identity is invalid")
+    seen: set[str] = set()
+    for entry in value:
+        if not isinstance(entry, dict):
+            raise ProjectionError("cross-run protocol-file identity is invalid")
+        path = entry.get("path")
+        size = entry.get("bytes")
+        digest = entry.get("sha256")
+        if (
+            not isinstance(path, str)
+            or not path
+            or path in seen
+            or not isinstance(size, int)
+            or isinstance(size, bool)
+            or size < 0
+            or not isinstance(digest, str)
+            or SHA256_IDENTITY.fullmatch(digest) is None
+        ):
+            raise ProjectionError("cross-run protocol-file identity is invalid")
+        seen.add(path)
+    if protocol_version == "v1.1" and seen != V11_PROTOCOL_FILE_PATHS:
+        raise ProjectionError("v1.1 protocol-file identity set is invalid")
+    return value
+
+
+def _validate_prefreeze_campaign(
+    campaign: dict[str, Any], protocol_version: str
+) -> None:
+    protocol = _required_dict(campaign.get("protocol"), "protocol")
+    paper_git = _required_dict(campaign.get("paper_git"), "paper Git")
+    if (
+        protocol.get("freeze_state") != "pre_freeze"
+        or paper_git.get("freeze_state") != "pre_freeze_worktree"
+    ):
+        raise ProjectionError("projection archive is not in the pre-freeze state")
+    _validated_protocol_files(
+        protocol.get("files"),
+        protocol_version=protocol_version,
+    )
+
+
+def _cross_run_provenance(value: Any, *, protocol_version: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise ProjectionError("cross-run provenance identity is invalid")
+    normalized = json.loads(canonical_json(value))
+    freeze_state = normalized.get("freeze_state")
+    if freeze_state != {
+        "paper_git": "pre_freeze_worktree",
+        "protocol": "pre_freeze",
+    }:
+        raise ProjectionError("cross-run freeze-state identity is invalid")
+    protocol_files = _validated_protocol_files(
+        normalized.get("protocol_files"),
+        protocol_version=protocol_version,
+    )
+    for entry in protocol_files:
+        if entry["path"] in V11_PREFREEZE_MUTABLE_STATUS_PATHS:
+            entry["bytes"] = "<pre-freeze-status-bytes>"
+            entry["sha256"] = "<pre-freeze-status-sha256>"
+    return normalized
 
 
 def _read_journal(
@@ -695,6 +784,7 @@ def load_run_profile(
     campaign = _required_dict(
         load_json(root / "campaign-manifest.json"), "campaign manifest"
     )
+    _validate_prefreeze_campaign(campaign, protocol_version)
     manifest = envelope_data(
         root / "raw/run-manifest.json", "eos_benchmark_run_manifest"
     )
@@ -889,7 +979,19 @@ def validate_cross_run(
     final_plan: dict[str, Any],
 ) -> dict[str, Any]:
     final_semantics = _validate_plan(final_plan, role="final")
-    if smoke.identity["provenance"] != pilot.identity["provenance"]:
+    protocol_version = smoke.identity.get("protocol_version")
+    if (
+        protocol_version not in PROTOCOLS
+        or pilot.identity.get("protocol_version") != protocol_version
+    ):
+        raise ProjectionError("smoke and pilot protocol versions drifted")
+    if _cross_run_provenance(
+        smoke.identity["provenance"],
+        protocol_version=protocol_version,
+    ) != _cross_run_provenance(
+        pilot.identity["provenance"],
+        protocol_version=protocol_version,
+    ):
         raise ProjectionError("smoke and pilot provenance identities drifted")
     for candidate in (pilot.plan, final_semantics):
         if (
@@ -1090,9 +1192,7 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--pilot-archive", type=Path, required=True)
     command.add_argument("--final-plan", type=Path, required=True)
     command.add_argument("--output", type=Path, required=True)
-    command.add_argument(
-        "--protocol-version", choices=sorted(PROTOCOLS), required=True
-    )
+    command.add_argument("--protocol-version", choices=sorted(PROTOCOLS), required=True)
     return command
 
 

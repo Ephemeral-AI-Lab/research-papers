@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-31
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, and the v1.1 local-IPC qualifier plus fresh 19-cell smoke passed. The five-sample pilot is next.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, and the v1.1 local-IPC qualifier, smoke, five-sample pilot, archive verification, deterministic exploratory analysis, anomaly review, and <=1,400-second projection passed. The v1.1 freeze is next.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -81,7 +81,7 @@ setting changed. The
 [`v1.1 protocol amendment`](experiments/exp1-v1.1-protocol-amendment.md)
 preregisters an ineligible 25,000-call concurrency-5 qualifier before fresh
 smoke, pilot, a no-more-than-1,400-second projection, a new freeze, and exactly
-one final. No v1.1 measurement has started.
+one final.
 
 The exact v1.1 qualifier subsequently passed: all 25,000 invocations completed
 successfully in 5,000 concurrency-5 batches, with zero gateway-owned TCP
@@ -91,8 +91,14 @@ and validated cleanup. Fresh v1.1 smoke
 55 issued requests, correctness, warning, transport, and cleanup gates; its
 verified archive content tree is
 `sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
-Both artifacts remain qualification-only. A fresh five-sample v1.1 pilot is
-now the next gate.
+Both artifacts remain qualification-only. Fresh five-sample pilot
+`019fb84e-aef1-7fdc-9a56-1adbe712f30d` subsequently passed all 19 cells, 133
+trial batches, 95 measured trials, 385 issued requests, correctness, resource
+correlation, warning, transport, cleanup, archive, and deterministic
+exploratory-analysis gates. The conservative observed-envelope projection is
+1303.732241600 seconds against the fixed 1400-second limit. Pilot and projected
+values remain exploratory and ineligible. Gate 3 passes; the scoped v1.1
+freeze is now the next gate.
 
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
@@ -125,8 +131,11 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
   The run failed and therefore produced no eligible final result.
 - [x] Pass and retain the preregistered v1.1 local-IPC qualifier.
 - [x] Run and archive a fresh v1.1 smoke.
-- [ ] Run and archive a fresh five-sample pilot, freeze v1.1, and run exactly
-  one eligible final if every preceding gate passes.
+- [x] Run and archive a fresh v1.1 five-sample pilot, deterministically
+  regenerate exploratory tables, review anomalies, and pass the fixed
+  no-more-than-1,400-second projection.
+- [ ] Freeze v1.1 and run exactly one eligible final if the strict frozen
+  preflight passes.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.
@@ -173,8 +182,10 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
 - The accepted-work unit, structured-team and exploratory-swarm workloads, matched baseline policy, and final experiment protocol are not yet locked.
 - The reviewed `product_cli` cohort exists, and the sole v1.0 final hit Windows
   TCP endpoint-reuse pressure during a mandatory observability boundary.
-  V1.1 is authorized and amended, and its qualifier passed; fresh smoke/pilot,
-  projection, and new freeze must still pass before the one new final.
+  V1.1 is authorized and amended; its qualifier, smoke, pilot, archive,
+  deterministic exploratory analysis, anomaly review, and projection passed.
+  The new freeze and strict frozen preflight must still pass before the one
+  new final.
 - Focused RQ3 timing is end-to-end native CLI subprocess latency, including
   process launch and CLI-to-gateway transport. Product-reported internal timing
   may be retained only as a separate secondary field.
