@@ -6418,3 +6418,70 @@ must not be used to selectively remove unfavorable cells.
 - **Next gate:** commit this append-only result/tracker update, then run one
   fresh complete 19-cell v1.1 smoke. Pilot, projection, freeze, and final
   remain prohibited until smoke passes.
+
+### 2026-07-31T13:02:42.753Z - EXP1 v1.1 CLI integration smoke passed
+
+- **Entry ID:** `smoke-exp1-v1.1-5c48dae1-pass-117`.
+- **Phase/kind:** EXP1-C live `paper-env-smoke`, immutable archival, and
+  verify-only replay. This is qualification-only evidence and is permanently
+  ineligible for manuscript tables, runtime projection, or performance claims.
+- **Bound identities:** run `019fb83a-54bc-79db-b6ac-6189fb28f5f2`; clean
+  paper commit `09795c39a2e4ab92ef57470064a6313985568037`; clean product direct
+  `main` commit `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; package ZIP
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`;
+  smoke plan
+  `sha256:1a8364a4612ac16834747d7619be1f63da3857d0223ec181c8a93c6851793937`;
+  protocol `ephemeral-sandbox-v1-practical-performance-v1.1`; pinned image
+  unchanged.
+- **Captured result:** the supervised wrapper and benchmark both exited 0;
+  wrapper and benchmark stderr are empty. Manifest start
+  `2026-07-31T12:51:02.121558Z`, end
+  `2026-07-31T12:54:41.773028Z`, exact corpus elapsed 219.651470 seconds.
+  The launch-to-wrapper-completion bracket was 455.068 seconds and includes
+  complete recursive deletion of all 19 deep fixture copies.
+- **Terminal corpus:** state `completed`, correctness `pass`, report ready and
+  non-provisional; all 19 cells, 19 trial batches, 55 issued requests, 48
+  correctness checks, and 19 operation-evidence records passed with zero
+  failures or report warnings. The cold create-sandbox request was
+  47.4741525 seconds.
+- **Transport/CLI evidence:** the manifest records exactly four execution
+  blocks, all `windows_named_pipe`, `local_only`, and
+  `per_execution_block`, with `npipe` endpoint URIs. All 339 schema-2 CLI
+  invocations have unique request IDs, return code 0, passed response
+  validation and authentication redaction, and produced zero stderr bytes.
+  All 602 resource records and mandatory observation windows are retained.
+- **Cleanup:** wrapper cleanup removed the owned run workspace and runtime.
+  Archive cleanup proof records no matching product process, run- or
+  gateway-labeled container or volume, and a clean exact product checkout.
+  Independent PID/name/state checks found only protected gateway PID 62980,
+  which remained alive and untouched.
+- **Immutable archive:** creation and verify-only replay both exited 0 and
+  agreed at
+  `experiments\runs\019fb83a-54bc-79db-b6ac-6189fb28f5f2`: 1,073 files,
+  29,778,180 bytes, content-tree
+  `sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
+  Archive-manifest SHA-256 is
+  `66736f3c23ebe372bb350071f531491a01c038d2137eb9170921ba805286d8aa`;
+  campaign-manifest SHA-256 is
+  `e2df50964644bc22abfbafffe034c71ee32569c64bb1b5789a3a01feafef6e72`.
+  Disposition is `smoke`, eligibility `qualification_only`, and protocol
+  freeze state `pre_freeze`.
+- **Runtime-budget interpretation:** the inventory's three-minute acceptance
+  budget belongs to the already accepted Phase-2 two-lifecycle/20-call
+  environment qualifier, not this packet's 19-cell EXP1-C integration smoke.
+  EXP1-C acceptance is correctness, warnings, and leak based and specifies no
+  runtime cap. The 219.651470-second duration is retained as an anomaly and is
+  1.605245 seconds below the previously accepted v1.0 treatment smoke
+  `019fb6c5-dab0-7958-b7ba-94f2a9eda944`; it does not block the pilot.
+- **Diagnostic evidence-handling correction:** one read-only progress
+  diagnostic inspected live process command-line metadata and caused a
+  transient gateway credential to appear in diagnostic tool output. The
+  literal is intentionally not reproduced, was not copied into campaign
+  artifacts, and became unusable when the isolated gateway exited. All
+  subsequent live checks are restricted to PID/name/state and exact artifact
+  fields.
+- **Disposition:** EXP1-C passes for the exact v1.1 treatment. One fresh
+  exploratory five-sample pilot is authorized after a strict fast preflight.
+  Freeze, tag, and final remain prohibited until pilot archival,
+  deterministic table regeneration, the conservative no-more-than-1,400
+  second projection, anomaly review, and cleanup pass Gate 3.

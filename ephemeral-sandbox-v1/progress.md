@@ -1,7 +1,7 @@
 # Ephemeral Sandbox v1 — Paper Progress
 
 **Last updated:** 2026-07-31
-**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, the v1.1 local-IPC qualifier passed, and the fresh smoke gate is next.
+**Overall status:** Baseline design, interface, story, related-work, and source-derived complexity audits are complete; PW0--PW3 are reproducibly built and attested; the v1.0 final is permanently failed/ineligible, and the v1.1 local-IPC qualifier plus fresh 19-cell smoke passed. The five-sample pilot is next.
 **Submission gate:** Not ready for arXiv.
 
 Use this tracker as the authoritative task list for the preprint. A checked item means its stated acceptance condition has been met; it does not imply that later claims are validated.
@@ -86,8 +86,13 @@ one final. No v1.1 measurement has started.
 The exact v1.1 qualifier subsequently passed: all 25,000 invocations completed
 successfully in 5,000 concurrency-5 batches, with zero gateway-owned TCP
 endpoints, zero new TCP/IP 4227/4231 events, bounded gateway resource growth,
-and validated cleanup. The retained evidence remains qualification-only. Fresh
-smoke is now the next gate; no v1.1 performance measurement has started.
+and validated cleanup. Fresh v1.1 smoke
+`019fb83a-54bc-79db-b6ac-6189fb28f5f2` then passed all 19 cells, 19 batches,
+55 issued requests, correctness, warning, transport, and cleanup gates; its
+verified archive content tree is
+`sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
+Both artifacts remain qualification-only. A fresh five-sample v1.1 pilot is
+now the next gate.
 
 Detailed section dependencies, work packages, and evidence gates are in [`paper_skeleton.md`](paper_skeleton.md).
 
@@ -119,8 +124,9 @@ Detailed section dependencies, work packages, and evidence gates are in [`paper_
   and launch the sole 19-cell `paper-good-pass` after every prior gate passed.
   The run failed and therefore produced no eligible final result.
 - [x] Pass and retain the preregistered v1.1 local-IPC qualifier.
-- [ ] Run and archive a fresh smoke and five-sample pilot, freeze v1.1, and
-  run exactly one eligible final if every preceding gate passes.
+- [x] Run and archive a fresh v1.1 smoke.
+- [ ] Run and archive a fresh five-sample pilot, freeze v1.1, and run exactly
+  one eligible final if every preceding gate passes.
 - [ ] Implement or verify a fair independent-container/worktree-per-agent baseline.
 - [ ] Measure 1, 5, and 20 agents across 4 KiB, 256 KiB, and 3 MiB payloads.
 - [ ] Measure layer depths 1, 10, 50, and 100.

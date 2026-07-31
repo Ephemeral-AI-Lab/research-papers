@@ -17,9 +17,9 @@
     "experiments/experiment_log.md"
   ],
   "blockers": [
-    "EXP1 v1.1 is authorized and replaces loopback TCP with local Windows named-pipe IPC. Product candidate 5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8 is clean and packaged, and the preregistered 25,000-invocation qualifier passed. Fresh smoke, pilot, no-more-than-1,400-second projection, new paper-v1.1-freeze, and exactly one final remain incomplete. No elevated or host-network action is required.",
+    "EXP1 v1.1 is authorized and replaces loopback TCP with local Windows named-pipe IPC. Product candidate 5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8 is clean and packaged, and the preregistered 25,000-invocation qualifier plus fresh 19-cell smoke passed. The five-sample pilot, no-more-than-1,400-second projection, new paper-v1.1-freeze, and exactly one final remain incomplete. No elevated or host-network action is required.",
     "experiment_inventory.md preserves the frozen v1.0 failure and links the active focused v1.1 RQ3 amendment, but this does not replace the broader RQ1-RQ5 evaluation charter.",
-    "The v1.0 product_cli smoke, pilot, and failed final remain ineligible; no v1.1 measurement exists and no final performance table or numeric-evidence record has been generated.",
+    "The v1.0 product_cli smoke, pilot, and failed final remain ineligible. The v1.1 qualifier and smoke are qualification-only; no eligible final v1.1 performance corpus, final performance table, or numeric-evidence record has been generated.",
     "Eligible final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
     "Author names and affiliations are unresolved.",
     "The four supplied concept figures are drafting-stage review assets; recorded topology, resolution, grayscale-contrast, and style-family disparities require PW7 repair or an explicit submission-stage waiver.",

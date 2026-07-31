@@ -291,3 +291,12 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   has SHA-256
   `2c4f87dc5bb123157f76e6be58b769bafef8943aba36ee8e9202601b50e62a02`.
   Fresh v1.1 smoke is the next gate.
+- **2026-07-31 -- v1.1 smoke passed:** Fresh run
+  `019fb83a-54bc-79db-b6ac-6189fb28f5f2` completed all 19 cells, 19 trial
+  batches, and 55 issued requests through four local Windows named-pipe
+  execution blocks. Correctness, CLI validation, warning, cleanup, and
+  protected-process gates passed. The immutable archive contains 1,073 files
+  and 29,778,180 bytes with content-tree
+  `sha256:c8e0e872d42c0df2ce2c19c4b030a29b615a7d250c95097dac9bff66fa4405e4`.
+  It is qualification-only. A strict preflight and one fresh five-sample
+  v1.1 pilot are now authorized; freeze and final remain prohibited.
