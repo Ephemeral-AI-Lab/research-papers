@@ -1,6 +1,6 @@
 # EXP1 CLI-only focused performance campaign
 
-**Status:** Ready for execution; no performance measurement has been run
+**Status:** v1.0 preserved failed/ineligible; authorized v1.1 campaign resumed
 
 **Date prepared:** 2026-07-30
 
@@ -10,6 +10,18 @@ protocol
 **Authoritative protocol:** [`../../experiment_inventory.md`](../../experiment_inventory.md)
 
 **Run log:** [`../../experiments/experiment_log.md`](../../experiments/experiment_log.md)
+
+**Active amendment:**
+[`../../experiments/exp1-v1.1-protocol-amendment.md`](../../experiments/exp1-v1.1-protocol-amendment.md)
+
+The packet below remains authoritative except for the explicit v1.1 amendment.
+The amendment changes the Windows CLI-to-gateway treatment from loopback TCP
+to isolated named-pipe IPC, replaces the active product/package/freeze
+identities, adds a preregistered 25,000-invocation qualification gate, and
+names the new tag `paper-v1.1-freeze`. It does not change the matrix, trials,
+seed, timing boundary, metrics, resource cadence, correctness gates,
+exclusions, 1,400-second projection limit, or exactly-one-final rule. All v1.0
+freeze and failed-final text below is retained as historical evidence.
 
 ## Objective
 

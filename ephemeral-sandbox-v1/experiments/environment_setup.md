@@ -1,12 +1,41 @@
 # Environment qualification
 
-**Status:** qualified on 2026-07-30
+**Status:** base environment qualified on 2026-07-30; v1.1 IPC qualification pending
 
 **Scope:** environment correctness only; no performance experiment
 
 **Current qualifier:** [`scripts/qualify_windows_docker_environment.ps1`](scripts/qualify_windows_docker_environment.ps1)
 
-## Selected environment
+## Active EXP1 v1.1 treatment
+
+The base host, Docker, image, limits, fixture, and native CLI boundary remain
+as qualified below. The active experiment treatment is amended by
+[`exp1-v1.1-protocol-amendment.md`](exp1-v1.1-protocol-amendment.md):
+
+- product `main` candidate
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`;
+- staged package
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-5c48dae1`;
+- native Windows named-pipe transport using
+  `npipe://./pipe/<unique-name>`;
+- canonical `--gateway-endpoint` CLI option;
+- one isolated endpoint per gateway execution block, with no retry, TCP
+  fallback, or host network mutation.
+
+The exact package hashes and preregistered 25,000-invocation gate are in the
+amendment. The TCP examples and v0.1.4 package identities below are retained
+only as the historical v1.0 environment record; they are not commands or
+inputs for v1.1.
+
+## Historical v1.0 environment record (do not execute for v1.1)
+
+Everything below this heading records the accepted v1.0 base-environment
+qualification. It remains evidence for the unchanged host, Docker, image, and
+native-CLI boundary, but its v0.1.4 package, loopback endpoint, and commands are
+not active v1.1 inputs. Use the amendment and the active-treatment block above
+for v1.1.
+
+### Historical v1.0 selected environment
 
 The selected host is the current native Windows workstation. Docker Desktop
 provides the Linux container engine, and the pinned Ubuntu image is the sandbox
@@ -37,7 +66,7 @@ This contract supersedes the earlier native-Ubuntu,
 assumptions. Those assumptions resulted from confusing the Ubuntu sandbox image
 with the host.
 
-## Execution boundary
+### Historical v1.0 execution boundary
 
 The qualified control flow is:
 
@@ -53,9 +82,9 @@ limited to engine/image inspection, before/after resource auditing, and removal
 of shared-base volumes carrying the qualifier's unique gateway-instance label.
 Sandbox lifecycle operations themselves use the product manager CLI.
 
-## Canonical sandbox creation inputs
+### Historical v1.0 sandbox-creation inputs
 
-Use these exact values for a repository-backed sandbox:
+The accepted v1.0 qualification used these exact repository-backed inputs:
 
 ```powershell
 $package = 'C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-v0.1.4'
@@ -83,7 +112,7 @@ Use this clone—not the build checkout, paper repository, or
 `--workspace-bind-root`. This avoids copying the staged binary package and
 other generated artifacts into the sandbox shared-base cache.
 
-### Start the released gateway
+#### Historical v1.0 gateway launch
 
 ```powershell
 powershell.exe -NoProfile -ExecutionPolicy Bypass `
@@ -95,7 +124,7 @@ $gatewayToken = (
 ).Trim()
 ```
 
-### Create the sandbox through the manager CLI
+#### Historical v1.0 manager-CLI sandbox creation
 
 ```powershell
 $created = & $managerCli `
@@ -142,7 +171,7 @@ Those fixtures validate the environment and CLI boundary. The source-only base
 repository above is the canonical workspace for repo-backed sandbox creation
 after qualification.
 
-## Pinned release package
+### Historical v1.0 pinned release package
 
 Official archive:
 
@@ -164,9 +193,10 @@ Archive SHA-256:
 The staged package is under ignored `target/`; the product Git checkout
 therefore remains clean.
 
-## Qualification command
+### Historical v1.0 qualification command
 
-Use a new, empty artifact directory for every attempt:
+The accepted v1.0 qualifier used this command shape with a new, empty artifact
+directory. It must not be reused for the v1.1 IPC gate:
 
 ```powershell
 $paper = 'C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1'
@@ -213,7 +243,7 @@ Acceptance requires:
 - zero containers or volumes owned by the qualifier's gateway instance;
 - completion within 180 seconds.
 
-## Accepted evidence
+### Accepted v1.0 base-environment evidence
 
 Accepted artifact directory:
 
@@ -247,7 +277,7 @@ Observed qualification result:
 The elapsed time is an environment-gate observation only. It is not a
 performance result and must not enter a paper table.
 
-## Verdict
+### Base-environment verdict from the v1.0 qualifier
 
 **GO:** the selected Windows plus Docker Desktop environment is qualified for
 CLI-controlled sandbox work.

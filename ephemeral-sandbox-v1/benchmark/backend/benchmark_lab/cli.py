@@ -4,18 +4,27 @@ import argparse
 import asyncio
 import ipaddress
 import json
+from collections.abc import Sequence
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 
 import uvicorn
 
 from .api import create_app
+from .ipc_qualification import qualify_exp1_ipc
 from .paths import BenchmarkRoots
 from .planning import load_preset
 from .service import CampaignService, ServiceError
 
-
-COMMANDS = ("serve", "validate", "run", "compare", "recover", "cleanup")
+COMMANDS = (
+    "serve",
+    "validate",
+    "run",
+    "compare",
+    "recover",
+    "cleanup",
+    "qualify-exp1-ipc",
+)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -27,7 +36,9 @@ def parser() -> argparse.ArgumentParser:
         command.add_argument("--product-root", type=Path, required=True)
         command.add_argument("--product-bin-dir", type=Path, required=True)
         if name in {"validate", "run"}:
-            command.add_argument("--plan", required=True, help="plan YAML path or installed preset id")
+            command.add_argument(
+                "--plan", required=True, help="plan YAML path or installed preset id"
+            )
         elif name == "compare":
             command.add_argument("--reference", required=True)
             command.add_argument("--candidate", required=True)
@@ -64,7 +75,11 @@ def _dispatch(arguments: argparse.Namespace, service: CampaignService) -> int:
         if not 1 <= arguments.port <= 65535:
             raise SystemExit("serve port must be between 1 and 65535")
         dist = _resolve_web_dist(arguments.web_dist, service.roots)
-        authority = f"[{arguments.host}]:{arguments.port}" if address.version == 6 else f"{arguments.host}:{arguments.port}"
+        authority = (
+            f"[{arguments.host}]:{arguments.port}"
+            if address.version == 6
+            else f"{arguments.host}:{arguments.port}"
+        )
         app = create_app(service, authority=authority, web_dist=dist)
         uvicorn.run(app, host=arguments.host, port=arguments.port, access_log=False)
         return 0
@@ -86,7 +101,11 @@ def _dispatch(arguments: argparse.Namespace, service: CampaignService) -> int:
         _print(asyncio.run(service.run_foreground(plan, expanded["plan_hash"])))
         return 0
     if arguments.command == "compare":
-        _print(service.compare(arguments.reference, arguments.candidate, arguments.descriptive_override))
+        _print(
+            service.compare(
+                arguments.reference, arguments.candidate, arguments.descriptive_override
+            )
+        )
         return 0
     if arguments.command == "recover":
         result = asyncio.run(service.recover())
@@ -95,6 +114,10 @@ def _dispatch(arguments: argparse.Namespace, service: CampaignService) -> int:
     if arguments.command == "cleanup":
         _print(asyncio.run(service.cleanup(arguments.run_id)))
         return 0
+    if arguments.command == "qualify-exp1-ipc":
+        result = asyncio.run(qualify_exp1_ipc(service.roots))
+        _print(result)
+        return 0 if result["status"] == "passed" else 2
     raise AssertionError(arguments.command)
 
 
@@ -103,7 +126,9 @@ def _resolve_plan(service: CampaignService, value: str) -> dict[str, Any]:
     if candidate.exists():
         if candidate.is_symlink() or not candidate.is_file():
             raise SystemExit("plan path must be a plain file")
-        return CampaignService._load_plan(candidate.resolve(strict=True)).model_dump(mode="json")
+        return CampaignService._load_plan(candidate.resolve(strict=True)).model_dump(
+            mode="json"
+        )
     for path in sorted((service.roots.benchmark_source_root / "presets").glob("*.yml")):
         preset = load_preset(path)
         if preset.id == value:

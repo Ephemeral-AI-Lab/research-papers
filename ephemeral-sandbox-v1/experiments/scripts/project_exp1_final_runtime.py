@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import sys
 from dataclasses import dataclass
 from datetime import datetime
@@ -54,6 +55,26 @@ STABLE_HOST_FIELDS = (
     "volume_root",
     "docker_engine_version",
     "monotonic_clock",
+)
+PROTOCOLS = {
+    "v1.0": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.0",
+        "environment_identity": "isolated_loopback_per_execution_block",
+    },
+    "v1.1": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.1",
+        "environment_identity": (
+            "isolated_windows_named_pipe_per_execution_block"
+        ),
+    },
+}
+V11_GATEWAY_TRANSPORT = {
+    "transport": "windows_named_pipe",
+    "scope": "local_only",
+    "rotation": "per_execution_block",
+}
+SAFE_NPIPE_ENDPOINT = re.compile(
+    r"npipe://\./pipe/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\Z"
 )
 
 
@@ -205,6 +226,77 @@ def _required_dict(value: Any, label: str) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ProjectionError(f"{label} is not an object")
     return value
+
+
+def _validate_protocol_transport(
+    campaign: dict[str, Any],
+    manifest: dict[str, Any],
+    plan: dict[str, Any],
+    protocol_version: str,
+) -> None:
+    protocol = _required_dict(campaign.get("protocol"), "protocol")
+    expected_version = (
+        protocol_version
+        if protocol_version == "v1.1"
+        else "pre-freeze-exp1"
+    )
+    if (
+        protocol.get("version") != expected_version
+        or protocol.get("id") not in (PROTOCOLS[protocol_version]["id"], None)
+    ):
+        raise ProjectionError("archive protocol version is invalid")
+    environment = _required_dict(manifest.get("environment"), "run environment")
+    if protocol_version == "v1.0":
+        if environment.get("gateway_endpoint_identity") not in (
+            None,
+            PROTOCOLS["v1.0"]["environment_identity"],
+        ):
+            raise ProjectionError("legacy v1.0 gateway identity drift")
+        return
+    if (
+        protocol.get("id") != PROTOCOLS["v1.1"]["id"]
+        or environment.get("gateway_endpoint_identity")
+        != PROTOCOLS["v1.1"]["environment_identity"]
+        or environment.get("gateway_transport") != V11_GATEWAY_TRANSPORT
+    ):
+        raise ProjectionError("v1.1 named-pipe environment identity is invalid")
+    policy = _required_dict(manifest.get("gateway_policy"), "gateway policy")
+    if (
+        policy.get("protocol_version") != PROTOCOLS["v1.1"]["id"]
+        or any(policy.get(key) != value for key, value in V11_GATEWAY_TRANSPORT.items())
+        or policy.get("mode") != "isolated"
+        or policy.get("isolated_runtime_per_execution_block") is not True
+        or policy.get("loopback_only") is not False
+    ):
+        raise ProjectionError("v1.1 named-pipe gateway policy is invalid")
+    planned = plan.get("execution_blocks")
+    launched = manifest.get("gateway_execution_blocks")
+    if (
+        not isinstance(planned, list)
+        or not isinstance(launched, list)
+        or len(planned) != len(launched)
+    ):
+        raise ProjectionError("v1.1 execution-block endpoint count is invalid")
+    endpoints: set[str] = set()
+    for expected, observed in zip(planned, launched):
+        endpoint = observed.get("endpoint_uri") if isinstance(observed, dict) else None
+        if (
+            not isinstance(expected, dict)
+            or not isinstance(observed, dict)
+            or observed.get("block_id") != expected.get("block_id")
+            or observed.get("family_id") != expected.get("family_id")
+            or any(
+                observed.get(key) != value
+                for key, value in V11_GATEWAY_TRANSPORT.items()
+            )
+            or not isinstance(observed.get("gateway_instance_id"), str)
+            or not observed["gateway_instance_id"]
+            or not isinstance(endpoint, str)
+            or SAFE_NPIPE_ENDPOINT.fullmatch(endpoint) is None
+            or endpoint in endpoints
+        ):
+            raise ProjectionError("v1.1 execution-block endpoint evidence is unsafe")
+        endpoints.add(endpoint)
 
 
 def _stable_host(campaign: dict[str, Any]) -> dict[str, Any]:
@@ -589,7 +681,10 @@ def load_run_profile(
     role: str,
     *,
     verify_inventory: bool = True,
+    protocol_version: str = "v1.0",
 ) -> RunProfile:
+    if protocol_version not in PROTOCOLS:
+        raise ProjectionError("unsupported EXP1 protocol version")
     expected = EXPECTED[role]
     root = root.resolve(strict=True)
     archive_manifest = _required_dict(
@@ -622,6 +717,12 @@ def load_run_profile(
         or archive_manifest.get("plan_hash") != plan.get("plan_hash")
     ):
         raise ProjectionError(f"{role} archive terminal provenance is invalid")
+    if archive_manifest.get("protocol_version") not in (
+        None if protocol_version == "v1.0" else protocol_version,
+        protocol_version,
+    ):
+        raise ProjectionError(f"{role} archive protocol identity is invalid")
+    _validate_protocol_transport(campaign, manifest, plan, protocol_version)
     cleanup = _cleanup_identity(campaign)
     if cleanup["product_commit"] != campaign.get("product", {}).get("commit"):
         raise ProjectionError("post-run product identity drifted")
@@ -765,6 +866,7 @@ def load_run_profile(
         role=role,
         identity={
             "run_id": manifest["run_id"],
+            "protocol_version": protocol_version,
             "plan_hash": plan["plan_hash"],
             "archive_manifest_sha256": sha256_file(root / "archive-manifest.json"),
             "archive_content_tree_sha256": archive_manifest["content_tree_sha256"],
@@ -824,6 +926,7 @@ def project_structural(
     *,
     final_plan_sha256: str,
     script_sha256: str,
+    protocol_version: str = "v1.0",
 ) -> dict[str, Any]:
     validate_cross_run(smoke, pilot, final_plan)
     family_ids = sorted(pilot.family_residual_ns)
@@ -917,6 +1020,7 @@ def project_structural(
     return {
         "schema_version": 2,
         "model_revision": 1,
+        "protocol_version": protocol_version,
         "purpose": "EXP1 Gate 3 runtime projection; not manuscript evidence",
         "analysis_script_sha256": script_sha256,
         "final_plan": {
@@ -986,6 +1090,9 @@ def parser() -> argparse.ArgumentParser:
     command.add_argument("--pilot-archive", type=Path, required=True)
     command.add_argument("--final-plan", type=Path, required=True)
     command.add_argument("--output", type=Path, required=True)
+    command.add_argument(
+        "--protocol-version", choices=sorted(PROTOCOLS), required=True
+    )
     return command
 
 
@@ -1001,11 +1108,16 @@ def main() -> int:
         output.parent.mkdir(parents=True, exist_ok=True)
         final_plan = expanded_plan_data(final_plan_path)
         result = project_structural(
-            load_run_profile(smoke_path, "smoke"),
-            load_run_profile(pilot_path, "pilot"),
+            load_run_profile(
+                smoke_path, "smoke", protocol_version=args.protocol_version
+            ),
+            load_run_profile(
+                pilot_path, "pilot", protocol_version=args.protocol_version
+            ),
             final_plan,
             final_plan_sha256=sha256_file(final_plan_path),
             script_sha256=sha256_file(Path(__file__).resolve(strict=True)),
+            protocol_version=args.protocol_version,
         )
         rendered = render_json(result)
         output.write_text(rendered, encoding="utf-8", newline="\n")

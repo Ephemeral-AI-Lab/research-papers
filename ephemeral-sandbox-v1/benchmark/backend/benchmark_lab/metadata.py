@@ -78,6 +78,16 @@ async def collect_environment(roots: BenchmarkRoots, plan: dict[str, Any]) -> di
     }
     if final_host is not None:
         host.update(final_host)
+    windows_named_pipe = (
+        os.name == "nt" and effective["client_cohort"] == "product_cli"
+    )
+    gateway_transport = {
+        "transport": (
+            "windows_named_pipe" if windows_named_pipe else "tcp_loopback"
+        ),
+        "scope": "local_only",
+        "rotation": "per_execution_block",
+    }
     return {
         "schema_version": 1,
         "treatment": {
@@ -96,7 +106,12 @@ async def collect_environment(roots: BenchmarkRoots, plan: dict[str, Any]) -> di
         "image_digest": image_digest or effective.get("image_digest"),
         "workspace_root_identity": effective["workspace_root_identity"],
         "client_cohort": effective["client_cohort"],
-        "gateway_endpoint_identity": "isolated_loopback_per_execution_block",
+        "gateway_endpoint_identity": (
+            "isolated_windows_named_pipe_per_execution_block"
+            if windows_named_pipe
+            else "isolated_loopback_per_execution_block"
+        ),
+        "gateway_transport": gateway_transport,
     }
 
 

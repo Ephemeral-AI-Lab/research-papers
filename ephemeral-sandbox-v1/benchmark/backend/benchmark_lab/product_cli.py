@@ -471,10 +471,10 @@ class ProductCliAccess(ProductAccess):
     ) -> TimedGatewayResponse:
         request_id = _identity(request_id)
         executable = self._executables[executable_role]
-        socket = f"{self._endpoint.host}:{self._endpoint.port}"
+        socket = self._endpoint.address
         argv = [
             os.fspath(executable),
-            "--gateway-socket",
+            "--gateway-endpoint",
             socket,
             f"--gateway-auth-token={self._auth_token}",
             "--request-id",

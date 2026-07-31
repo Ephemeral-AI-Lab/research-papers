@@ -4,6 +4,8 @@ import json
 import sys
 from pathlib import Path
 
+import pytest
+
 PAPER_ROOT = Path(__file__).resolve().parents[4]
 SCRIPT = PAPER_ROOT / "experiments/scripts/project_exp1_final_runtime.py"
 SPEC = importlib.util.spec_from_file_location("project_exp1_final_runtime_test", SCRIPT)
@@ -14,6 +16,50 @@ SPEC.loader.exec_module(projection)
 
 SMOKE_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb5e4-3f62-7760-bc3f-e7501502ec74"
 PILOT_ARCHIVE = PAPER_ROOT / "experiments/runs/019fb5f1-d73a-7128-9bab-d75dd229c020"
+
+
+def test_v11_projection_rejects_unsafe_named_pipe_endpoint() -> None:
+    campaign = {
+        "protocol": {
+            "version": "v1.1",
+            "id": projection.PROTOCOLS["v1.1"]["id"],
+        }
+    }
+    manifest = {
+        "environment": {
+            "gateway_endpoint_identity": (
+                "isolated_windows_named_pipe_per_execution_block"
+            ),
+            "gateway_transport": dict(projection.V11_GATEWAY_TRANSPORT),
+        },
+        "gateway_policy": {
+            "protocol_version": projection.PROTOCOLS["v1.1"]["id"],
+            "mode": "isolated",
+            "isolated_runtime_per_execution_block": True,
+            "loopback_only": False,
+            **projection.V11_GATEWAY_TRANSPORT,
+        },
+        "gateway_execution_blocks": [
+            {
+                "block_id": "block-1",
+                "family_id": "runtime",
+                "gateway_instance_id": "gateway-1",
+                "endpoint_uri": "npipe://./pipe/../unsafe",
+                **projection.V11_GATEWAY_TRANSPORT,
+            }
+        ],
+    }
+    plan = {
+        "execution_blocks": [{"block_id": "block-1", "family_id": "runtime"}]
+    }
+
+    with pytest.raises(
+        projection.ProjectionError,
+        match="execution-block endpoint evidence is unsafe",
+    ):
+        projection._validate_protocol_transport(
+            campaign, manifest, plan, "v1.1"
+        )
 
 
 def _plan(role: str) -> dict:

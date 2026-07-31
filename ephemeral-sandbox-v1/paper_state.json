@@ -12,13 +12,14 @@
     "complexity_and_evolution.md",
     "experiment_inventory.md",
     "experiments/environment_setup.md",
+    "experiments/exp1-v1.1-protocol-amendment.md",
     "experiments/expected_tables.md",
     "experiments/experiment_log.md"
   ],
   "blockers": [
-    "EXP1 protocol v1.0 and its product/source identities were frozen, but the sole final attempt failed during a mandatory observability boundary after Windows reported WSAEADDRINUSE 10048 and TCP/IP Event 4227. The preserved corpus is failed_ineligible. A read-only v1.1 decision package recommends a temporary active-store IPv4 dynamic-port expansion plus qualification, new freeze, and one new final; explicit author authorization and an elevated host action are required before any mutation.",
-    "experiment_inventory.md contains the frozen focused RQ3 protocol and failure outcome, but this does not replace the broader RQ1-RQ5 evaluation charter.",
-    "The reviewed product_cli cohort and exploratory smoke/pilot exist, but their values are ineligible and no final performance table or numeric-evidence record was generated.",
+    "EXP1 v1.1 is authorized and replaces loopback TCP with local Windows named-pipe IPC. Product candidate 5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8 is clean and packaged, but the preregistered 25,000-invocation qualifier, fresh smoke, pilot, no-more-than-1,400-second projection, new paper-v1.1-freeze, and exactly one final remain incomplete. No elevated or host-network action is required.",
+    "experiment_inventory.md preserves the frozen v1.0 failure and links the active focused v1.1 RQ3 amendment, but this does not replace the broader RQ1-RQ5 evaluation charter.",
+    "The v1.0 product_cli smoke, pilot, and failed final remain ineligible; no v1.1 measurement exists and no final performance table or numeric-evidence record has been generated.",
     "Eligible final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
     "Author names and affiliations are unresolved.",
     "The four supplied concept figures are drafting-stage review assets; recorded topology, resolution, grayscale-contrast, and style-family disparities require PW7 repair or an explicit submission-stage waiver.",

@@ -28,7 +28,7 @@ from .reports import persist_report_bundle
 from .resource_sampling import TrialResourceSampler, WorkspaceMetricCache
 from .safety import OwnershipLedger
 from .sessions import Session, SessionLifecycle
-from .transport import GatewayProductError, GatewayTransportError, TimedGatewayResponse
+from .transport import GatewayProductError, TimedGatewayResponse
 
 
 class CampaignError(RuntimeError):
@@ -208,6 +208,21 @@ class CampaignRunner:
                     readiness_via_cli=client_cohort == "product_cli",
                 )
                 gateway_instance_ids.append(gateway.identity.gateway_instance_id)
+                endpoint = gateway.identity.endpoint
+                self._manifest["gateway_execution_blocks"].append(
+                    {
+                        "block_id": block["block_id"],
+                        "family_id": block["family_id"],
+                        "gateway_instance_id": gateway.identity.gateway_instance_id,
+                        "endpoint_uri": endpoint.uri,
+                        "transport": endpoint.transport,
+                        "scope": "local_only",
+                        "rotation": "per_execution_block",
+                    }
+                )
+                self._store.replace_snapshot(
+                    run_id, ArtifactId.RUN_MANIFEST, self._manifest
+                )
                 if client_cohort == "product_cli":
                     product = ProductCliAccess(
                         gateway.identity.endpoint,
@@ -2372,6 +2387,32 @@ class CampaignRunner:
             for artifact_id, spec in ARTIFACT_SPECS.items()
             if artifact_id in PRODUCER_ARTIFACT_IDS and spec.schema_name is not None
         }
+        gateway_policy = {
+            "semantic_revision": 1,
+            "mode": "isolated",
+            "loopback_only": True,
+            "isolated_runtime_per_execution_block": True,
+            "remount_sweep_widths": sorted(
+                {_block_width(block, plan) for block in plan["execution_blocks"]}
+            ),
+            "maximum_connections": 256,
+            "readiness_timeout_ms": 60_000,
+            "readiness_probe_timeout_ms": 2_000,
+            "readiness_poll_interval_ms": 50,
+        }
+        if _is_v11_windows_named_pipe_treatment(environment):
+            gateway_policy.update(
+                {
+                    "semantic_revision": 2,
+                    "protocol_version": (
+                        "ephemeral-sandbox-v1-practical-performance-v1.1"
+                    ),
+                    "transport": "windows_named_pipe",
+                    "scope": "local_only",
+                    "rotation": "per_execution_block",
+                    "loopback_only": False,
+                }
+            )
         return {
             "schema_version": 2,
             "run_id": run_id,
@@ -2398,19 +2439,8 @@ class CampaignRunner:
                 "sha256": definition_sha256,
             },
             "fixed_lifecycle_policy": plan["fixed_lifecycle_policy"],
-            "gateway_policy": {
-                "semantic_revision": 1,
-                "mode": "isolated",
-                "loopback_only": True,
-                "isolated_runtime_per_execution_block": True,
-                "remount_sweep_widths": sorted(
-                    {_block_width(block, plan) for block in plan["execution_blocks"]}
-                ),
-                "maximum_connections": 256,
-                "readiness_timeout_ms": 60_000,
-                "readiness_probe_timeout_ms": 2_000,
-                "readiness_poll_interval_ms": 50,
-            },
+            "gateway_policy": gateway_policy,
+            "gateway_execution_blocks": [],
             "started_at": self._started_at,
             "ended_at": None,
             "correctness": "pending",
@@ -3356,6 +3386,22 @@ def _gateway_log_summary(records: tuple[Any, ...]) -> str:
             )
         )
     return "gateway logs retained as redacted digests: " + ",".join(parts)
+
+
+def _is_v11_windows_named_pipe_treatment(
+    environment: dict[str, Any],
+) -> bool:
+    return (
+        environment.get("client_cohort") == "product_cli"
+        and environment.get("gateway_endpoint_identity")
+        == "isolated_windows_named_pipe_per_execution_block"
+        and environment.get("gateway_transport")
+        == {
+            "transport": "windows_named_pipe",
+            "scope": "local_only",
+            "rotation": "per_execution_block",
+        }
+    )
 
 
 def _block_width(block: dict[str, Any], plan: dict[str, Any]) -> int:

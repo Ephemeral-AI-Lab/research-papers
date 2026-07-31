@@ -243,3 +243,39 @@ Root [`progress.md`](../progress.md) is the authoritative project milestone trac
   source/environment freeze, and exactly one newly authorized final. No
   network, source, Git, Docker, or live-run mutation occurred. Explicit author
   authorization and an elevated host action remain the exact blocker.
+- **2026-07-31 -- v1.1 authorization and treatment amendment:** The author
+  directed the permanent CLI issue to be fixed and the goal resumed. EXP1
+  v1.1 therefore replaces CLI-to-gateway loopback TCP with direct Windows
+  named-pipe IPC while retaining one fresh native CLI subprocess per measured
+  request. The earlier host-wide dynamic-port-range proposal is superseded and
+  was never applied. The v1.0 archive remains immutable and ineligible.
+- **2026-07-31 -- resumed implementation state:** Typed TCP/npipe/Unix endpoint
+  discovery, the Windows named-pipe client, explicit `--gateway-endpoint`
+  CLI/MCP wiring, Windows local-IPC defaults, and compatibility aliases are
+  implemented. Real client named-pipe round-trip and concurrency-5 tests pass.
+  Gateway listener/lifecycle implementation and full product validation remain
+  in progress; no live qualifier, smoke, pilot, freeze, or final has started.
+- **2026-07-31 -- local-IPC product gate passed:** Product direct `main` commit
+  `56c676d588fbb704bf3da8f67d22be910453644d` and fresh package
+  `target/windows-exp1-56c676d5` now carry the no-fallback named-pipe
+  treatment. Changed-crate tests, warnings-denied Clippy, and native
+  concurrency-5 packaged CLI round trips pass. The next blocking gate is the
+  ineligible 25,000-invocation qualifier with zero new TCP/IP 4227/4231
+  events and bounded gateway handle/RSS growth; no live campaign stage has
+  started.
+- **2026-07-31 -- final prequalification product candidate:** Compatibility
+  follow-up commit `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8` preserves
+  legacy DNS TCP endpoints while retaining strict local named-pipe defaults
+  and rejects ambiguous Unix endpoint syntax. A fresh clean package at
+  `target/windows-exp1-5c48dae1` supersedes the `56c676d5` candidate for all
+  new work. Its ZIP SHA-256 is
+  `11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`;
+  packaged concurrency-5 native manager-CLI named-pipe verification passed.
+- **2026-07-31 -- v1.1 policy preregistration:** Added
+  `experiments/exp1-v1.1-protocol-amendment.md` before live qualification.
+  It locks exactly 25,000 manager-CLI calls in 5,000 concurrency-5 batches,
+  strict output/no-retry/no-TCP rules, event-log and owned-TCP checks,
+  periodic gateway sampling, fixed handle/memory growth caps, fail-closed
+  cleanup, exact provenance, and the unchanged postqualification
+  smoke/pilot/1,400-second/freeze/one-final sequence. The historical elevated
+  IPv4-range proposal is explicitly superseded and was never applied.

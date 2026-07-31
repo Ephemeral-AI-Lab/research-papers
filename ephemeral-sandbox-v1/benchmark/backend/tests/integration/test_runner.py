@@ -18,7 +18,11 @@ from benchmark_lab.runner import (
     CampaignRunner,
     TrialContext,
 )
-from benchmark_lab.transport import GatewayTransportError, TimedGatewayResponse
+from benchmark_lab.transport import (
+    GatewayEndpoint,
+    GatewayTransportError,
+    TimedGatewayResponse,
+)
 
 ROOT = Path(__file__).resolve().parents[3]
 GOLDEN = ROOT / "tests/fixtures/golden/rust/quick-smoke-completed"
@@ -247,7 +251,10 @@ class FakeGateway:
         self.closed = False
         self.retained_shared_base_volumes = False
         self.finalized = False
-        self.identity = SimpleNamespace(gateway_instance_id=gateway_instance_id)
+        self.identity = SimpleNamespace(
+            gateway_instance_id=gateway_instance_id,
+            endpoint=GatewayEndpoint("127.0.0.1", 47621),
+        )
 
     async def close(
         self,
@@ -296,6 +303,11 @@ def _install_fakes(
             "workspace_root_identity": None,
             "client_cohort": "direct_client",
             "gateway_endpoint_identity": "fake",
+            "gateway_transport": {
+                "transport": "tcp_loopback",
+                "scope": "local_only",
+                "rotation": "per_execution_block",
+            },
         }
 
     async def cleanup_gateway_docker_resources(
@@ -355,6 +367,28 @@ def test_runner_persists_verified_terminal_corpus_and_removes_workspace(
     }
     assert corpus.manifest["treatment"] == corpus.environment["treatment"]
     assert corpus.manifest["correctness"] == "pass"
+    assert {
+        "semantic_revision": 1,
+        "mode": "isolated",
+        "loopback_only": True,
+    }.items() <= corpus.manifest["gateway_policy"].items()
+    assert {
+        "protocol_version",
+        "transport",
+        "scope",
+        "rotation",
+    }.isdisjoint(corpus.manifest["gateway_policy"])
+    assert corpus.manifest["gateway_execution_blocks"] == [
+        {
+            "block_id": plan["execution_blocks"][0]["block_id"],
+            "family_id": plan["execution_blocks"][0]["family_id"],
+            "gateway_instance_id": gateway.identity.gateway_instance_id,
+            "endpoint_uri": "tcp://127.0.0.1:47621",
+            "transport": "tcp_loopback",
+            "scope": "local_only",
+            "rotation": "per_execution_block",
+        }
+    ]
     definition_reference = (
         ArtifactStore(roots)
         .download_artifact("run-success", ArtifactId.DEFINITION_SNAPSHOT.value)
@@ -473,6 +507,129 @@ def test_runner_finalizes_retained_volumes_from_every_execution_block(
     assert all(gateway.retained_shared_base_volumes for gateway in gateways)
     assert all(gateway.finalized for gateway in gateways)
     assert not (roots.runs / "run-two-blocks").exists()
+
+
+def test_gateway_execution_block_prefix_is_durable_before_product_and_crash(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    roots = _roots(tmp_path)
+    fake = FakeProduct()
+    gateway = FakeGateway("benchmark-gateway-first")
+    _install_fakes(monkeypatch, fake, gateway)
+    plan = _two_block_file_read_plan()
+    durable_before_product: list[list[dict]] = []
+    durable_before_crash: list[dict] = []
+    launches = 0
+
+    class SimulatedCrash(BaseException):
+        pass
+
+    class Launcher:
+        async def start(
+            self,
+            run_id,
+            *,
+            remount_sweep_width,
+            readiness_via_cli,
+        ):
+            nonlocal launches
+            assert remount_sweep_width == 1
+            assert readiness_via_cli is False
+            if launches:
+                snapshot = ArtifactStore(roots).read_envelope(
+                    run_id, ArtifactId.RUN_MANIFEST
+                )
+                durable_before_crash.extend(
+                    copy.deepcopy(snapshot["gateway_execution_blocks"])
+                )
+                raise SimulatedCrash("simulated process interruption")
+            launches += 1
+            return gateway
+
+    def observed_product_access(client, runs):
+        assert client is gateway.client
+        snapshot = ArtifactStore(roots).read_envelope(
+            "run-crash-prefix", ArtifactId.RUN_MANIFEST
+        )
+        durable_before_product.append(
+            copy.deepcopy(snapshot["gateway_execution_blocks"])
+        )
+        return fake
+
+    monkeypatch.setattr(runner_module, "GatewayLauncher", lambda roots: Launcher())
+    monkeypatch.setattr(runner_module, "ProductAccess", observed_product_access)
+
+    with pytest.raises(SimulatedCrash, match="simulated process interruption"):
+        asyncio.run(
+            CampaignRunner(roots).run(
+                "run-crash-prefix",
+                plan,
+                intent=_artifact("intent-plan.json"),
+                definition_snapshot=_artifact("definition-snapshot.json"),
+            )
+        )
+
+    expected_prefix = [
+        {
+            "block_id": plan["execution_blocks"][0]["block_id"],
+            "family_id": plan["execution_blocks"][0]["family_id"],
+            "gateway_instance_id": gateway.identity.gateway_instance_id,
+            "endpoint_uri": "tcp://127.0.0.1:47621",
+            "transport": "tcp_loopback",
+            "scope": "local_only",
+            "rotation": "per_execution_block",
+        }
+    ]
+    assert durable_before_product == [expected_prefix]
+    assert durable_before_crash == expected_prefix
+    assert (
+        ArtifactStore(roots)
+        .read_envelope("run-crash-prefix", ArtifactId.RUN_MANIFEST)[
+            "gateway_execution_blocks"
+        ]
+        == expected_prefix
+    )
+
+
+def test_manifest_v11_policy_is_scoped_to_windows_product_cli_named_pipe(
+    tmp_path: Path,
+) -> None:
+    runner = CampaignRunner(_roots(tmp_path))
+    runner._started_at = "2026-07-31T00:00:00.000000Z"
+    plan = _single_file_read_plan()
+    environment = {
+        "treatment": {"source_commit": "fake"},
+        "client_cohort": "product_cli",
+        "gateway_endpoint_identity": (
+            "isolated_windows_named_pipe_per_execution_block"
+        ),
+        "gateway_transport": {
+            "transport": "windows_named_pipe",
+            "scope": "local_only",
+            "rotation": "per_execution_block",
+        },
+    }
+
+    manifest = runner._new_manifest(
+        "run-v11-policy",
+        plan,
+        _artifact("definition-snapshot.json"),
+        "sha256:" + "1" * 64,
+        environment,
+        None,
+    )
+
+    assert {
+        "semantic_revision": 2,
+        "protocol_version": (
+            "ephemeral-sandbox-v1-practical-performance-v1.1"
+        ),
+        "mode": "isolated",
+        "transport": "windows_named_pipe",
+        "scope": "local_only",
+        "rotation": "per_execution_block",
+        "loopback_only": False,
+    }.items() <= manifest["gateway_policy"].items()
 
 
 def test_runner_cleanup_failure_forces_failed_retained_run(

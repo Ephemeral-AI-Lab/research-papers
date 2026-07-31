@@ -6136,3 +6136,224 @@ must not be used to selectively remove unfavorable cells.
   is one author decision approving or rejecting the host-wide active-store
   IPv4 mutation and the complete qualifier/refreeze/one-final sequence. No
   step of that sequence is implied by earlier v1.0 authorization.
+
+### 2026-07-31T07:59:50.209Z - Author authorized permanent CLI transport fix and EXP1 v1.1 resumption
+
+- **Author direction:** after reviewing the local TCP endpoint-reuse failure
+  and the temporary dynamic-range workaround, the author directed: “fix the
+  issue then resume the goal.” This authorizes the demonstrated released-CLI
+  transport defect to be corrected in product `main` and authorizes the EXP1
+  campaign to resume as a new protocol/treatment version after qualification.
+- **Protocol decision:** EXP1 v1.1 will replace one-shot CLI-to-gateway
+  loopback TCP with direct OS-local IPC to the existing gateway: Windows named
+  pipes on the fixed host, with Unix-domain sockets implemented for
+  cross-platform product parity and TCP retained only as an explicit
+  compatibility/remote endpoint. Each measured request remains one fresh
+  native CLI subprocess and one request/response exchange. No persistent CLI,
+  broker, retry, pacing, cell, payload, trial, sampling, exclusion, metric, or
+  table change is authorized.
+- **Why this supersedes the prior proposal:** independent native CLI processes
+  cannot share an in-process TCP pool. Direct local IPC removes Windows
+  ephemeral TCP allocation from the measured CLI-to-gateway path without an
+  additional broker process, while preserving the native subprocess timing
+  boundary. The existing gateway request handler is already transport-neutral;
+  only endpoint discovery/connect/listen plumbing needs to change.
+- **Evidence boundary:** the sole v1.0 final and its archive remain immutable,
+  failed, and ineligible. Its partial values will not be rerun, replaced,
+  pooled, or compared numerically with v1.1. Local IPC is a scientifically
+  material transport treatment and therefore requires a new product identity,
+  package hashes, protocol/source/environment freeze, smoke, five-sample
+  pilot, projection no greater than 1,400 seconds, and exactly one new final
+  only if all preceding gates pass.
+- **Host state:** the proposed IPv4 active-store range expansion was never
+  applied and is no longer the selected v1.1 path. IPv4, IPv6, TIME_WAIT,
+  auto-reuse, routing, firewall, Docker, and protected resources remain
+  unchanged.
+- **Implementation/qualification gate:** before live benchmark smoke, require
+  product transport parity and failure tests, bounded gateway lifecycle and
+  cleanup, an ineligible high-churn native-CLI named-pipe qualification of at
+  least 25,000 successful invocations including concurrency-5 bursts, zero
+  transport failures, no new TCP/IP 4227/4231 event attributable to the
+  qualifier, no silent TCP fallback, and bounded process handle/RSS growth.
+  Any failure remains a pre-freeze blocker.
+- **Git boundary:** work remains directly on product `main`; no branch,
+  worktree, push, or movement of the existing `paper-v1-freeze` tag is
+  authorized. Any successful v1.1 freeze will use new immutable commit/tag
+  identities and preserve all v1.0 identities.
+
+### 2026-07-31T08:42:08.878Z - Permanent local-IPC product fix committed and packaged
+
+- **Product identity:** direct product `main` commit
+  `56c676d588fbb704bf3da8f67d22be910453644d` (`Use local IPC for gateway
+  CLI transport`). No push occurred and the existing `paper-v1-freeze` tag was
+  not moved.
+- **Implemented treatment:** typed `tcp://`, `npipe://`, and `unix://`
+  endpoints; Windows named-pipe and Unix-domain listeners; Windows named-pipe
+  client; Windows local-IPC defaults; explicit `--gateway-endpoint` with the
+  released `--gateway-socket` compatibility alias; and updated Windows
+  launcher/package documentation. The client performs one connection attempt,
+  one request, and one response with no retry or transport fallback.
+- **Product verification:** formatting and diff checks passed. The complete
+  changed-crate suite for config, gateway, operation client, all three CLIs,
+  and MCP passed, including real named-pipe request/response and concurrency-5
+  tests. Warnings-denied all-target Clippy passed for the changed crates.
+  A fresh release-binary integration launched five native manager CLI
+  processes concurrently against one named-pipe gateway; all five exited 0,
+  wrote one valid `{"sandboxes":[]}` JSON line, and had empty stderr.
+- **Portability repairs discovered by validation:** the existing gateway
+  progress test compared an unescaped Windows path inside a JSON-framed log;
+  it now compares the serialized message. The POSIX local-daemon installer
+  test is now explicitly Unix-only. Both previously failing gateway tests
+  pass.
+- **Whole-workspace boundary:** `cargo test` was attempted on native Windows.
+  It first exposed the pre-existing Unix-only telemetry `rustix::fs` import.
+  A temporary diagnostic portability experiment was fully reverted and was
+  not committed; the next attempt reached the pre-existing Linux namespace
+  process crate, which cannot compile `std::os::fd`, `std::os::unix`, or
+  `libc::pause` on Windows. This is not on the changed Windows
+  gateway/client/CLI path; changed-crate tests and strict Clippy are the
+  applicable native-Windows gates.
+- **Package build:** the first direct `.ps1` invocation was rejected by the
+  host execution policy before the script ran. The repository-documented
+  `powershell.exe -NoProfile -ExecutionPolicy Bypass -File` invocation then
+  completed successfully as
+  `target/windows-exp1-56c676d5`. The package ZIP is 5,706,464 bytes,
+  `sha256:bba3376de85a80c1664cbc12114666cf00a2d9f45cc4f8cf09477cc5c6df9b1d`.
+- **Packaged identities:** gateway
+  `sha256:80948557a439e4072a7acbd29fa7bd52824ac7e7ebdcade53656cacc1ca11c68`;
+  manager CLI
+  `sha256:9ee4ad89c1be3f9461991d4ee468b0ac5be1b8f97bd393d90b1d844c0977fa16`;
+  runtime CLI
+  `sha256:3b66c73bfe3661ec9a1c71e4d7b74925f6b0ab1957ccb6a33891c710f762082a`;
+  observability CLI
+  `sha256:3197990555825ee17a2224cad62933ff3eb720f411661015b5604360cc7c1a5b`;
+  Linux daemon
+  `sha256:f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a`;
+  Windows config
+  `sha256:987776d700108c8a9a9c1a3ed42b9155a4db46e7dde20765a79ef6df6e13677a`.
+- **Package smoke:** the packaged gateway and manager CLI repeated the
+  concurrency-5 native-process named-pipe check with five exit-0, empty-stderr,
+  single-JSON responses. Earlier ad hoc PowerShell result-check wrappers
+  mis-handled empty files and process exit-code properties; those wrapper
+  errors did not indicate product failures and the final
+  `System.Diagnostics.Process` verifier passed.
+- **Host/protected state:** no host network setting changed. Protected gateway
+  PID 62980 remained alive and untouched. The high-churn qualifier, live
+  smoke, pilot, freeze, and final have not started.
+
+### 2026-07-31T08:52:59.986Z - Final local-IPC candidate and qualifier policy preregistered
+
+- **Entry ID:** `exp1-v1.1-ipc-preregistration-113`.
+- **Phase:** prequalification protocol/provenance freeze; no live benchmark or
+  qualifier result.
+- **Candidate correction:** product follow-up commit
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8` (`Preserve TCP endpoint
+  compatibility`) supersedes `56c676d588fbb704bf3da8f67d22be910453644d`
+  as the prequalification candidate. It preserves legacy DNS TCP endpoints,
+  retains the strict Windows named-pipe default, and rejects ambiguous Unix
+  endpoint syntax. Product `main` is clean; neither commit nor tag was pushed.
+- **Final candidate package:** staged directory
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-5c48dae1`;
+  ZIP size 5,739,735 bytes and
+  `sha256:11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`.
+  Gateway SHA-256 is
+  `42e7642dd025487811abbcd78dcc5513760f2aaa1e6057cfdfa3e74c03748358`;
+  manager CLI
+  `e1faa2fe0e9f4909fa2d694166784ac65dde40ba82795b7e0c503eb5fea86513`;
+  runtime CLI
+  `e18827cf765945c958e169748575b89645c730b310ee5ffc1b42c382b44a0e26`;
+  observability CLI
+  `2b1c13bba36c9486f768824178d1e2ea8d2b1da019bd21cd1f9ea250d5da34c5`;
+  Linux daemon
+  `f5a71c3c3fe05345958b1d4d4561c64dec298022d80d3595bb0397c9b15f3c2a`;
+  Windows config
+  `987776d700108c8a9a9c1a3ed42b9155a4db46e7dde20765a79ef6df6e13677a`.
+- **Package validation:** packaged gateway plus five simultaneous native
+  manager CLI processes completed on one unique named pipe. Each process
+  exited 0, had empty stderr, and emitted exactly one valid
+  `{"sandboxes":[]}` JSON line. No retry or TCP fallback was present.
+- **Preregistration:** created
+  `experiments/exp1-v1.1-protocol-amendment.md` before any live qualifier
+  result. The stable
+  `EXP1 v1.1 IPC qualification policy preregistration` section fixes exactly
+  25,000 `list_sandboxes` invocations as 5,000 concurrency-5 batches; one
+  unique named pipe; unique request IDs; strict exit/stdout/stderr validation;
+  no TCP, retry, fallback, or pacing; event 4227/4231 coverage through
+  post-cleanup; gateway-owned TCP checks at readiness, every 100 batches,
+  pre-stop, and post-cleanup; gateway process sampling at readiness, every
+  100 batches, and pre-stop; peak and final growth caps of 32 handles, 16 MiB
+  private bytes, and 16 MiB RSS; exact-cap pass and cap-plus-one failure;
+  complete source/package/command/host provenance; and fail-closed cleanup.
+  The qualifier is explicitly `qualification_only` and cannot supply
+  performance evidence.
+- **Rationale fixed before evidence:** 32 handles is no greater than the
+  gateway listener pending-instance maximum. The two 16 MiB allowances are
+  conservative fixed engineering-qualification bounds, not measured
+  performance results.
+- **Supersession:** the historical active-store IPv4 range proposal is marked
+  superseded without execution. No IPv4, IPv6, TIME_WAIT, auto-reuse,
+  firewall, routing, Docker, or other host network setting changed.
+- **Next gate:** finish harness/archive/table hardening and the complete
+  backend test suite, create a clean paper prequalification commit, then run
+  the preregistered live qualifier. Smoke, pilot, freeze, and final remain
+  prohibited until that gate passes.
+
+### 2026-07-31T12:33:58.622Z - Provenance-only Table 1 schema clarification preregistered
+
+- **Phase:** prequalification protocol/documentation hardening; no live
+  qualifier, smoke, pilot, or performance evidence was collected.
+- **Clarification:** the earlier prohibition on a table change continues to
+  lock Tables 2--4 and every numeric/measured definition. Because gateway
+  transport is the scientifically material v1.1 treatment, Table 1 now adds
+  exactly one non-numeric text row named `Gateway transport`.
+- **Schema boundary:** the deterministic table and output-manifest schema is
+  version 2 solely to bind the protocol version and typed transport provenance.
+  The value is derived from archived run-manifest evidence, never entered
+  manually or copied from qualifier results. Legacy v1.0 regeneration may
+  disclose its loopback transport without changing the frozen raw corpus.
+- **Unchanged design:** the 19 cells, trials, seed, timing boundary, metrics,
+  aggregations, eligibility, resource cadence, correctness gates, exclusions,
+  and every numeric table field remain unchanged. This is the only authorized
+  v1.1 table-schema change.
+- **Freeze-scope correction:** authoritative root `progress.md` is now included
+  in the archived protocol identity and scoped clean-freeze check alongside
+  `plan/progress.md`; tracker drift can no longer escape final provenance.
+
+### 2026-07-31T12:41:43.385Z - V1.1 prequalification source gate passed
+
+- **Entry ID:** `exp1-v1.1-prequalification-source-gate-115`.
+- **Phase:** independent integrated review before the clean paper commit and
+  live IPC qualifier; no qualifier invocation or performance measurement.
+- **Integrated tests:** with `PYTHONDONTWRITEBYTECODE=1`, the complete
+  `benchmark\backend\tests` plus `experiments\analysis\tests` run passed:
+  354 passed, five expected Windows-symlink-privilege skips, exit 0 in
+  48.88 seconds. The final qualifier-only rerun passed 46/46 in 5.28 seconds.
+- **Qualifier lint/format:** offline Ruff format-check and lint over
+  `ipc_qualification.py` and `test_ipc_qualification.py` both exited 0.
+  `git diff --check` exited 0 apart from informational LF-to-CRLF checkout
+  warnings.
+- **Recorded non-mutating tool failures:** a broader Ruff format-check over
+  the imported benchmark subtree exited 1 because 49 legacy files do not
+  match the currently cached Ruff formatter; check mode changed no file. A
+  broader Ruff lint invocation also exited 1 on pre-existing exception-policy,
+  Python-target, import-order, and style findings across legacy runner/gateway
+  sources. The scoped qualifier files pass both checks, and the full runtime
+  suite passes. No dependency was installed and no bulk reformat was applied.
+- **Independent parity correction:** direct comparison found that the
+  qualifier's scoped paper path tuple redundantly named files already covered
+  by `benchmark`, while the archive tuple did not. The redundant entries were
+  removed; qualifier and archive `PAPER_FROZEN_SCOPE` and generated-file
+  exclusions now compare exactly equal. The 46 qualifier tests pass after the
+  correction.
+- **Exact plan validation:** all three plans are runnable, select only
+  `product_cli`, and use only `paper-100m`. Smoke remains 19 cells, 19
+  batches, 55 requests,
+  `sha256:1a8364a4612ac16834747d7619be1f63da3857d0223ec181c8a93c6851793937`;
+  pilot remains 19/133/385,
+  `sha256:e142322153e5beec84c72994ce0da20fb78b2e418174324b96d954b6e8b6631f`;
+  final remains 19/1,938/5,610,
+  `sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b`.
+- **Gate decision:** source, protocol, qualifier, plan, archive, projection,
+  and table hardening are ready for a scoped clean paper commit. The live
+  qualifier remains prohibited until that commit exists and the qualifier's
+  own product-global and paper-scoped clean checks pass.

@@ -1,12 +1,22 @@
 # Focused sandbox performance experiment specification
 
-**Protocol ID:** `ephemeral-sandbox-v1-practical-performance-v1.0`
+**Active protocol ID:** `ephemeral-sandbox-v1-practical-performance-v1.1`
 
-**Status:** Frozen; sole final attempt failed and is permanently ineligible
+**Status:** v1.1 local-IPC treatment authorized; qualification pending
 
 **Last updated:** 2026-07-31
 **Primary tracker:** the phase checklists in this document  
 **Run log:** [`experiments/experiment_log.md`](experiments/experiment_log.md)
+
+The original specification below is the immutable v1.0 protocol record. Its
+sole final attempt failed and remains permanently ineligible. New work is
+governed by the
+[`EXP1 v1.1 local-IPC protocol amendment`](experiments/exp1-v1.1-protocol-amendment.md),
+which changes only the scientific treatment's CLI-to-gateway transport to an
+isolated Windows named pipe per gateway execution block and preserves all
+other scientific choices. Its sole schema clarification adds a non-numeric
+`Gateway transport` provenance row; measured table definitions are unchanged.
+The v1.0 and v1.1 corpora must never be pooled or numerically compared.
 
 ## Purpose and claim boundary
 
@@ -93,11 +103,11 @@ seed:            20260712
 The selected `paper-100m` base applies to every final measured cell, including
 file read, write, and edit. Operation-specific targets are created during
 untimed setup inside a fresh per-cell copy of that base. The current benchmark
-schema applies the selected profile only to command and workspace-readiness
-cells, so Phase 3 must extend the file-operation preparation path before any
-pilot or final run. Neither the product checkout, paper checkout, canonical
-repository-backed qualification workspace, nor a clean empty fixture is a
-substitute for the performance base.
+schema applies the selected profile to command, workspace-readiness, read,
+write, and edit cells, as required by the completed Phase 3 instrumentation.
+Neither the product checkout, paper checkout, canonical repository-backed
+qualification workspace, nor a clean empty fixture is a substitute for the
+performance base.
 
 ## Measured operations and boundaries
 
@@ -111,9 +121,9 @@ substitute for the performance base.
 | File edit | One native runtime-CLI `file_edit` subprocess in a fresh prepared session over the `paper-100m` base | Target/session setup, read-back verification, teardown |
 
 The focused campaign includes explicit manager-CLI sandbox-create-to-ready
-timing. The current runner invokes `create_sandbox` during setup and discards
-its response timing, so Phase 3 must add this separate metric. Session-create
-latency remains a distinct runtime-CLI operation and must never be relabeled as
+timing. The runner records the dedicated `create_sandbox` process-launch through
+validated-ready boundary separately from untimed setup. Session-create latency
+remains a distinct runtime-CLI operation and must never be relabeled as
 sandbox-create latency.
 
 ### CLI timing contract
@@ -216,9 +226,11 @@ The targets below are acceptance budgets, not measured claims:
 | Complete good pass | <= 1,400 seconds (23 minutes 20 seconds) |
 | Deterministic analysis and table generation | <= 2 minutes |
 
-If the good pass exceeds 1,400 seconds during the pilot, reduce the matrix
-before protocol lock. Do not reduce trials or remove slow cells after seeing
-final results.
+The original v1.0 pre-lock option to reduce the matrix no longer applies. V1.1
+retains the locked 19-cell matrix unchanged. If the conservative pilot
+projection exceeds 1,400 seconds, the final remains blocked; do not reduce
+trials or remove slow cells after seeing v1.1 pilot or final evidence without a
+new, explicitly authorized protocol amendment.
 
 ## Phases and acceptance tracker
 

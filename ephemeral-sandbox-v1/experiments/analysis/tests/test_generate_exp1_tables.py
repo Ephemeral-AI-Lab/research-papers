@@ -294,7 +294,21 @@ def _build_archive(root: Path, *, disposition: str = "exploratory") -> Path:
             "requested": "example.invalid/exp1@sha256:" + "3" * 64,
         },
         "fixture": {"fixture_hash": FIXTURE_HASH, "tree_hash": TREE_HASH},
-        "paper_git": {"commit": "b" * 40},
+        "protocol": {
+            "id": generator.PROTOCOLS["v1.0"]["id"],
+            "version": "v1.0" if disposition == "final" else "pre-freeze-exp1",
+            "freeze_state": "frozen" if disposition == "final" else "pre_freeze",
+        },
+        "paper_git": {
+            "commit": "b" * 40,
+            "dirty": False,
+            "status_porcelain": [],
+            "freeze_state": (
+                "clean_frozen_commit"
+                if disposition == "final"
+                else "pre_freeze_worktree"
+            ),
+        },
     }
     treatment = {
         "source_commit": PRODUCT_COMMIT,
@@ -454,6 +468,8 @@ def test_generation_is_byte_deterministic_and_marks_pilot_ineligible(
         encoding="utf-8"
     )
     tables = json.loads((first / "tables.json").read_text(encoding="utf-8"))
+    assert tables["schema_version"] == 2
+    assert tables["generator_schema_version"] == 2
     assert len(tables["tables"]["startup"]["rows"]) == 4
     assert len(tables["tables"]["public_cli_operations"]["rows"]) == 16
     assert len(tables["tables"]["resources"]["rows"]) == 7
@@ -475,6 +491,7 @@ def test_generation_is_byte_deterministic_and_marks_pilot_ineligible(
         "Sandbox limits",
         "Workspace",
         "Client",
+        "Gateway transport",
         "Seed",
         "Trials",
     ]
@@ -487,6 +504,18 @@ def test_generation_is_byte_deterministic_and_marks_pilot_ineligible(
         if field["field"] == "Product commit/tag"
     )
     assert product_machine_field["value"]["freeze_tag"]["availability"] == "unavailable"
+    transport_row = next(
+        row for row in table1_rows if row[0] == "Gateway transport"
+    )
+    assert transport_row[1] == (
+        "tcp_loopback; local_only; per_execution_block"
+    )
+    transport_machine_field = next(
+        field
+        for field in tables["tables"]["environment"]["fields"]
+        if field["field"] == "Gateway transport"
+    )
+    assert transport_machine_field["value"] == generator.V10_GATEWAY_TRANSPORT
 
     table2_header, table2_rows = _markdown_table(first / "table-2-startup.md")
     assert table2_header == [
@@ -577,6 +606,8 @@ def test_generation_is_byte_deterministic_and_marks_pilot_ineligible(
     output_manifest = json.loads(
         (first / "output-manifest.json").read_text(encoding="utf-8")
     )
+    assert output_manifest["schema_version"] == 2
+    assert output_manifest["generator_schema_version"] == 2
     for entry in output_manifest["files"]:
         data = (first / entry["path"]).read_bytes()
         assert entry["bytes"] == len(data)
@@ -660,6 +691,50 @@ def test_frozen_final_candidate_requires_valid_annotated_product_tag(
         generator.generate(archive, tmp_path / "output")
 
 
+def test_frozen_final_candidate_requires_frozen_protocol_state(
+    tmp_path: Path,
+) -> None:
+    archive = _build_archive(tmp_path / "archive", disposition="final")
+    _mutate_json(
+        archive / "campaign-manifest.json",
+        lambda value: value["protocol"].update(freeze_state="pre_freeze"),
+    )
+    _refresh_archive_manifest(archive, disposition="final")
+
+    with pytest.raises(
+        generator.GenerationError,
+        match="final campaign protocol is not frozen",
+    ):
+        generator.generate(archive, tmp_path / "output")
+
+
+@pytest.mark.parametrize(
+    "mutation",
+    [
+        {"dirty": True},
+        {"status_porcelain": [" M experiments/expected_tables.md"]},
+        {"freeze_state": "pre_freeze_worktree"},
+        {"commit": "not-a-git-object"},
+    ],
+)
+def test_frozen_final_candidate_requires_clean_paper_freeze(
+    tmp_path: Path,
+    mutation: dict[str, Any],
+) -> None:
+    archive = _build_archive(tmp_path / "archive", disposition="final")
+    _mutate_json(
+        archive / "campaign-manifest.json",
+        lambda value: value["paper_git"].update(mutation),
+    )
+    _refresh_archive_manifest(archive, disposition="final")
+
+    with pytest.raises(
+        generator.GenerationError,
+        match="final paper source freeze provenance is invalid",
+    ):
+        generator.generate(archive, tmp_path / "output")
+
+
 @pytest.mark.parametrize(
     "mutate,error",
     [
@@ -726,3 +801,159 @@ def test_archive_content_drift_and_archive_output_path_fail_closed(
         generator.GenerationError, match="outside the immutable archive"
     ):
         generator.generate(clean_archive, clean_archive / "generated")
+
+
+def test_v11_table_generation_requires_named_pipe_block_evidence() -> None:
+    campaign = {
+        "protocol": {
+            "version": "v1.1",
+            "id": generator.PROTOCOLS["v1.1"]["id"],
+        }
+    }
+    run = {
+        "environment": {
+            "gateway_endpoint_identity": (
+                "isolated_windows_named_pipe_per_execution_block"
+            ),
+            "gateway_transport": dict(generator.V11_GATEWAY_TRANSPORT),
+        },
+        "gateway_policy": {
+            "protocol_version": generator.PROTOCOLS["v1.1"]["id"],
+            "mode": "isolated",
+            "isolated_runtime_per_execution_block": True,
+            "loopback_only": False,
+            **generator.V11_GATEWAY_TRANSPORT,
+        },
+        "gateway_execution_blocks": [
+            {
+                "block_id": "block-1",
+                "family_id": "runtime",
+                "gateway_instance_id": "gateway-1",
+                "endpoint_uri": "npipe://./pipe/eos-exp1-block-1",
+                **generator.V11_GATEWAY_TRANSPORT,
+            }
+        ],
+    }
+    expanded = {
+        "execution_blocks": [{"block_id": "block-1", "family_id": "runtime"}]
+    }
+
+    generator._validate_protocol_transport(
+        campaign, run, expanded, "v1.1", "final"
+    )
+    run["gateway_execution_blocks"][0]["endpoint_uri"] = (
+        "npipe://server/pipe/not-local"
+    )
+    with pytest.raises(
+        generator.GenerationError,
+        match="execution-block endpoint evidence is unsafe",
+    ):
+        generator._validate_protocol_transport(
+            campaign, run, expanded, "v1.1", "final"
+        )
+
+
+def test_v11_final_generation_requires_v11_tag_and_discloses_transport(
+    tmp_path: Path,
+) -> None:
+    archive = _build_archive(tmp_path / "archive", disposition="final")
+    _mutate_json(
+        archive / "campaign-manifest.json",
+        lambda value: (
+            value["protocol"].update(
+                id=generator.PROTOCOLS["v1.1"]["id"],
+                version="v1.1",
+            ),
+            value["product"]["freeze_tag"].update(
+                name="paper-v1.1-freeze",
+                reference="refs/tags/paper-v1.1-freeze",
+            ),
+        ),
+    )
+    _mutate_json(
+        archive / "run-manifest.json",
+        lambda value: (
+            value["data"]["environment"].update(
+                gateway_endpoint_identity=(
+                    "isolated_windows_named_pipe_per_execution_block"
+                ),
+                gateway_transport=dict(generator.V11_GATEWAY_TRANSPORT),
+            ),
+            value["data"].update(
+                gateway_policy={
+                    "protocol_version": generator.PROTOCOLS["v1.1"]["id"],
+                    "mode": "isolated",
+                    "isolated_runtime_per_execution_block": True,
+                    "loopback_only": False,
+                    **generator.V11_GATEWAY_TRANSPORT,
+                },
+                gateway_execution_blocks=[
+                    {
+                        "block_id": "block-1",
+                        "family_id": "runtime",
+                        "gateway_instance_id": "gateway-1",
+                        "endpoint_uri": "npipe://./pipe/eos-exp1-block-1",
+                        **generator.V11_GATEWAY_TRANSPORT,
+                    }
+                ],
+            ),
+        ),
+    )
+    _mutate_json(
+        archive / "expanded-plan.json",
+        lambda value: value["data"].update(
+            execution_blocks=[{"block_id": "block-1", "family_id": "runtime"}]
+        ),
+    )
+    _refresh_archive_manifest(archive, disposition="final")
+    _mutate_json(
+        archive / "archive-manifest.json",
+        lambda value: value.update(protocol_version="v1.1"),
+    )
+
+    output = tmp_path / "output"
+    generator.generate(archive, output, protocol_version="v1.1")
+
+    table1_header, table1_rows = _markdown_table(output / "table-1-environment.md")
+    assert table1_header == ["Field", "Archived value", "Evidence source"]
+    transport_row = next(
+        row for row in table1_rows if row[0] == "Gateway transport"
+    )
+    assert transport_row[1] == (
+        "windows_named_pipe; local_only; per_execution_block"
+    )
+    tables = json.loads((output / "tables.json").read_text(encoding="utf-8"))
+    transport_field = next(
+        field
+        for field in tables["tables"]["environment"]["fields"]
+        if field["field"] == "Gateway transport"
+    )
+    assert transport_field["value"] == generator.V11_GATEWAY_TRANSPORT
+    product_field = next(
+        field
+        for field in tables["tables"]["environment"]["fields"]
+        if field["field"] == "Product commit/tag"
+    )
+    assert product_field["value"]["freeze_tag"]["name"] == "paper-v1.1-freeze"
+
+    _mutate_json(
+        archive / "campaign-manifest.json",
+        lambda value: value["product"]["freeze_tag"].update(
+            name="paper-v1-freeze",
+            reference="refs/tags/paper-v1-freeze",
+        ),
+    )
+    _refresh_archive_manifest(archive, disposition="final")
+    _mutate_json(
+        archive / "archive-manifest.json",
+        lambda value: value.update(protocol_version="v1.1"),
+    )
+    with pytest.raises(
+        generator.GenerationError,
+        match="final product freeze-tag provenance is invalid",
+    ):
+        generator.generate(
+            archive,
+            tmp_path / "invalid-output",
+            protocol_version="v1.1",
+        )

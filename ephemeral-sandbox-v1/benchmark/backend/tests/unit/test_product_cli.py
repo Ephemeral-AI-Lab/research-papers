@@ -83,6 +83,7 @@ def _access(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     process_factory: Any,
+    endpoint: GatewayEndpoint | None = None,
 ) -> tuple[ProductCliAccess, Path, list[str]]:
     roots = _roots(tmp_path)
     selected: list[str] = []
@@ -102,7 +103,7 @@ def _access(
     run_root.mkdir()
     return (
         ProductCliAccess(
-            GatewayEndpoint("127.0.0.1", 47621),
+            endpoint or GatewayEndpoint("127.0.0.1", 47621),
             "-secret-token",
             roots,
             run_root,
@@ -139,7 +140,7 @@ async def test_invocation_uses_exact_cli_and_persists_redacted_evidence(
     argv, kwargs = calls[0]
     assert Path(argv[0]).name == "sandbox-manager-cli.exe"
     assert argv[1:] == (
-        "--gateway-socket",
+        "--gateway-endpoint",
         "127.0.0.1:47621",
         "--gateway-auth-token=-secret-token",
         "--request-id",
@@ -163,6 +164,47 @@ async def test_invocation_uses_exact_cli_and_persists_redacted_evidence(
     assert response.transport_evidence["metadata_path"].endswith(".json")
     assert "stdout_base64" not in response.transport_evidence
     assert "stderr_base64" not in response.transport_evidence
+
+
+@pytest.mark.asyncio
+async def test_named_pipe_uri_is_passed_exactly_and_token_is_redacted(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    calls: list[tuple[str, ...]] = []
+    uri = "npipe://./pipe/ephemeral-sandbox-benchmark-exact-uri"
+
+    async def create_process(*argv: str, **_kwargs: Any) -> FakeProcess:
+        calls.append(argv)
+        return FakeProcess(b'{"sandboxes":[]}\n')
+
+    access, run_root, _ = _access(
+        tmp_path,
+        monkeypatch,
+        create_process,
+        GatewayEndpoint.windows_named_pipe(uri),
+    )
+    await access._invoke(
+        "manager",
+        "list_sandboxes",
+        [],
+        timeout_seconds=1,
+        request_id="run-1.named-pipe",
+    )
+
+    assert calls[0][1:4] == (
+        "--gateway-endpoint",
+        uri,
+        "--gateway-auth-token=-secret-token",
+    )
+    metadata_text = next(
+        (run_root / "cli-subprocesses").glob("*.json")
+    ).read_text(encoding="utf-8")
+    metadata = json.loads(metadata_text)
+    assert "-secret-token" not in metadata_text
+    assert metadata["sanitized_argv"][2] == uri
+    assert metadata["sanitized_argv"][3] == (
+        "--gateway-auth-token=[REDACTED]"
+    )
 
 
 @pytest.mark.asyncio

@@ -2,7 +2,15 @@
   "schema_version": 1,
   "decision_id": "exp1-v1.1-windows-endpoint-pressure-remediation",
   "created_at_utc": "2026-07-31T07:37:02.435Z",
-  "status": "proposal_awaiting_explicit_authorization",
+  "status": "superseded_unexecuted_by_authorized_local_ipc_treatment",
+  "supersession": {
+    "authorized_at_utc": "2026-07-31T07:59:50.209Z",
+    "selected_treatment": "windows_named_pipe_local_ipc",
+    "active_protocol": "ephemeral-sandbox-v1-practical-performance-v1.1",
+    "active_protocol_amendment": "experiments/exp1-v1.1-protocol-amendment.md",
+    "host_network_mutation_performed": false,
+    "historical_record_retained": true
+  },
   "scope": {
     "failed_protocol": "ephemeral-sandbox-v1-practical-performance-v1.0",
     "proposed_protocol": "ephemeral-sandbox-v1-practical-performance-v1.1",
@@ -271,8 +279,9 @@
     "Only a complete eligible v1.1 corpus may generate deterministic tables, numeric-evidence v2 records, and RQ3 numeric wording."
   ],
   "authorization_blocker": {
-    "reason": "The recommended action changes a host-wide TCP setting and the frozen protocol/environment, and a new final would be a materially new experiment.",
-    "single_external_decision": "The author must explicitly approve or reject the proposed v1.1 active-store IPv4 range remediation and the complete qualification/refreeze/one-final sequence.",
+    "status": "superseded_not_applicable",
+    "reason": "The proposed host-wide TCP change was not selected and was never applied.",
+    "single_external_decision": "none; active local-IPC work proceeds under experiments/exp1-v1.1-protocol-amendment.md",
     "current_session_can_apply_setting": false,
     "observed_privilege_evidence": "Get-NetTransportFilter returned Windows access denied; no setting mutation was attempted."
   },

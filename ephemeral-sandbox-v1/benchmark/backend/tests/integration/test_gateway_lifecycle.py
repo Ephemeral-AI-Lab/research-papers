@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 import benchmark_lab.gateway as gateway_module
+import benchmark_lab.product_cli as product_cli_module
 import pytest
 import yaml
 from benchmark_lab.gateway import (
@@ -70,6 +71,19 @@ def test_cli_readiness_request_id_is_unique_per_gateway_instance() -> None:
     assert first == "run-1.benchmark-gateway-first.ready.0"
 
 
+@pytest.mark.skipif(os.name != "nt", reason="Windows named-pipe policy")
+def test_product_cli_execution_blocks_get_unique_named_pipe_endpoints() -> None:
+    first = gateway_module._execution_block_endpoint(True)
+    second = gateway_module._execution_block_endpoint(True)
+    explicit_tcp = gateway_module._execution_block_endpoint(False)
+
+    assert first.transport == second.transport == "windows_named_pipe"
+    assert first.uri.startswith("npipe://./pipe/ephemeral-sandbox-benchmark-")
+    assert second.uri.startswith("npipe://./pipe/ephemeral-sandbox-benchmark-")
+    assert first.uri != second.uri
+    assert explicit_tcp.transport == "tcp_loopback"
+
+
 async def test_cli_readiness_product_rejection_fails_without_retry(
     tmp_path: Path,
 ) -> None:
@@ -95,6 +109,67 @@ async def test_cli_readiness_product_rejection_fails_without_retry(
         )
 
     assert attempts == 1
+
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows named-pipe policy")
+async def test_product_cli_gateway_uses_exact_named_pipe_for_config_and_readiness(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    benchmark_roots = roots(tmp_path)
+    process = FakeProcess()
+    fake_client = FakeClient()
+    config_bind_addresses: list[str] = []
+    client_endpoints = []
+    cli_endpoints = []
+
+    async def process_factory(*args: str, **_: Any) -> FakeProcess:
+        config = yaml.safe_load(Path(args[-1]).read_bytes())
+        config_bind_addresses.append(config["gateway"]["bind_addr"])
+        Path(config["gateway"]["pid_path"]).write_text(str(process.pid))
+        return process
+
+    def client_factory(endpoint, _token: str) -> FakeClient:
+        client_endpoints.append(endpoint)
+        return fake_client
+
+    class FakeCli:
+        def __init__(self, endpoint, _token, _roots, _evidence_root) -> None:
+            cli_endpoints.append(endpoint)
+
+        async def assert_no_sandboxes(self, *, request_id: str) -> None:
+            assert request_id.endswith(".ready.0")
+
+    def kill_group(_: int, __: signal.Signals) -> None:
+        process.stop()
+
+    monkeypatch.setattr(product_cli_module, "ProductCliAccess", FakeCli)
+    gateway = await GatewayLauncher(
+        benchmark_roots,
+        process_factory=process_factory,
+        client_factory=client_factory,
+        kill_group=kill_group,
+        process_identity=lambda _: "process-identity-1",
+        orphan_cleanup=no_orphans,
+    ).start(
+        "run-1",
+        readiness_timeout_seconds=1,
+        readiness_via_cli=True,
+    )
+    runtime = benchmark_roots.runtime / "run-1"
+    owner = json.loads((runtime / "owner-process.json").read_text())
+    endpoint = gateway.identity.endpoint
+
+    assert endpoint.transport == "windows_named_pipe"
+    assert config_bind_addresses == [endpoint.uri]
+    assert client_endpoints == [endpoint]
+    assert cli_endpoints == [endpoint]
+    assert owner["schema_version"] == 2
+    assert owner["endpoint_uri"] == endpoint.uri
+    assert "endpoint_host" not in owner
+    assert "endpoint_port" not in owner
+
+    await gateway.close(destroy_sandboxes_via_gateway=False)
 
 
 def roots(tmp_path: Path) -> BenchmarkRoots:

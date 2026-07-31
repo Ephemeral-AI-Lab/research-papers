@@ -1,12 +1,20 @@
 # EXP1 v1.1 endpoint-pressure remediation decision
 
-Status: proposal awaiting explicit author authorization.
+Status: superseded without execution by the authorized local-IPC treatment.
 
 Date: 2026-07-31.
 
 This document is failure analysis and protocol planning, not performance
 evidence. It does not authorize a v1.0 rerun, alter the immutable failed
 archive, change the host, or launch a live probe.
+
+The author subsequently selected a permanent CLI-focused product fix. No
+dynamic-port command in this document was run and no host network setting was
+changed. Active work is governed by
+[`../exp1-v1.1-protocol-amendment.md`](../exp1-v1.1-protocol-amendment.md),
+which uses Windows named pipes, retains explicit TCP compatibility outside the
+paper treatment, and preregisters the replacement qualification and freeze
+sequence. The material below remains an immutable historical decision record.
 
 ## Decision
 
@@ -153,6 +161,6 @@ numerically compared with v1.1.
 
 ## Exact blocker
 
-The only remaining decision before any implementation or live work is explicit
-author approval or rejection of the v1.1 temporary active-store IPv4 range
-remediation and the complete qualification/refreeze/one-final sequence above.
+This proposal has no remaining blocker because it was superseded and will not
+be executed. The active local-IPC campaign is blocked only by its in-tree
+qualification, smoke, pilot, projection, and freeze gates.

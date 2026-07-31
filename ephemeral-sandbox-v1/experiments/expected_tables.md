@@ -1,12 +1,17 @@
 # Expected experiment tables
 
-**Status:** Schema draft; no measured values exist  
+**Status:** v1.1 schema preregistered; no eligible measured values exist
 **Protocol:** [`../experiment_inventory.md`](../experiment_inventory.md)  
 **Rule:** every numeric cell must be generated from archived run data
 
 The focused study produces four tables: one provenance table and three measured
 result tables. It does not include a baseline-ranking table because the study
 is intended to characterize practical performance, not claim superiority.
+
+V1.1 adds only the non-numeric `Gateway transport` row to Table 1 and advances
+the generated machine/output-manifest schema to version 2 so that the material
+transport treatment and protocol version are explicit. Tables 2--4 and every
+numeric or measured field remain unchanged.
 
 Verification remains mandatory inside the benchmark, but it is not shown as a
 column. A row is displayed only when all contributing samples pass the
@@ -33,6 +38,7 @@ one host, image, product revision, benchmark revision, and workspace.
 | Sandbox limits | 1 vCPU, 512 MiB, 256 PIDs | effective configuration |
 | Workspace | 4,000 files, 100 MiB, depth 100 | fixture manifest |
 | Client | native Windows `product_cli` | qualification summary and benchmark run manifest |
+| Gateway transport | isolated Windows named pipe per gateway execution block; no retry or TCP fallback | archived run manifest and gateway execution-block manifest |
 | Seed | `20260712` | expanded plan |
 | Trials | 2 warmups + 100 measured per cell | expanded plan |
 
@@ -52,10 +58,10 @@ manifest.
 | Session create to ready | 5 | 100 | -- | -- | -- | -- |
 | First no-op command | 1 | 100 | -- | -- | -- | -- |
 
-The first row is blocked until the runner preserves an explicit end-to-end
-manager-CLI `create_sandbox` process-launch-to-ready timing. It must be omitted
-rather than filled from generic setup time if that instrumentation is not
-added. "Session create" uses a runtime-CLI
+The runner preserves the first row's explicit end-to-end manager-CLI
+`create_sandbox` process-launch-to-validated-ready timing. The generator must
+still omit the row if that dedicated evidence is absent or invalid; generic
+setup time is never an eligible substitute. "Session create" uses a runtime-CLI
 `create_workspace_session` invocation against a prepared sandbox and must not
 be renamed to sandbox creation.
 

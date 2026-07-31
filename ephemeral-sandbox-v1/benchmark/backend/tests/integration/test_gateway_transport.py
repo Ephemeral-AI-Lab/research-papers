@@ -4,6 +4,7 @@ from collections.abc import Awaitable, Callable
 
 import pytest
 
+import benchmark_lab.transport as transport_module
 from benchmark_lab.transport import (
     AUTH_FIELD,
     GatewayClient,
@@ -196,3 +197,69 @@ def test_endpoint_scope_and_request_validation_are_strict() -> None:
         asyncio.run(client.request("op", {"kind": "system", "extra": 1}, {}, timeout_seconds=1))
     with pytest.raises(ValueError, match="operation"):
         asyncio.run(client.request("bad operation", {"kind": "system"}, {}, timeout_seconds=1))
+
+
+def test_named_pipe_endpoint_is_canonical_and_strict() -> None:
+    uri = "npipe://./pipe/ephemeral-sandbox-benchmark-0123abcd"
+    endpoint = GatewayEndpoint.windows_named_pipe(uri)
+
+    assert endpoint.transport == "windows_named_pipe"
+    assert endpoint.address == uri
+    assert endpoint.uri == uri
+    assert endpoint.native_named_pipe_path == (
+        r"\\.\pipe\ephemeral-sandbox-benchmark-0123abcd"
+    )
+    assert GatewayEndpoint.parse(uri) == endpoint
+    assert GatewayEndpoint.parse("tcp://127.0.0.1:47621") == GatewayEndpoint(
+        "127.0.0.1", 47621
+    )
+
+    for invalid in (
+        "npipe://./pipe/",
+        "npipe://./pipe/../escape",
+        "npipe://./pipe/name with spaces",
+        "unix:///tmp/gateway.sock",
+    ):
+        with pytest.raises(ValueError):
+            GatewayEndpoint.parse(invalid)
+
+
+@pytest.mark.asyncio
+async def test_named_pipe_connection_failure_never_falls_back_to_tcp(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    named_pipe_attempts = 0
+    tcp_attempts = 0
+
+    async def named_pipe(*_args, **_kwargs):
+        nonlocal named_pipe_attempts
+        named_pipe_attempts += 1
+        raise OSError("named pipe unavailable")
+
+    async def tcp(*_args, **_kwargs):
+        nonlocal tcp_attempts
+        tcp_attempts += 1
+        raise AssertionError("TCP fallback is prohibited")
+
+    monkeypatch.setattr(
+        transport_module, "_open_windows_named_pipe_connection", named_pipe
+    )
+    monkeypatch.setattr(transport_module.asyncio, "open_connection", tcp)
+    client = GatewayClient(
+        GatewayEndpoint.windows_named_pipe(
+            "npipe://./pipe/ephemeral-sandbox-benchmark-no-fallback"
+        ),
+        TOKEN,
+    )
+
+    with pytest.raises(GatewayTransportError) as captured:
+        await client.request(
+            "list_sandboxes",
+            {"kind": "system"},
+            {},
+            timeout_seconds=1,
+        )
+
+    assert captured.value.kind == "connection_error"
+    assert named_pipe_attempts == 1
+    assert tcp_attempts == 0

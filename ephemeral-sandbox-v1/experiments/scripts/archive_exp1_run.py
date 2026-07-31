@@ -10,6 +10,7 @@ import collections
 import hashlib
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -68,6 +69,38 @@ BENCHMARK_GIT_EXCLUSIONS = [
     ],
     ":(exclude,glob)benchmark/**/*.pyc",
 ]
+PAPER_PROTOCOL_PATHS = (
+    "progress.md",
+    "plan/task-packets/exp1-cli-performance-campaign.md",
+    "experiment_inventory.md",
+    "experiments/exp1-v1.1-protocol-amendment.md",
+    "experiments/environment_setup.md",
+    "experiments/expected_tables.md",
+    "experiments/experiment_log.md",
+    "benchmark/PAPER_ARTIFACT.md",
+    "paper_state.json",
+    "plan/progress.md",
+)
+PAPER_ANALYSIS_PATHS = (
+    "benchmark/backend/benchmark_lab/derivation.py",
+    "benchmark/backend/benchmark_lab/reports.py",
+    "experiments/scripts/archive_exp1_run.py",
+    "experiments/scripts/project_exp1_final_runtime.py",
+    "experiments/analysis/scripts/generate_exp1_tables.py",
+)
+PAPER_FROZEN_SCOPE = (
+    "benchmark",
+    *(
+        path
+        for path in PAPER_PROTOCOL_PATHS
+        if not path.startswith("benchmark/")
+    ),
+    *(
+        path
+        for path in PAPER_ANALYSIS_PATHS
+        if not path.startswith("benchmark/")
+    ),
+)
 EXP1_EXPECTED_HOST = {
     "computer_name": "DESKTOP-OLP1ADS",
     "operating_system": "windows",
@@ -86,6 +119,28 @@ EXP1_EXPECTED_SANDBOX_LIMITS = {
 }
 RUN_STATUSES = {"completed", "failed"}
 CLI_EVIDENCE_COMMIT_PROTOCOL = "metadata-packed-payload-fsync-v1"
+PROTOCOLS = {
+    "v1.0": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.0",
+        "final_tag": "paper-v1-freeze",
+        "gateway_endpoint_identity": "isolated_loopback_per_execution_block",
+    },
+    "v1.1": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.1",
+        "final_tag": "paper-v1.1-freeze",
+        "gateway_endpoint_identity": (
+            "isolated_windows_named_pipe_per_execution_block"
+        ),
+    },
+}
+V11_GATEWAY_TRANSPORT = {
+    "transport": "windows_named_pipe",
+    "scope": "local_only",
+    "rotation": "per_execution_block",
+}
+SAFE_NPIPE_ENDPOINT = re.compile(
+    r"npipe://\./pipe/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\Z"
+)
 
 
 class ArchiveError(RuntimeError):
@@ -104,6 +159,83 @@ def archive_eligibility(disposition: str, run_status: str) -> str:
     if disposition == "final":
         return "frozen_final_candidate"
     raise ArchiveError("archive disposition is invalid")
+
+
+def protocol_version_from_campaign(
+    campaign: dict[str, Any], *, disposition: str
+) -> str:
+    protocol = campaign.get("protocol")
+    if not isinstance(protocol, dict):
+        raise ArchiveError("campaign protocol provenance is missing")
+    version = protocol.get("version")
+    if version == "v1.1":
+        if protocol.get("id") != PROTOCOLS["v1.1"]["id"]:
+            raise ArchiveError("campaign v1.1 protocol identity is invalid")
+        return "v1.1"
+    expected = "v1.0" if disposition == "final" else "pre-freeze-exp1"
+    if version == expected and protocol.get("id") in (None, PROTOCOLS["v1.0"]["id"]):
+        return "v1.0"
+    raise ArchiveError("campaign protocol version is invalid")
+
+
+def validate_protocol_transport(
+    *,
+    protocol_version: str,
+    environment: dict[str, Any],
+    manifest: dict[str, Any],
+    plan: dict[str, Any],
+    completed: bool,
+) -> None:
+    if protocol_version not in PROTOCOLS:
+        raise ArchiveError("unsupported EXP1 protocol version")
+    if protocol_version == "v1.0":
+        identity = environment.get("gateway_endpoint_identity")
+        if identity not in (None, PROTOCOLS["v1.0"]["gateway_endpoint_identity"]):
+            raise ArchiveError("legacy v1.0 gateway endpoint identity drift")
+        return
+
+    if (
+        environment.get("gateway_endpoint_identity")
+        != PROTOCOLS["v1.1"]["gateway_endpoint_identity"]
+        or environment.get("gateway_transport") != V11_GATEWAY_TRANSPORT
+    ):
+        raise ArchiveError("v1.1 named-pipe environment identity is invalid")
+    policy = manifest.get("gateway_policy")
+    if (
+        not isinstance(policy, dict)
+        or policy.get("protocol_version") != PROTOCOLS["v1.1"]["id"]
+        or any(policy.get(key) != value for key, value in V11_GATEWAY_TRANSPORT.items())
+        or policy.get("mode") != "isolated"
+        or policy.get("isolated_runtime_per_execution_block") is not True
+        or policy.get("loopback_only") is not False
+    ):
+        raise ArchiveError("v1.1 named-pipe gateway policy is invalid")
+    blocks = plan.get("execution_blocks")
+    launched = manifest.get("gateway_execution_blocks")
+    if not isinstance(blocks, list) or not isinstance(launched, list):
+        raise ArchiveError("v1.1 execution-block endpoint evidence is missing")
+    if (completed and len(launched) != len(blocks)) or len(launched) > len(blocks):
+        raise ArchiveError("v1.1 execution-block endpoint count is invalid")
+    endpoints: set[str] = set()
+    for expected, observed in zip(blocks, launched):
+        endpoint = observed.get("endpoint_uri") if isinstance(observed, dict) else None
+        if (
+            not isinstance(expected, dict)
+            or not isinstance(observed, dict)
+            or observed.get("block_id") != expected.get("block_id")
+            or observed.get("family_id") != expected.get("family_id")
+            or any(
+                observed.get(key) != value
+                for key, value in V11_GATEWAY_TRANSPORT.items()
+            )
+            or not isinstance(observed.get("gateway_instance_id"), str)
+            or not observed["gateway_instance_id"]
+            or not isinstance(endpoint, str)
+            or SAFE_NPIPE_ENDPOINT.fullmatch(endpoint) is None
+            or endpoint in endpoints
+        ):
+            raise ArchiveError("v1.1 execution-block endpoint evidence is unsafe")
+        endpoints.add(endpoint)
 
 
 def benchmark_source_capture_boundary(run_status: str) -> str:
@@ -307,15 +439,21 @@ def git_value(product_root: Path, *args: str) -> str:
 
 
 def product_freeze_tag(
-    product_root: Path, *, disposition: str, product_commit: str
+    product_root: Path,
+    *,
+    disposition: str,
+    product_commit: str,
+    protocol_version: str = "v1.0",
 ) -> dict[str, Any]:
+    if protocol_version not in PROTOCOLS:
+        raise ArchiveError("unsupported EXP1 protocol version")
+    name = PROTOCOLS[protocol_version]["final_tag"]
     if disposition != "final":
         return {
             "availability": "unavailable",
             "reason": "pre-freeze smoke/exploratory archive",
-            "required_final_tag": "paper-v1-freeze",
+            "required_final_tag": name,
         }
-    name = "paper-v1-freeze"
     reference = f"refs/tags/{name}"
     tag_object = git_value(product_root, "rev-parse", f"{reference}^{{tag}}")
     object_type = git_value(product_root, "cat-file", "-t", tag_object)
@@ -327,7 +465,7 @@ def product_freeze_tag(
         or peeled_commit != product_commit
     ):
         raise ArchiveError(
-            "final product paper-v1-freeze tag is absent, lightweight, "
+            f"final product {name} tag is absent, lightweight, "
             "or does not peel to the measured product commit"
         )
     return {
@@ -352,13 +490,7 @@ def paper_git_provenance(paper_root: Path, *, disposition: str) -> dict[str, Any
     git_root = Path(git_value(paper_root, "rev-parse", "--show-toplevel")).resolve(
         strict=True
     )
-    frozen_scope = [
-        "benchmark",
-        "plan/task-packets/exp1-cli-performance-campaign.md",
-        "experiments/expected_tables.md",
-        "experiments/scripts/archive_exp1_run.py",
-        "experiments/analysis/scripts/generate_exp1_tables.py",
-    ]
+    frozen_scope = list(PAPER_FROZEN_SCOPE)
     status = git_value(
         paper_root,
         "status",
@@ -394,6 +526,7 @@ def validate_source(
     disposition: str,
     run_status: str,
     expected_plan_hash: str,
+    protocol_version: str = "v1.0",
 ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
     expected = DISPOSITIONS[disposition]
     manifest = envelope_data(run_path / "run-manifest.json")
@@ -441,6 +574,13 @@ def validate_source(
     if plan["effective_environment"]["client_cohort"] != "product_cli":
         raise ArchiveError("archive source is not product_cli")
     validate_exp1_environment(manifest["environment"])
+    validate_protocol_transport(
+        protocol_version=protocol_version,
+        environment=manifest["environment"],
+        manifest=manifest,
+        plan=plan,
+        completed=run_status == "completed",
+    )
     if (
         len(plan["cells"]) != expected["cells"]
         or len(report["cells"]) != expected["cells"]
@@ -834,6 +974,7 @@ def capture_environment(
     cli_help: list[dict[str, Any]],
     cleanup: dict[str, Any],
     run_status: str,
+    protocol_version: str = "v1.0",
 ) -> dict[str, Any]:
     image_data = json.loads(
         run_checked(["docker", "image", "inspect", image], cwd=paper_root).stdout
@@ -888,6 +1029,7 @@ def capture_environment(
         product_root,
         disposition=("final" if is_final else "exploratory"),
         product_commit=treatment["source_commit"],
+        protocol_version=protocol_version,
     )
     return {
         "schema_version": 1,
@@ -1053,7 +1195,10 @@ def write_campaign_manifests(
     paper_root: Path,
     disposition: str,
     run_status: str,
+    protocol_version: str = "v1.0",
 ) -> None:
+    if protocol_version not in PROTOCOLS:
+        raise ArchiveError("unsupported EXP1 protocol version")
     source_manifest_path = archive_path / "benchmark-source-manifest.json"
     campaign_manifest_path = archive_path / "campaign-manifest.json"
     if source_manifest_path.exists() or campaign_manifest_path.exists():
@@ -1074,17 +1219,8 @@ def write_campaign_manifests(
     write_json(source_manifest_path, benchmark_source)
     raw_files, raw_bytes, raw_tree_hash = archive_inventory(raw)
     paper_git = paper_git_provenance(paper_root, disposition=disposition)
-    protocol_paths = [
-        paper_root / "plan/task-packets/exp1-cli-performance-campaign.md",
-        paper_root / "experiments/expected_tables.md",
-        paper_root / "benchmark/PAPER_ARTIFACT.md",
-    ]
-    analysis_paths = [
-        paper_root / "benchmark/backend/benchmark_lab/derivation.py",
-        paper_root / "benchmark/backend/benchmark_lab/reports.py",
-        paper_root / "experiments/scripts/archive_exp1_run.py",
-        paper_root / "experiments/analysis/scripts/generate_exp1_tables.py",
-    ]
+    protocol_paths = [paper_root / relative for relative in PAPER_PROTOCOL_PATHS]
+    analysis_paths = [paper_root / relative for relative in PAPER_ANALYSIS_PATHS]
     campaign_manifest = {
         "schema_version": 1,
         "run_id": manifest["run_id"],
@@ -1117,7 +1253,12 @@ def write_campaign_manifests(
             "capture_boundary": benchmark_source_capture_boundary(run_status),
         },
         "protocol": {
-            "version": "v1.0" if disposition == "final" else "pre-freeze-exp1",
+            "id": PROTOCOLS[protocol_version]["id"],
+            "version": (
+                protocol_version
+                if protocol_version == "v1.1" or disposition == "final"
+                else "pre-freeze-exp1"
+            ),
             "freeze_state": ("frozen" if disposition == "final" else "pre_freeze"),
             "files": [file_identity(path, paper_root) for path in protocol_paths],
         },
@@ -1180,6 +1321,7 @@ def finalize_existing_archive(path: Path, *, paper_root: Path) -> dict[str, Any]
         paper_root=paper_root,
         disposition=disposition,
         run_status=run_status,
+        protocol_version=archive_manifest.get("protocol_version", "v1.0"),
     )
     entries, total_bytes, tree_hash = archive_inventory(path)
     archive_manifest.update(
@@ -1221,6 +1363,8 @@ def _validate_archive_provenance(path: Path, archive_manifest: dict[str, Any]) -
     raw_manifest = envelope_data(path / "raw/run-manifest.json")
     raw_report = envelope_data(path / "raw/report.json")
     raw_environment = envelope_data(path / "raw/environment-metadata.json")
+    raw_plan_path = path / "raw/expanded-plan.json"
+    raw_plan = envelope_data(raw_plan_path) if raw_plan_path.is_file() else {}
     copied_manifest = envelope_data(path / "run-manifest.json")
     copied_report = envelope_data(path / "report.json")
     preflight = load_json(path / "environment-preflight.txt")
@@ -1295,14 +1439,29 @@ def _validate_archive_provenance(path: Path, archive_manifest: dict[str, Any]) -
         ):
             raise ArchiveError("failed archive lacks terminal failure evidence")
     protocol = campaign.get("protocol")
-    expected_protocol = "v1.0" if disposition == "final" else "pre-freeze-exp1"
+    protocol_version = protocol_version_from_campaign(
+        campaign, disposition=disposition
+    )
     if (
-        not isinstance(protocol, dict)
-        or protocol.get("version") != expected_protocol
-        or protocol.get("freeze_state")
+        protocol.get("freeze_state")
         != ("frozen" if disposition == "final" else "pre_freeze")
+        or (
+            protocol_version == "v1.1"
+            and archive_manifest.get("protocol_version") != "v1.1"
+        )
+        or (
+            protocol_version == "v1.0"
+            and archive_manifest.get("protocol_version") not in (None, "v1.0")
+        )
     ):
         raise ArchiveError("campaign protocol freeze provenance is invalid")
+    validate_protocol_transport(
+        protocol_version=protocol_version,
+        environment=recorded_environment,
+        manifest=raw_manifest,
+        plan=raw_plan,
+        completed=run_status == "completed",
+    )
     analysis = campaign.get("analysis_and_archiving_code")
     analysis_paths = (
         {
@@ -1363,10 +1522,11 @@ def _validate_archive_provenance(path: Path, archive_manifest: dict[str, Any]) -
     if not isinstance(freeze_tag, dict):
         raise ArchiveError("product freeze-tag provenance is missing")
     if disposition == "final":
+        required_tag = PROTOCOLS[protocol_version]["final_tag"]
         if (
             freeze_tag.get("availability") != "available"
-            or freeze_tag.get("name") != "paper-v1-freeze"
-            or freeze_tag.get("reference") != "refs/tags/paper-v1-freeze"
+            or freeze_tag.get("name") != required_tag
+            or freeze_tag.get("reference") != f"refs/tags/{required_tag}"
             or freeze_tag.get("object_type") != "tag"
             or not _is_git_sha1(freeze_tag.get("tag_object"))
             or freeze_tag.get("peeled_commit") != product.get("commit")
@@ -1379,13 +1539,16 @@ def _validate_archive_provenance(path: Path, archive_manifest: dict[str, Any]) -
             raise ArchiveError("final source/tag freeze provenance is invalid")
     elif (
         freeze_tag.get("availability") != "unavailable"
-        or freeze_tag.get("required_final_tag") != "paper-v1-freeze"
+        or freeze_tag.get("required_final_tag")
+        != PROTOCOLS[protocol_version]["final_tag"]
         or paper_git.get("freeze_state") != "pre_freeze_worktree"
     ):
         raise ArchiveError("pre-freeze source/tag provenance is invalid")
 
 
 def archive(args: argparse.Namespace) -> dict[str, Any]:
+    if args.protocol_version != "v1.1":
+        raise ArchiveError("new archives require explicit --protocol-version v1.1")
     paper_root = args.paper_root.resolve(strict=True)
     product_root = args.product_root.resolve(strict=True)
     product_bin = args.product_bin_dir.resolve(strict=True)
@@ -1406,6 +1569,7 @@ def archive(args: argparse.Namespace) -> dict[str, Any]:
         disposition=args.disposition,
         run_status=args.run_status,
         expected_plan_hash=args.expected_plan_hash,
+        protocol_version=args.protocol_version,
     )
     observation_summary, resource_lines = inspect_observations(
         run_path,
@@ -1481,6 +1645,7 @@ def archive(args: argparse.Namespace) -> dict[str, Any]:
         cli_help=cli_help,
         cleanup=cleanup,
         run_status=args.run_status,
+        protocol_version=args.protocol_version,
     )
     write_json(staging / "environment-preflight.txt", environment)
     unavailable = observation_summary["resource_availability"]
@@ -1544,6 +1709,7 @@ def archive(args: argparse.Namespace) -> dict[str, Any]:
         paper_root=paper_root,
         disposition=args.disposition,
         run_status=args.run_status,
+        protocol_version=args.protocol_version,
     )
     entries, total_bytes, tree_hash = archive_inventory(staging)
     write_json(
@@ -1554,6 +1720,7 @@ def archive(args: argparse.Namespace) -> dict[str, Any]:
             "disposition": args.disposition,
             "run_status": args.run_status,
             "eligibility": archive_eligibility(args.disposition, args.run_status),
+            "protocol_version": args.protocol_version,
             "source_path": os.fspath(run_path),
             "plan_hash": args.expected_plan_hash,
             "archive_file_count": len(entries),
@@ -1570,6 +1737,11 @@ def parser() -> argparse.ArgumentParser:
     command = argparse.ArgumentParser()
     command.add_argument("--run-id")
     command.add_argument("--disposition", choices=sorted(DISPOSITIONS))
+    command.add_argument(
+        "--protocol-version",
+        choices=("v1.1",),
+        help="required explicitly when creating a new archive",
+    )
     command.add_argument(
         "--run-status",
         choices=sorted(RUN_STATUSES),
@@ -1616,6 +1788,7 @@ def main() -> int:
                 "product_bin_dir",
                 "product_archive",
                 "image",
+                "protocol_version",
             )
             missing = [name for name in required if getattr(args, name) is None]
             if missing:

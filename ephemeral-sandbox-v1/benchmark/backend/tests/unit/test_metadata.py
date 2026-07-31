@@ -153,3 +153,11 @@ async def test_paper_environment_records_final_host_and_limits_at_run_start(
     assert environment["host"]["os_build_number"] == 26200
     assert environment["host"]["filesystem"] == "NTFS"
     assert environment["sandbox_limits"] == limits
+    assert environment["gateway_endpoint_identity"] == (
+        "isolated_windows_named_pipe_per_execution_block"
+    )
+    assert environment["gateway_transport"] == {
+        "transport": "windows_named_pipe",
+        "scope": "local_only",
+        "rotation": "per_execution_block",
+    }

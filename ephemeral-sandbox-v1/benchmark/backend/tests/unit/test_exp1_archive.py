@@ -753,6 +753,126 @@ def test_product_freeze_tag_requires_annotated_tag_peeling_to_commit(
         )
 
 
+def test_v11_requires_safe_unique_named_pipe_per_execution_block() -> None:
+    environment = _environment()
+    environment.update(
+        gateway_endpoint_identity=(
+            "isolated_windows_named_pipe_per_execution_block"
+        ),
+        gateway_transport=dict(archive_exp1_run.V11_GATEWAY_TRANSPORT),
+    )
+    plan = {
+        "execution_blocks": [
+            {"block_id": "block-1", "family_id": "create"},
+            {"block_id": "block-2", "family_id": "runtime"},
+        ]
+    }
+    manifest = {
+        "gateway_policy": {
+            "protocol_version": archive_exp1_run.PROTOCOLS["v1.1"]["id"],
+            "mode": "isolated",
+            "isolated_runtime_per_execution_block": True,
+            "loopback_only": False,
+            **archive_exp1_run.V11_GATEWAY_TRANSPORT,
+        },
+        "gateway_execution_blocks": [
+            {
+                "block_id": "block-1",
+                "family_id": "create",
+                "gateway_instance_id": "gateway-1",
+                "endpoint_uri": "npipe://./pipe/eos-exp1-block-1",
+                **archive_exp1_run.V11_GATEWAY_TRANSPORT,
+            },
+            {
+                "block_id": "block-2",
+                "family_id": "runtime",
+                "gateway_instance_id": "gateway-2",
+                "endpoint_uri": "npipe://./pipe/eos-exp1-block-2",
+                **archive_exp1_run.V11_GATEWAY_TRANSPORT,
+            },
+        ],
+    }
+
+    archive_exp1_run.validate_protocol_transport(
+        protocol_version="v1.1",
+        environment=environment,
+        manifest=manifest,
+        plan=plan,
+        completed=True,
+    )
+
+    manifest["gateway_execution_blocks"][1]["endpoint_uri"] = (
+        "npipe://./pipe/eos-exp1-block-1"
+    )
+    with pytest.raises(
+        archive_exp1_run.ArchiveError,
+        match="execution-block endpoint evidence is unsafe",
+    ):
+        archive_exp1_run.validate_protocol_transport(
+            protocol_version="v1.1",
+            environment=environment,
+            manifest=manifest,
+            plan=plan,
+            completed=True,
+        )
+
+
+def test_new_archive_requires_explicit_protocol_version(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    monkeypatch.setattr(
+        "sys.argv",
+        [
+            "archive_exp1_run.py",
+            "--run-id",
+            "run",
+            "--disposition",
+            "smoke",
+            "--expected-plan-hash",
+            "sha256:" + "a" * 64,
+            "--paper-root",
+            ".",
+            "--product-root",
+            ".",
+            "--product-bin-dir",
+            ".",
+            "--product-archive",
+            "package.zip",
+            "--image",
+            "image",
+        ],
+    )
+
+    assert archive_exp1_run.main() == 1
+    assert "protocol_version" in capsys.readouterr().err
+    with pytest.raises(SystemExit):
+        archive_exp1_run.parser().parse_args(["--protocol-version", "v1.0"])
+
+
+def test_v11_final_freeze_uses_annotated_v11_tag(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    commit = "a" * 40
+
+    def git_value(root: Path, *args: str) -> str:
+        if args[0] == "rev-parse" and args[1].endswith("^{tag}"):
+            assert "paper-v1.1-freeze" in args[1]
+            return "b" * 40
+        if args[:2] == ("cat-file", "-t"):
+            return "tag"
+        assert "paper-v1.1-freeze" in args[1]
+        return commit
+
+    monkeypatch.setattr(archive_exp1_run, "git_value", git_value)
+    value = archive_exp1_run.product_freeze_tag(
+        tmp_path,
+        disposition="final",
+        product_commit=commit,
+        protocol_version="v1.1",
+    )
+    assert value["name"] == "paper-v1.1-freeze"
+
+
 def test_final_paper_git_provenance_requires_clean_frozen_scope(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -761,6 +881,14 @@ def test_final_paper_git_provenance_requires_clean_frozen_scope(
             return str(tmp_path)
         if args[:2] == ("status", "--porcelain=v1"):
             assert "benchmark" in args
+            assert "progress.md" in args
+            assert "experiment_inventory.md" in args
+            assert "experiments/exp1-v1.1-protocol-amendment.md" in args
+            assert "experiments/environment_setup.md" in args
+            assert "experiments/experiment_log.md" in args
+            assert "paper_state.json" in args
+            assert "plan/progress.md" in args
+            assert "experiments/scripts/project_exp1_final_runtime.py" in args
             assert "experiments/analysis/scripts/generate_exp1_tables.py" in args
             assert ":(exclude,glob)benchmark/**/*.pyc" in args
             return " M benchmark/backend/benchmark_lab/metadata.py"
@@ -773,6 +901,37 @@ def test_final_paper_git_provenance_requires_clean_frozen_scope(
         match="not a clean frozen commit",
     ):
         archive_exp1_run.paper_git_provenance(tmp_path, disposition="final")
+
+
+def test_v11_archive_binds_protocol_live_state_and_analysis_sources() -> None:
+    assert archive_exp1_run.PAPER_PROTOCOL_PATHS == (
+        "progress.md",
+        "plan/task-packets/exp1-cli-performance-campaign.md",
+        "experiment_inventory.md",
+        "experiments/exp1-v1.1-protocol-amendment.md",
+        "experiments/environment_setup.md",
+        "experiments/expected_tables.md",
+        "experiments/experiment_log.md",
+        "benchmark/PAPER_ARTIFACT.md",
+        "paper_state.json",
+        "plan/progress.md",
+    )
+    assert archive_exp1_run.PAPER_ANALYSIS_PATHS == (
+        "benchmark/backend/benchmark_lab/derivation.py",
+        "benchmark/backend/benchmark_lab/reports.py",
+        "experiments/scripts/archive_exp1_run.py",
+        "experiments/scripts/project_exp1_final_runtime.py",
+        "experiments/analysis/scripts/generate_exp1_tables.py",
+    )
+    assert set(archive_exp1_run.PAPER_PROTOCOL_PATHS) <= {
+        "benchmark/PAPER_ARTIFACT.md",
+        *archive_exp1_run.PAPER_FROZEN_SCOPE,
+    }
+    assert set(archive_exp1_run.PAPER_ANALYSIS_PATHS) <= {
+        "benchmark/backend/benchmark_lab/derivation.py",
+        "benchmark/backend/benchmark_lab/reports.py",
+        *archive_exp1_run.PAPER_FROZEN_SCOPE,
+    }
 
 
 def test_final_paper_git_ignores_generated_pycache_but_blocks_source(

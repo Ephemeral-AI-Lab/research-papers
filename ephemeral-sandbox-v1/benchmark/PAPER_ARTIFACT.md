@@ -8,6 +8,14 @@ by annotated `paper-v1-freeze` tag object
 is ineligible, so this freeze supports provenance but no final performance
 claim.
 
+Active v1.1 work is governed by
+[`../experiments/exp1-v1.1-protocol-amendment.md`](../experiments/exp1-v1.1-protocol-amendment.md).
+It retains one fresh native CLI subprocess per measured request but replaces
+loopback TCP with one isolated Windows named pipe per gateway execution block.
+The v1.1 product candidate is clean direct `main` commit
+`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`; qualification, smoke, pilot,
+projection, and a new freeze remain pending. No v1.1 performance result exists.
+
 ## Provenance
 
 - Upstream repository: `Ephemeral-AI-Lab/ephemeral-sandbox-test`
@@ -29,18 +37,27 @@ Paper-local additions that are not present in the imported upstream subtree:
 - `backend/benchmark_lab/product_cli.py` is the native manager/runtime/
   observability CLI subprocess adapter, including end-to-end timing, exact
   executable selection, response validation, cancellation/timeout reaping,
-  pre-staged content-file transfer, redacted argv, and retained stdout/stderr
-  metadata.
+  pre-staged content-file transfer, canonical `--gateway-endpoint` routing,
+  redacted argv, and retained stdout/stderr metadata.
+- `backend/benchmark_lab/ipc_qualification.py` implements the preregistered
+  qualification-only 25,000-invocation native manager-CLI gate, including
+  fixed identity bindings, Windows event/TCP/process sampling, fail-closed
+  lifecycle evidence, and deterministic summary/manifest output.
 - `backend/tests/conftest.py` supplies a fail-closed Windows symlink helper
   which skips only WinError 1314.
 - `backend/tests/unit/test_product_cli.py` covers argument vectors, token
   redaction, executable routing, JSON and product errors, stderr, timeout,
-  cancellation, timing, concurrency, and raw CLI evidence.
+  cancellation, timing, concurrency, canonical endpoint routing, and raw CLI
+  evidence.
+- `backend/tests/unit/test_ipc_qualification.py` covers the fixed qualifier
+  workload, response and identity gates, sampling cadence, exact resource
+  bounds, TCP/event failures, manifest retention, cleanup, and CLI exit status.
 - `tests/fixtures/golden/artifacts/operation-evidence-v1-squash.json` is the
   explicit frozen schema-v1 squash evidence fixture used for compatibility
   checks.
 
-Paper-local modifications to imported upstream files are complete as follows:
+Paper-local modifications to imported upstream files, including the active
+v1.1 prequalification worktree delta, are complete as follows:
 
 - `backend/benchmark_lab/artifacts.py` adds content-addressed, colon-free,
   bounded evidence v2 storage, durable batch journal appends, and retained
@@ -48,6 +65,8 @@ Paper-local modifications to imported upstream files are complete as follows:
 - `backend/benchmark_lab/catalog.py` validates Windows `.exe` identities and
   falls back from an unavailable catalog exporter to reviewed released-CLI
   help probes.
+- `backend/benchmark_lab/cli.py` exposes the fail-closed
+  `qualify-exp1-ipc` command and returns a nonzero status for a failed gate.
 - `backend/benchmark_lab/derivation.py` raises the derivation revision and
   records the CLI subprocess timing boundary, executable/evidence provenance,
   and unavailable-metric reasons required by numeric evidence v2.
@@ -60,10 +79,13 @@ Paper-local modifications to imported upstream files are complete as follows:
 - `backend/benchmark_lab/gateway.py` stages native Windows configuration,
   launches isolated released gateways, performs readiness through the manager
   CLI for `product_cli`, scopes readiness request IDs by gateway instance,
-  passes arbitrary tokens with parser-safe equals syntax, fails fast on
-  deterministic product rejection, and cleans long owned paths.
+  assigns one unique named-pipe endpoint per v1.1 execution block, preserves
+  endpoint ownership evidence, passes arbitrary tokens with parser-safe equals
+  syntax, fails fast on deterministic product rejection, and cleans long owned
+  paths.
 - `backend/benchmark_lab/metadata.py` records native Windows host, product
-  source, image, daemon, gateway, and three CLI executable identities.
+  source, image, daemon, gateway, three CLI executable identities, and the
+  protocol-visible gateway transport/scope/rotation identity.
 - `backend/benchmark_lab/models.py` admits the canonical `product_cli` cohort.
 - `backend/benchmark_lab/observability.py` validates daemon self-metric
   responses used by resource sampling.
@@ -88,9 +110,10 @@ Paper-local modifications to imported upstream files are complete as follows:
   response end while excluding evidence persistence; commits setup,
   waiting-at-barrier, and all-tasks-ready events as one ordered durable
   transaction before release, then batches timestamped in-flight and terminal
-  states after the operation; pre-stages write payloads; emits
-  deterministic checks and bounded evidence; and distinguishes sandbox create
-  from session create.
+  states after the operation; pre-stages write payloads; emits deterministic
+  checks and bounded evidence; distinguishes sandbox create from session
+  create; records the v1.1 gateway policy; and durably persists each unique
+  execution-block endpoint before client construction or trial timing.
 - `backend/benchmark_lab/safety.py` removes only marked owned trees using safe
   native extended-length paths.
 - `backend/benchmark_lab/service.py` requires reviewed product catalog/CLI
@@ -98,7 +121,8 @@ Paper-local modifications to imported upstream files are complete as follows:
 - `backend/benchmark_lab/sessions.py` uses the shared product-access protocol
   without constructing a direct gateway transport.
 - `backend/benchmark_lab/transport.py` exposes bounded product rejection
-  classification for setup fail-fast behavior.
+  classification plus strict loopback-TCP/named-pipe endpoint parsing and a
+  one-attempt Windows named-pipe request path with no fallback.
 - `backend/tests/compatibility/test_artifacts.py` and
   `backend/tests/unit/test_runner_squash.py` verify schema-v1 compatibility
   using the explicit frozen evidence fixture and v2 indexing/download.
@@ -112,10 +136,22 @@ Paper-local modifications to imported upstream files are complete as follows:
   virtual environment while retaining the zero-product-source coupling guard.
 - `backend/tests/integration/test_gateway_lifecycle.py` covers native Windows
   launch/configuration, CLI readiness, gateway-scoped IDs, leading-hyphen
-  rejection behavior, cleanup, stale recovery, and symlink refusal.
+  rejection behavior, per-block named-pipe uniqueness/ownership, cleanup,
+  stale recovery, and symlink refusal.
+- `backend/tests/integration/test_gateway_transport.py` covers real and mocked
+  named-pipe round trips, concurrent requests, unsafe endpoint rejection, and
+  absence of TCP fallback.
 - `backend/tests/integration/test_runner.py` keeps its fakes aligned with CLI
   readiness, daemon sampling, explicit gateway cleanup semantics, synchronized
-  barrier timing, validated-response makespan, and write pre-staging.
+  barrier timing, validated-response makespan, write pre-staging, v1.1 policy
+  provenance, endpoint uniqueness, and crash-prefix manifest durability.
+- `backend/tests/unit/test_exp1_archive.py` verifies explicit protocol version,
+  unique safe named-pipe provenance, v1.1 freeze tags, and the complete frozen
+  protocol/analysis/tracker scope.
+- `backend/tests/unit/test_exp1_runtime_projection.py` verifies v1.1 protocol
+  and named-pipe provenance before any final-runtime projection is accepted.
+- `backend/tests/unit/test_metadata.py` verifies the recorded named-pipe
+  transport, local scope, and per-execution-block rotation identity.
 - `backend/tests/unit/test_resource_sampling.py` verifies fixed-deadline
   collection, deferred ordered persistence, and explicit saturation evidence.
 - `backend/tests/unit/test_derivation.py` verifies timing/provenance and
@@ -172,19 +208,16 @@ build, image pull, or source mutation may occur during a pilot or final
 campaign.
 
 The three paper presets select `product_cli`; `direct_client` and `cli_e2e`
-remain prohibited. The validated pre-freeze product is local clean `main` at
-`bc1e6ee04d4df5541290537994a4bf270fcd36b6`, containing two narrowly scoped
-released-CLI fixes, the pilot-discovered validated shared-base cache
-optimization, and the validated 250-millisecond resource-sampling cadence
-used by both daemon workspace and manager cgroup observability. The daemon
-now wires its existing bounded upperdir collector into that owned cadence and
-the public snapshot's dedicated resource reader. Its staged native Windows
-package and archive are:
+remain prohibited. The v1.1 prequalification product is local clean `main` at
+`5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`. It retains the earlier
+released-CLI, shared-base-cache, and resource-sampling repairs and adds the
+no-fallback local-IPC treatment plus TCP endpoint compatibility. Its staged
+native Windows package and archive are:
 
-- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-bc1e6ee0`
-- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-bc1e6ee0.zip`
+- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-5c48dae1`
+- `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-5c48dae1.zip`
 - archive SHA-256
-  `f1bede6d96bdf7907c898c11c6c39865824888086ea6ae9e72518c93fef51240`
+  `11e83246b2f509da9708a0237bb6ab600d042e1cb390c81fc41dc834d897c506`
 
 From `research-papers\ephemeral-sandbox-v1`, the validated Windows command
 shape is:
@@ -192,7 +225,7 @@ shape is:
 ```powershell
 $paper = 'C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1'
 $product = 'C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox'
-$productBin = "$product\target\windows-exp1-bc1e6ee0\bin"
+$productBin = "$product\target\windows-exp1-5c48dae1\bin"
 
 Set-Location -LiteralPath $paper
 py -3.13 -m venv .venv

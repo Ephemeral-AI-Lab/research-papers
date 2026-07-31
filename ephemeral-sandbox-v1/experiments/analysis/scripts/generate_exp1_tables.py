@@ -16,12 +16,13 @@ import hashlib
 import io
 import json
 import math
+import re
 import sys
 from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Any
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 EVIDENCE_SCHEMA_VERSION = "ai-research-writing/numeric-evidence-v2"
 SHA256_PREFIX = "sha256:"
 MIB = 1024.0 * 1024.0
@@ -47,6 +48,33 @@ EXPECTED_COUNTS = {
         "output_eligibility": "frozen_final_candidate",
     },
 }
+PROTOCOLS = {
+    "v1.0": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.0",
+        "final_tag": "paper-v1-freeze",
+        "environment_identity": "isolated_loopback_per_execution_block",
+    },
+    "v1.1": {
+        "id": "ephemeral-sandbox-v1-practical-performance-v1.1",
+        "final_tag": "paper-v1.1-freeze",
+        "environment_identity": (
+            "isolated_windows_named_pipe_per_execution_block"
+        ),
+    },
+}
+V11_GATEWAY_TRANSPORT = {
+    "transport": "windows_named_pipe",
+    "scope": "local_only",
+    "rotation": "per_execution_block",
+}
+V10_GATEWAY_TRANSPORT = {
+    "transport": "tcp_loopback",
+    "scope": "local_only",
+    "rotation": "per_execution_block",
+}
+SAFE_NPIPE_ENDPOINT = re.compile(
+    r"npipe://\./pipe/[A-Za-z0-9][A-Za-z0-9._-]{0,127}\Z"
+)
 
 PERFORMANCE_ROWS = [
     ("create_sandbox", "create_sandbox", None, 1, "Create sandbox"),
@@ -573,7 +601,97 @@ def _label_for_key(key: tuple[str, Any, int]) -> str:
     raise GenerationError(f"no table label for cell key {key}")
 
 
-def _validate_archive(archive: Path) -> dict[str, Any]:
+def _validate_protocol_transport(
+    campaign: Mapping[str, Any],
+    run: Mapping[str, Any],
+    expanded: Mapping[str, Any],
+    protocol_version: str,
+    disposition: str,
+) -> None:
+    protocol = campaign.get("protocol")
+    if protocol_version == "v1.0" and protocol is None:
+        environment = run.get("environment")
+        _require(isinstance(environment, Mapping), "run environment is invalid")
+        _require(
+            environment.get("gateway_endpoint_identity")
+            in (None, PROTOCOLS["v1.0"]["environment_identity"]),
+            "legacy v1.0 gateway identity drift",
+        )
+        return
+    _require(isinstance(protocol, Mapping), "campaign protocol provenance is missing")
+    expected_version = (
+        protocol_version
+        if protocol_version == "v1.1" or disposition == "final"
+        else "pre-freeze-exp1"
+    )
+    _require(
+        protocol.get("version") == expected_version
+        and protocol.get("id") in (None, PROTOCOLS[protocol_version]["id"]),
+        "campaign protocol version is invalid",
+    )
+    environment = run.get("environment")
+    _require(isinstance(environment, Mapping), "run environment is invalid")
+    if protocol_version == "v1.0":
+        _require(
+            environment.get("gateway_endpoint_identity")
+            in (None, PROTOCOLS["v1.0"]["environment_identity"]),
+            "legacy v1.0 gateway identity drift",
+        )
+        return
+    _require(
+        protocol.get("id") == PROTOCOLS["v1.1"]["id"]
+        and environment.get("gateway_endpoint_identity")
+        == PROTOCOLS["v1.1"]["environment_identity"]
+        and environment.get("gateway_transport") == V11_GATEWAY_TRANSPORT,
+        "v1.1 named-pipe environment identity is invalid",
+    )
+    policy = run.get("gateway_policy")
+    _require(
+        isinstance(policy, Mapping)
+        and policy.get("protocol_version") == PROTOCOLS["v1.1"]["id"]
+        and all(
+            policy.get(key) == value
+            for key, value in V11_GATEWAY_TRANSPORT.items()
+        )
+        and policy.get("mode") == "isolated"
+        and policy.get("isolated_runtime_per_execution_block") is True
+        and policy.get("loopback_only") is False,
+        "v1.1 named-pipe gateway policy is invalid",
+    )
+    planned = expanded.get("execution_blocks")
+    launched = run.get("gateway_execution_blocks")
+    _require(
+        isinstance(planned, list)
+        and isinstance(launched, list)
+        and len(planned) == len(launched),
+        "v1.1 execution-block endpoint count is invalid",
+    )
+    endpoints: set[str] = set()
+    for expected, observed in zip(planned, launched):
+        endpoint = observed.get("endpoint_uri") if isinstance(observed, Mapping) else None
+        _require(
+            isinstance(expected, Mapping)
+            and isinstance(observed, Mapping)
+            and observed.get("block_id") == expected.get("block_id")
+            and observed.get("family_id") == expected.get("family_id")
+            and all(
+                observed.get(key) == value
+                for key, value in V11_GATEWAY_TRANSPORT.items()
+            )
+            and isinstance(observed.get("gateway_instance_id"), str)
+            and bool(observed["gateway_instance_id"])
+            and isinstance(endpoint, str)
+            and SAFE_NPIPE_ENDPOINT.fullmatch(endpoint) is not None
+            and endpoint not in endpoints,
+            "v1.1 execution-block endpoint evidence is unsafe",
+        )
+        endpoints.add(endpoint)
+
+
+def _validate_archive(
+    archive: Path, protocol_version: str = "v1.0"
+) -> dict[str, Any]:
+    _require(protocol_version in PROTOCOLS, "unsupported EXP1 protocol version")
     manifest_path = archive / "archive-manifest.json"
     _require(manifest_path.is_file(), "archive-manifest.json is required")
     manifest = _load_json(manifest_path)
@@ -612,6 +730,30 @@ def _validate_archive(archive: Path) -> dict[str, Any]:
         f"unsupported table-generation disposition: {disposition!r}",
     )
     expected = EXPECTED_COUNTS[disposition]
+    _require(
+        manifest.get("protocol_version")
+        in ((None, "v1.0") if protocol_version == "v1.0" else ("v1.1",)),
+        "archive protocol identity is invalid",
+    )
+    _validate_protocol_transport(
+        campaign, run, expanded, protocol_version, disposition
+    )
+    if disposition == "final":
+        protocol = campaign.get("protocol")
+        paper_git = campaign.get("paper_git")
+        _require(
+            isinstance(protocol, Mapping)
+            and protocol.get("freeze_state") == "frozen",
+            "final campaign protocol is not frozen",
+        )
+        _require(
+            isinstance(paper_git, Mapping)
+            and _is_git_sha1(paper_git.get("commit"))
+            and paper_git.get("dirty") is False
+            and paper_git.get("status_porcelain") == []
+            and paper_git.get("freeze_state") == "clean_frozen_commit",
+            "final paper source freeze provenance is invalid",
+        )
     _require(
         campaign.get("disposition") == disposition, "campaign/archive disposition drift"
     )
@@ -689,11 +831,12 @@ def _validate_archive(archive: Path) -> dict[str, Any]:
     )
     freeze_tag = _nested(campaign, "product", "freeze_tag")
     if disposition == "final":
+        required_tag = PROTOCOLS[protocol_version]["final_tag"]
         _require(
             isinstance(freeze_tag, Mapping)
             and freeze_tag.get("availability") == "available"
-            and freeze_tag.get("name") == "paper-v1-freeze"
-            and freeze_tag.get("reference") == "refs/tags/paper-v1-freeze"
+            and freeze_tag.get("name") == required_tag
+            and freeze_tag.get("reference") == f"refs/tags/{required_tag}"
             and freeze_tag.get("object_type") == "tag"
             and _is_git_sha1(freeze_tag.get("tag_object"))
             and freeze_tag.get("peeled_commit") == product_commit,
@@ -703,7 +846,8 @@ def _validate_archive(archive: Path) -> dict[str, Any]:
         _require(
             isinstance(freeze_tag, Mapping)
             and freeze_tag.get("availability") == "unavailable"
-            and freeze_tag.get("required_final_tag") == "paper-v1-freeze",
+            and freeze_tag.get("required_final_tag")
+            == PROTOCOLS[protocol_version]["final_tag"],
             "exploratory product freeze-tag provenance is invalid",
         )
     _require(
@@ -884,6 +1028,7 @@ def _validate_archive(archive: Path) -> dict[str, Any]:
         "cells": cells,
         "expected": expected,
         "disposition": disposition,
+        "protocol_version": protocol_version,
         "source_hashes": source_hashes,
     }
 
@@ -896,7 +1041,31 @@ def _table_one(
     preflight = context["preflight"]
     fixture = context["fixture"]
     disposition = context["disposition"]
+    protocol_version = context["protocol_version"]
     expected = context["expected"]
+    run_environment = run.get("environment")
+    _require(isinstance(run_environment, Mapping), "run environment is invalid")
+    gateway_transport = (
+        run_environment.get("gateway_transport")
+        if protocol_version == "v1.1"
+        else V10_GATEWAY_TRANSPORT
+    )
+    _require(
+        isinstance(gateway_transport, Mapping)
+        and all(
+            isinstance(gateway_transport.get(key), str)
+            and bool(gateway_transport[key])
+            for key in ("transport", "scope", "rotation")
+        ),
+        "gateway transport provenance is invalid",
+    )
+    gateway_transport = {
+        key: gateway_transport[key] for key in ("transport", "scope", "rotation")
+    }
+    gateway_transport_display = (
+        f"{gateway_transport['transport']}; {gateway_transport['scope']}; "
+        f"{gateway_transport['rotation']}"
+    )
     product_commit = _nested(campaign, "product", "commit")
     freeze_tag = _nested(campaign, "product", "freeze_tag")
     if disposition == "final":
@@ -1071,6 +1240,20 @@ def _table_one(
             _nested(campaign, "plan", "client_cohort"),
             "campaign-manifest.json",
             {"pointer": "/plan/client_cohort"},
+            "text",
+        ),
+        (
+            "Gateway transport",
+            gateway_transport_display,
+            "run-manifest.json",
+            {
+                "pointer": (
+                    "/data/environment/gateway_transport"
+                    if protocol_version == "v1.1"
+                    else "/data/environment/gateway_endpoint_identity"
+                ),
+                "protocol_version": protocol_version,
+            },
             "text",
         ),
         (
@@ -1293,9 +1476,11 @@ def _table_one(
                 else {
                     "availability": "unavailable",
                     "reason": "legacy pre-freeze exploratory archive",
-                    "required_final_tag": "paper-v1-freeze",
+                    "required_final_tag": PROTOCOLS[protocol_version]["final_tag"],
                 },
             }
+        elif name == "Gateway transport":
+            machine_value = gateway_transport
         machine_fields.append(
             {
                 "field": name,
@@ -1614,12 +1799,14 @@ def _build_outputs(context: Mapping[str, Any], generator_sha: str) -> dict[str, 
     )
     table4, machine4 = _resource_table(context, evidence, banner)
     tables = {
+        "schema_version": SCHEMA_VERSION,
         "archive": {
             "content_tree_sha256": context["manifest"]["content_tree_sha256"],
             "disposition": disposition,
             "run_id": context["campaign"]["run_id"],
         },
         "eligibility": eligibility,
+        "protocol_version": context["protocol_version"],
         "generator_schema_version": SCHEMA_VERSION,
         "tables": {
             "environment": machine1,
@@ -1644,11 +1831,12 @@ def _build_outputs(context: Mapping[str, Any], generator_sha: str) -> dict[str, 
         f"archive_run_id={context['campaign']['run_id']}",
         f"archive_disposition={disposition}",
         f"archive_eligibility={eligibility}",
+        f"protocol_version={context['protocol_version']}",
         f"archive_content_tree_sha256={context['manifest']['content_tree_sha256']}",
         "archive_inventory_verified=true",
         "semantic_identity_verified=true",
         "correctness_verified=true",
-        "command=python experiments/analysis/scripts/generate_exp1_tables.py --archive <ARCHIVE> --output <OUTPUT>",
+        "command=python experiments/analysis/scripts/generate_exp1_tables.py --protocol-version <VERSION> --archive <ARCHIVE> --output <OUTPUT>",
         "output_path_embedded=false",
         "wall_clock_embedded=false",
     ]
@@ -1666,16 +1854,21 @@ def _build_outputs(context: Mapping[str, Any], generator_sha: str) -> dict[str, 
         "archive_disposition": disposition,
         "archive_run_id": context["campaign"]["run_id"],
         "eligibility": eligibility,
+        "protocol_version": context["protocol_version"],
         "files": manifest_files,
         "generator_schema_version": SCHEMA_VERSION,
         "generator_sha256": generator_sha,
-        "schema_version": 1,
+        "schema_version": SCHEMA_VERSION,
     }
     outputs["output-manifest.json"] = _json_bytes(output_manifest)
     return outputs
 
 
-def generate(archive: Path, output: Path) -> dict[str, Any]:
+def generate(
+    archive: Path,
+    output: Path,
+    protocol_version: str = "v1.0",
+) -> dict[str, Any]:
     archive = archive.resolve()
     output = output.resolve()
     _require(archive.is_dir(), f"archive directory does not exist: {archive}")
@@ -1684,7 +1877,7 @@ def generate(archive: Path, output: Path) -> dict[str, Any]:
         "output must be outside the immutable archive",
     )
     _require(not output.exists(), f"output directory already exists: {output}")
-    context = _validate_archive(archive)
+    context = _validate_archive(archive, protocol_version)
     generator_sha = _sha256_file(Path(__file__).resolve())
     outputs = _build_outputs(context, generator_sha)
     # Detect a mutation that raced semantic derivation before writing any output.
@@ -1698,6 +1891,7 @@ def generate(archive: Path, output: Path) -> dict[str, Any]:
         "archive_run_id": context["campaign"]["run_id"],
         "disposition": context["disposition"],
         "eligibility": context["expected"]["output_eligibility"],
+        "protocol_version": protocol_version,
         "files": sorted(outputs),
     }
 
@@ -1713,13 +1907,16 @@ def _parser() -> argparse.ArgumentParser:
         type=Path,
         help="new output directory outside the archive",
     )
+    parser.add_argument(
+        "--protocol-version", choices=sorted(PROTOCOLS), required=True
+    )
     return parser
 
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
-        result = generate(args.archive, args.output)
+        result = generate(args.archive, args.output, args.protocol_version)
     except GenerationError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2

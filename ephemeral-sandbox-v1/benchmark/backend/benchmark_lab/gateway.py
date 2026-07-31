@@ -71,15 +71,16 @@ class SandboxList(StrictModel):
 
 
 class OwnerProcess(StrictModel):
-    schema_version: int = Field(ge=1, le=1)
+    schema_version: int = Field(ge=1, le=2)
     pid: int = Field(gt=0)
     process_group: int = Field(gt=0)
     process_identity: str = Field(min_length=1, max_length=4096)
     gateway_executable: str = Field(min_length=1)
     gateway_binary_sha256: str = Field(pattern=r"^sha256:[0-9a-f]{64}$")
     gateway_instance_id: str = Field(min_length=1, max_length=256)
-    endpoint_host: str
-    endpoint_port: int = Field(ge=1, le=65535)
+    endpoint_uri: str | None = Field(default=None, min_length=1, max_length=512)
+    endpoint_host: str | None = None
+    endpoint_port: int | None = Field(default=None, ge=1, le=65535)
 
 
 @dataclass(frozen=True, slots=True)
@@ -159,7 +160,7 @@ class GatewayLauncher:
         gateway_instance_id: str | None = None
         try:
             shared_cache = _run_shared_cache(self._roots, run_id)
-            endpoint = _reserve_loopback_endpoint()
+            endpoint = _execution_block_endpoint(readiness_via_cli)
             gateway_instance_id = f"benchmark-gateway-{secrets.token_hex(16)}"
             config_path = runtime_path / "effective-config.yml"
             pid_path = runtime_path / "gateway.pid"
@@ -243,17 +244,16 @@ class GatewayLauncher:
             _write_new_private(
                 runtime_path / "owner-process.json",
                 OwnerProcess(
-                    schema_version=1,
+                    schema_version=2,
                     pid=process.pid,
                     process_group=process.pid,
                     process_identity=process_identity,
                     gateway_executable=os.fspath(gateway_binary),
                     gateway_binary_sha256=gateway_binary_sha256,
                     gateway_instance_id=gateway_instance_id,
-                    endpoint_host=endpoint.host,
-                    endpoint_port=endpoint.port,
+                    endpoint_uri=endpoint.uri,
                 )
-                .model_dump_json()
+                .model_dump_json(exclude_none=True)
                 .encode()
                 + b"\n",
             )
@@ -565,7 +565,7 @@ def _effective_config(
             raise TypeError
         gateway_config.update(
             {
-                "bind_addr": f"{endpoint.host}:{endpoint.port}",
+                "bind_addr": endpoint.address,
                 "pid_path": os.fspath(pid_path),
                 "max_concurrent_connections": 256,
             }
@@ -645,7 +645,8 @@ async def recover_stale_gateway(
         if metadata_path.is_symlink() or metadata_path.stat().st_size > 16 * 1024:
             raise GatewayLifecycleError("stale process metadata is unsafe")
         metadata = OwnerProcess.model_validate_json(metadata_path.read_bytes())
-    except (OSError, OwnershipError, ValidationError) as error:
+        endpoint = _owner_process_endpoint(metadata)
+    except (OSError, OwnershipError, ValidationError, ValueError) as error:
         raise GatewayLifecycleError("stale process ownership proof failed") from error
     expected_binary = _prebuilt_executable(roots, GATEWAY_EXECUTABLE)
     if (
@@ -670,10 +671,7 @@ async def recover_stale_gateway(
             if token_path.is_symlink() or token_metadata.st_mode & 0o077 or not token:
                 issues.append("credential recovery")
             else:
-                client = client_factory(
-                    GatewayEndpoint(metadata.endpoint_host, metadata.endpoint_port),
-                    token,
-                )
+                client = client_factory(endpoint, token)
                 try:
                     await _destroy_all_sandboxes(client)
                 except Exception:
@@ -766,6 +764,33 @@ def _reserve_loopback_endpoint() -> GatewayEndpoint:
         reservation.bind(("127.0.0.1", 0))
         host, port = reservation.getsockname()
     return GatewayEndpoint(host, port)
+
+
+def _execution_block_endpoint(readiness_via_cli: bool) -> GatewayEndpoint:
+    if os.name == "nt" and readiness_via_cli:
+        return GatewayEndpoint.windows_named_pipe(
+            "npipe://./pipe/"
+            f"ephemeral-sandbox-benchmark-{secrets.token_hex(16)}"
+        )
+    return _reserve_loopback_endpoint()
+
+
+def _owner_process_endpoint(metadata: OwnerProcess) -> GatewayEndpoint:
+    if metadata.schema_version == 2:
+        if (
+            metadata.endpoint_uri is None
+            or metadata.endpoint_host is not None
+            or metadata.endpoint_port is not None
+        ):
+            raise ValueError("gateway owner endpoint metadata is invalid")
+        return GatewayEndpoint.parse(metadata.endpoint_uri)
+    if (
+        metadata.endpoint_uri is not None
+        or metadata.endpoint_host is None
+        or metadata.endpoint_port is None
+    ):
+        raise ValueError("legacy gateway owner endpoint metadata is invalid")
+    return GatewayEndpoint(metadata.endpoint_host, metadata.endpoint_port)
 
 
 def _write_new_private(path: Path, content: bytes) -> None:
