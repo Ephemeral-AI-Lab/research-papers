@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "diagnostic_id": "exp1-final-019fb6e5-tcp-endpoint-reuse",
+  "run": {
+    "run_id": "019fb6e5-c00b-7b02-8a3c-d76bd1346eb4",
+    "name": "paper-good-pass",
+    "disposition": "final",
+    "run_status": "failed",
+    "eligibility": "failed_ineligible",
+    "plan_hash": "sha256:391b521b406f0f221a7a342b822cfa8d459e339fee6c53b4a60a913a2cb0089b",
+    "started_at": "2026-07-31T06:39:01.112787Z",
+    "ended_at": "2026-07-31T06:50:13.449078Z",
+    "elapsed_seconds": "672.336291",
+    "completed_trial_batches": 853,
+    "total_trial_batches": 1938,
+    "issued_operation_requests": 2077,
+    "expected_operation_requests": 5610,
+    "failure_count": 1,
+    "warning_count": 0
+  },
+  "failed_trial": {
+    "cell_id": "sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16",
+    "family": "files",
+    "operation": "file_read",
+    "trial_id": "trial-242749a59d59cc16-measured-000034",
+    "trial_kind": "measured",
+    "sequence_in_cell": 34,
+    "status": "infrastructure_failed",
+    "product_succeeded": true,
+    "cleanup_baseline_restored": true,
+    "checks_passed": false,
+    "reportable": false,
+    "operation_latency_ns_ineligible": 13526000,
+    "resource_records": 14,
+    "resource_batches": 1,
+    "expected_boundary_batches": 2,
+    "failure_boundary": "mandatory post-response resource boundary"
+  },
+  "root_cause": {
+    "classification": "windows_tcp_dynamic_endpoint_reuse_pressure",
+    "confidence": "high",
+    "summary": "A fresh observability CLI process could not connect to the isolated loopback gateway during the mandatory final resource sample. Windows returned WSAEADDRINUSE (10048), and the System TCP/IP provider emitted Event 4227 at the same instant, attributing the failure to high-rate outbound connection churn and reuse of a recently used local endpoint.",
+    "failed_cli_invocation": {
+      "relative_path": "raw/cli-subprocesses/de511434eb741316c53eba28b2e8586c402560f3d346b593c3f37c36e4547311.json",
+      "sha256": "sha256:3e188c6e284c0f65e2a909df854ac18a5f550ea1daffb86f2eb3d02ebc26ab0f",
+      "request_id": "trial-242749a59d59cc16-measured-000034.observe.snapshot.1.boundary.0",
+      "executable_role": "observability",
+      "operation": "snapshot",
+      "return_code": 1,
+      "response_validation": "transport_error:gateway transport failed (connection_error)",
+      "stderr_bytes": 187,
+      "stderr_sha256": "sha256:b61e0c2f370d165f3aee73407c216ca82db0bed41112c5462f1257f9888bab5c",
+      "winsock_error": {
+        "symbol": "WSAEADDRINUSE",
+        "code": 10048
+      }
+    },
+    "system_event": {
+      "log": "System",
+      "provider": "Tcpip",
+      "event_id": 4227,
+      "record_id": 88385,
+      "level": "Warning",
+      "created_at_utc": "2026-07-31T06:50:09.9652511Z",
+      "message_sha256": "sha256:535f882dfc5e90d98a9ffb429ef7a2c3d5eeb45d71892b54eb0af2bb1bc548dc",
+      "primary_capture_path": "experiments/analysis/exp1-final-system-event-4227.json",
+      "primary_capture_sha256": "sha256:b6eac476b6ecf8c20de529be5c5ca8de297874ae9273c65a4baaf6ffc34ac89d",
+      "capture_timing": "post-run read-only retrieval from the Windows System event log; the immutable run archive was not modified",
+      "meaning": "TCP/IP could not establish an outbound connection because the selected local endpoint had recently been used for the same remote endpoint; the event identifies high-rate open/close churn as the typical cause."
+    },
+    "connection_pressure": {
+      "ipv4_dynamic_tcp_start_port": 49152,
+      "ipv4_dynamic_tcp_port_count": 16384,
+      "ipv6_dynamic_tcp_start_port": 49152,
+      "ipv6_dynamic_tcp_port_count": 16384,
+      "persisted_cli_invocations_before_stop": 7992,
+      "persisted_cli_invocations_in_preceding_240_seconds": 6760,
+      "roles": {
+        "manager": 328,
+        "runtime": 3829,
+        "observability": 3835
+      },
+      "return_code_zero": 7991,
+      "return_code_nonzero": 1
+    },
+    "boundary_evidence": {
+      "preceding_measured_trials_27_through_33": "Each retained two complete 14-metric resource batches and passed.",
+      "failed_trial": "Only the first 14-metric boundary batch was durably recorded. The product file-read request succeeded, then the final snapshot CLI failed to connect before verification.",
+      "event_alignment": "The TCP/IP Event 4227 timestamp aligns with the failed trial event at approximately 668.853 seconds after run start."
+    },
+    "uncertainty": "The evidence establishes endpoint-reuse pressure and the exact failed connection. It does not prove that all 16,384 dynamic ports were simultaneously occupied, nor does it attribute the condition to a single internal socket beyond the recorded observability CLI connection.",
+    "official_references": [
+      "https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2",
+      "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/tcp-ip-port-exhaustion-troubleshooting"
+    ]
+  },
+  "evidence_integrity": {
+    "committed_cli_invocation_records": 7992,
+    "committed_cli_invocation_records_passing": 7991,
+    "committed_cli_invocation_records_failing": 1,
+    "raw_cli_projection_basenames": 7993,
+    "incomplete_projection_group": {
+      "basename": "766ed434998f2dc7c002bac6dd08c3d642cf1ec416eb2d2cc7df65a6906471a0",
+      "stdout_path": "raw/cli-subprocesses/766ed434998f2dc7c002bac6dd08c3d642cf1ec416eb2d2cc7df65a6906471a0.stdout",
+      "stdout_bytes": 20165,
+      "stdout_sha256": "sha256:0c53f4064938e550a540f0b7004f3ee0f131e097bfabb39a3874e34ff03e4c5b",
+      "stdout_is_valid_cgroup_json": true,
+      "stderr_path": "raw/cli-subprocesses/766ed434998f2dc7c002bac6dd08c3d642cf1ec416eb2d2cc7df65a6906471a0.stderr",
+      "stderr_bytes": 0,
+      "stderr_sha256": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "metadata_commit_marker_present": false
+    },
+    "interpretation": "The orphan stdout/stderr pair is consistent with the concurrent cgroup sibling finishing while the snapshot exception unwound the resource-boundary gather, but the exact persistence race is not logged and is not claimed as proven. The defect is secondary to the directly recorded snapshot connection failure."
+  },
+  "protocol_decision": {
+    "gate_5": "fail",
+    "gate_6": "fail_not_authorized_for_aggregation",
+    "gate_7": "fail_no_numeric_claim_handoff",
+    "rerun": "prohibited_under_frozen_v1.0",
+    "reason": "The protocol allows exactly one eligible frozen final attempt and requires a stop for a missing resource boundary or measured cell with fewer than 100 reportable trials.",
+    "required_new_decision": "Any new attempt requires a documented protocol amendment, a new source/environment freeze, and explicit author authorization. It cannot replace or overwrite this failed archive."
+  },
+  "cleanup": {
+    "initial_archive_attempt": "failed because the owned run workspace still existed",
+    "explicit_cleanup": {
+      "exit_code": 0,
+      "cleaned": true,
+      "terminalized": false,
+      "run_workspace_exists_after": false
+    },
+    "final_proof": {
+      "runtime_exists": false,
+      "matching_product_processes": [],
+      "run_labeled_containers": [],
+      "gateway_labeled_containers": [],
+      "run_labeled_volumes": [],
+      "gateway_labeled_volumes": [],
+      "product_branch": "main",
+      "product_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+      "product_status_porcelain": ""
+    }
+  },
+  "archive": {
+    "path": "experiments/runs/019fb6e5-c00b-7b02-8a3c-d76bd1346eb4",
+    "verified": true,
+    "file_count": 24867,
+    "bytes": 620311242,
+    "content_tree_sha256": "sha256:7efa643b12aba09f0ba5ecfbed5b5692a166a5c12931490402d3992d92f3ae6a",
+    "archive_manifest_sha256": "sha256:5e0a3c4f7c864df8070a668d2f373b75bece3c2a57cc4340cd89ece292cc7927",
+    "campaign_manifest_sha256": "sha256:8eefbec9772406943bb1baa2476b181c7436a6fafd7a6d7984874e8889f96982",
+    "raw_file_count": 24841,
+    "raw_bytes": 547911783,
+    "raw_content_tree_sha256": "sha256:1cc85e7883136ede15e342aa6f2ac50d72bdf6d4eace340dc0e6dba9e992f5b5",
+    "independent_verify_output_sha256": "sha256:13b4b44f9a6f2e8835fd85b81d73de0bba7a65ac0eb7c110a57ad21168f43630"
+  }
+}

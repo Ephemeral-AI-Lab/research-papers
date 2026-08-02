@@ -1,25 +1,67 @@
 \section{Evaluation}
 \label{sec:evaluation}
 
-\subsection{RQ3: Latency, Storage, and Resource Scaling}
+\subsection{Question and Claim Boundary}
 
-RQ3 tests the source-derived cost model rather than assuming that worker count
-alone explains scaling.  The protocol independently varies worker/publisher
-count, manifest depth, live-session count and lease age, private-upper entry
-count and fan-out, changed and validated paths, published logical bytes,
-conflict class, and eligible-merge bytes, lines, similarity, and edit distance.
-Storage cases include small edits to large files, many small files, and
-incompressible controls.  All factors, warmups, repeats, and stopping rules
-must be fixed before the final source freeze.
+The evaluation asks a deliberately narrow question: in the archived local
+campaign, what startup, public-CLI, and selected resource observations are
+obtained for the frozen implementation and fixture?  It tests only the
+mechanism's operational envelope under that protocol.  It does not compare
+against another sandbox, establish an application-level speedup, quantify a
+useful-work concurrency ceiling, validate publication correctness, or support
+a cross-platform or security claim.  Those boundaries matter because a
+private workspace can make execution independent while durable publication
+remains serialized.
 
-For each stage, we report latency distributions, CPU, RSS/PSS, I/O, failures,
-and exact phase boundaries.  Publication additionally reports writer-lock wait
-and hold time and decomposes planning, resolution/merge, hashing, copy,
-synchronization, and manifest transition.  Storage reports logical, allocated,
-shared, and exclusive bytes for upper, work, staging, published layers, and
-lease-retained history.  Squash reports plan, build, commit, and garbage
-collection separately.  No cost-model term becomes a paper result until it is
-reproduced from frozen raw artifacts and analysis code.
+The sole eligible final campaign is preserved as an immutable archive. Its
+archive manifest, raw reports, analysis inputs, and deterministic table output
+are linked through the run archive and frozen Table-A projection listed in
+\path{ARTIFACTS.md}.
+The manuscript-side generator reads that projection without modifying it and
+records every displayed number's selector in
+\path{sections/results_numeric_bindings.md}.  Thus the tables below are
+evidence displays, rather than fresh analysis or a rerun.
 
-\emph{The remaining RQ1--RQ5 methodology and all numerical results are pending
-protocol and evidence lock.}
+\subsection{Protocol}
+
+The campaign used the product CLI against a local gateway, a pinned container
+image, and a fixed workspace fixture.  It measures sandbox creation, session
+readiness, a first command, and public command, read, write, and edit paths
+under single-client and small concurrent-client loads.  The archive records
+warm-ups separately from measured trials, preserves the complete trial
+reports, and marks qualification and exploratory runs ineligible.  The
+resource rows report observed daemon and sandbox peaks, block I/O, and
+workspace-upper deltas for selected cells; they are not capacity reservations
+or fleet-wide measurements.
+
+The protocol is intentionally a treatment, not a universal benchmark.  It has
+no external baseline, no end-to-end coding task, no adversarial merge or
+recovery campaign, no layer-depth sweep, and no measurement of team-level
+coordination quality.  We therefore use descriptive distributions and state
+only what the frozen records directly support.
+
+\subsection{Frozen Observations}
+
+The evidence displays follow this discussion in the manuscript source.
+
+The startup table separates sandbox creation from session readiness and the
+first command, rather than collapsing them into one headline time.  The
+operation table retains all archived public-CLI cases and both recorded load
+levels.  The resource table keeps its selection rule visible: it reports
+observed peaks and deltas for the specified cells, not a claim that every
+operation consumes the same resources.  This organization makes the negative
+result as important as the positive one: the campaign supplies a reproducible
+local treatment, but it cannot answer the omitted comparison, scaling, or
+useful-work questions.
+
+\subsection{Threats to Validity}
+
+Internal validity is bounded by the archive and its deterministic analysis,
+but a single host, engine configuration, fixture, and transport prevent a
+hardware- or deployment-independent inference.  Construct validity is also
+narrow: command and file operations are not representative of a whole coding
+agent workflow, and resource counters do not establish isolation strength or
+fairness.  External validity is limited by the absence of heterogeneous
+projects, competing systems, fault injection, and collaborative outcomes.
+The evaluation is consequently evidence for this implementation and protocol,
+not a comparative systems result.

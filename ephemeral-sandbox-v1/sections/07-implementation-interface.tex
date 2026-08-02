@@ -1,6 +1,103 @@
 \section{Implementation and Operational Interface}
 \label{sec:implementation-interface}
 
+The Rust implementation follows the ownership boundaries of the mechanism.
+Product adapters obtain semantic operations from
+\texttt{sandbox-operation-catalog}, add adapter-specific shell projections,
+and construct an adapter-neutral request through the shared client.  The
+authenticated newline-framed request traverses the gateway and manager to one
+sandbox daemon, where \texttt{sandbox-runtime} orchestrates command, file,
+workspace-session, LayerStack, and observability applications.  Low-level
+crates separately own LayerStack storage and leases, workspace lifecycle,
+OverlayFS mounting, namespace execution, namespace processes, and telemetry.
+This separation keeps transport and presentation code from owning publication
+or workspace semantics. The audited source snapshot is the commit peeled from
+the annotated \texttt{paper-v1.1-freeze} tag; path-level anchors and the
+revalidation record are preserved in the
+\href{https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8}{tagged source tree}
+and \path{plan/source_revalidation.md}. This section is source-derived
+interface evidence, not a runtime-correctness or performance result.
+
+\subsection{Role-Separated Operational Contract}
+
+The measured source snapshot builds three feature-gated CLI executables and no combined
+client.  The semantic catalog defines operation names, descriptions,
+arguments, visibility, and routing; each CLI projection defines shell paths,
+flags, positionals, usage, and examples.  A bidirectional projection-integrity
+test checks that every public catalog route has exactly one matching projection
+and that no projected operation lacks a public route.  Table~\ref{tab:cli-roles}
+summarizes the measured contract. Management covers lifecycle, image and
+workspace inspection, compaction, and export. Runtime covers commands,
+standard input/output, files, attribution, and workspace sessions.
+Observability covers snapshots, traces, events, resources, diagnostics, and
+LayerStack inspection. The complete command shapes are recorded in
+\path{cli_contract_matrix.md}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{p{0.17\linewidth}p{0.12\linewidth}p{0.23\linewidth}p{0.37\linewidth}}
+\hline
+Client & Count & Request scope & Responsibility \\
+\hline
+Management & 8 & System envelope & Sandbox lifecycle, selection, compaction,
+and export; a target sandbox can remain an operation argument \\
+Runtime & 10 & Sandbox required & Commands, file operations, attribution,
+and explicit workspace-session lifecycle inside one selected sandbox \\
+Observability & 8 & Two system-or-sandbox; six sandbox-only & Read-only
+snapshots, traces, events, resources, daemon and topology diagnostics, cgroup
+counters, and LayerStack/session views \\
+\hline
+\end{tabular}
+\caption{Role-separated public CLI contract at the measured tagged source
+snapshot. Counts and exact projections are source-derived interface evidence,
+not runtime-correctness or performance results.}
+\label{tab:cli-roles}
+\end{table}
+
+The runtime selector becomes the request-envelope sandbox scope rather than a
+duplicated operation argument. Every client constructs an envelope containing
+an operation, request identifier, scope, and arguments. The shared builder
+generates a UUIDv4 request identifier by default, and all three clients expose
+a validated \texttt{--request-id} override for correlation across
+orchestration and diagnostics. Correlation identifies one requested operation,
+but it does not
+establish causal ownership of every resulting filesystem line.  Gateway
+connection discovery prefers CLI socket/token overrides, then environment
+variables, and finally a platform-local default; the client does not discover
+a token file automatically. The canonical \texttt{--gateway-endpoint} accepts
+TCP, Windows named-pipe, and Unix-socket URIs; the visible
+\texttt{--gateway-socket} spelling is an alias. On Windows, the default is a
+local named pipe, while explicit TCP remains a compatibility choice.
+
+Shell behavior is also part of the contract.  Help is human-readable text on
+standard output with exit status 0.  A successful operation writes one JSON
+result line to standard output and exits 0.  A gateway operation failure or
+transport/protocol failure writes a JSON error envelope to standard error and
+exits 1, while local syntax, configuration, unknown-operation, or argument
+failure writes a local JSON error envelope and exits 2.  Requested manager
+progress may share standard error with a successful final result on standard
+output.  For command execution, the command's own exit status is response
+data; the CLI process status reports whether the runtime request and protocol
+succeeded.
+
+Help is derived by joining the same semantic catalog with the selected CLI
+projection, so descriptions, declared arguments, defaults, usage, examples,
+and related operations remain mechanically connected.  This does not keep
+external website documentation synchronized: the audited live pages expose
+different operation counts and are not the authority for the paper source snapshot.
+Likewise, catalog/projection/help tests establish an adapter contract; they do
+not prove workspace isolation, publication correctness, or recovery behavior.
+
+Role separation gives an orchestrator smaller, testable operation sets, but it
+is not by itself an authorization or sandbox-security boundary.  The source snapshot
+does not declare coding intent, task dependencies, ownership transfers,
+service or port leases, general resource-budget admission, semantic
+compatibility, integration scheduling, or handoff acceptance.  The clients
+are typed building blocks through which an external orchestrator can create,
+operate, inspect, publish, and destroy work; they are not a complete agent-team
+or exploratory-swarm coordination plane.
+
 \subsection{Source-Derived Operational Cost Model}
 \label{sec:cost-model}
 
@@ -13,7 +110,7 @@ the number of concurrent publishers, and $R=\sum_{i=1}^{S}L_i$ the layer
 references retained across live leases.  Table~\ref{tab:cost-model} records
 source-derived drivers; it is not a performance result.
 
-\begin{table}[t]
+\begin{table}[H]
 \centering
 \small
 \begin{tabular}{p{0.19\linewidth}p{0.36\linewidth}p{0.34\linewidth}}
@@ -64,8 +161,14 @@ reached edit distance $D$, and $K=\min(n,200{,}000)$, the current implementation
 retains an $O(KD)$ frontier trace and can approach an $O(K^2)$ trace envelope.
 The evaluation must stress line count and edit shape in addition to file bytes.
 
-\subsection{Operational Interface}
+Squash reduces eligible history depth but does not erase lease constraints.
+Its planning and flattening phases scale with manifest structure and directory
+contents; live leases can retain old layers until a safe substitution and
+release.  These terms, together with the serialized publication path, are
+mechanism-level hypotheses for the evaluation rather than evidence of a
+particular latency, storage saving, or concurrency ceiling.
 
-\emph{Draft pending PW3.  This subsection will describe the role-separated
-management, runtime, and read-only observability clients and the final tagged
-catalog-derived contract.}
+The audited execution mechanism is Linux- and OverlayFS-centered. The tagged
+source contract defines responsibility, lifecycle, and cost drivers without
+establishing cross-platform behavior, security, semantic merge correctness, or
+measured efficiency beyond the bounded campaign in Section~\ref{sec:evaluation}.

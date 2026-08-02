@@ -2,6 +2,7 @@ import asyncio
 import hashlib
 import ipaddress
 import json
+import os
 import re
 import secrets
 import time
@@ -18,6 +19,8 @@ MAX_WIRE_BYTES = 16 * 1024 * 1024
 MAX_ID_BYTES = 256
 _SAFE_ID = re.compile(r"^[A-Za-z0-9_.:-]+$")
 _SENSITIVE_WORD = re.compile(r"(?i)\b(token|secret|password|credential|authorization)\b")
+_NPIPE_URI_PREFIX = "npipe://./pipe/"
+_SAFE_NPIPE_SEGMENT = re.compile(r"^[A-Za-z0-9_.-]+$")
 
 
 class GatewayError(RuntimeError):
@@ -62,16 +65,78 @@ class ProductErrorEnvelope(StrictModel):
 
 @dataclass(frozen=True, slots=True)
 class GatewayEndpoint:
-    host: str
-    port: int
+    host: str | None = None
+    port: int | None = None
+    named_pipe_uri: str | None = None
 
     def __post_init__(self) -> None:
+        if self.named_pipe_uri is not None:
+            if self.host is not None or self.port is not None:
+                raise ValueError("gateway endpoint must select exactly one transport")
+            _validated_named_pipe_uri(self.named_pipe_uri)
+            return
+        if self.host is None or self.port is None or isinstance(self.port, bool):
+            raise ValueError("gateway TCP endpoint is incomplete")
         try:
             address = ipaddress.ip_address(self.host)
         except ValueError as error:
             raise ValueError("gateway host must be a numeric loopback address") from error
         if not address.is_loopback or not 1 <= self.port <= 65535:
             raise ValueError("gateway endpoint must be a valid loopback socket")
+
+    @classmethod
+    def windows_named_pipe(cls, uri: str) -> "GatewayEndpoint":
+        return cls(named_pipe_uri=uri)
+
+    @classmethod
+    def parse(cls, value: str) -> "GatewayEndpoint":
+        if value.startswith(_NPIPE_URI_PREFIX):
+            return cls.windows_named_pipe(value)
+        address = value.removeprefix("tcp://")
+        if address.startswith("["):
+            end = address.find("]")
+            if end < 0 or address[end + 1 : end + 2] != ":":
+                raise ValueError("gateway TCP endpoint is invalid")
+            host = address[1:end]
+            port_text = address[end + 2 :]
+        else:
+            host, separator, port_text = address.rpartition(":")
+            if not separator:
+                raise ValueError("gateway TCP endpoint is invalid")
+        try:
+            port = int(port_text)
+        except ValueError as error:
+            raise ValueError("gateway TCP endpoint is invalid") from error
+        return cls(host, port)
+
+    @property
+    def transport(self) -> Literal["tcp_loopback", "windows_named_pipe"]:
+        return (
+            "windows_named_pipe"
+            if self.named_pipe_uri is not None
+            else "tcp_loopback"
+        )
+
+    @property
+    def address(self) -> str:
+        if self.named_pipe_uri is not None:
+            return self.named_pipe_uri
+        assert self.host is not None and self.port is not None
+        host = f"[{self.host}]" if ":" in self.host else self.host
+        return f"{host}:{self.port}"
+
+    @property
+    def uri(self) -> str:
+        if self.named_pipe_uri is not None:
+            return self.named_pipe_uri
+        return f"tcp://{self.address}"
+
+    @property
+    def native_named_pipe_path(self) -> str:
+        if self.named_pipe_uri is None:
+            raise ValueError("gateway endpoint is not a Windows named pipe")
+        name = self.named_pipe_uri.removeprefix(_NPIPE_URI_PREFIX)
+        return "\\\\.\\pipe\\" + name.replace("/", "\\")
 
 
 @dataclass(frozen=True, slots=True)
@@ -82,6 +147,7 @@ class TimedGatewayResponse:
     response_sha256: str
     value: Any
     started_ns: int | None = None
+    transport_evidence: dict[str, Any] | None = None
 
 
 class GatewayClient:
@@ -152,10 +218,8 @@ class GatewayClient:
         try:
             try:
                 reader, writer = await asyncio.wait_for(
-                    asyncio.open_connection(
-                        self._endpoint.host,
-                        self._endpoint.port,
-                        limit=self._max_wire_bytes + 1,
+                    _open_gateway_connection(
+                        self._endpoint, limit=self._max_wire_bytes + 1
                     ),
                     timeout=timeout_seconds,
                 )
@@ -210,6 +274,60 @@ class GatewayClient:
             value=value,
             started_ns=started_ns,
         )
+
+
+async def _open_gateway_connection(
+    endpoint: GatewayEndpoint,
+    *,
+    limit: int,
+) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+    if endpoint.transport == "tcp_loopback":
+        assert endpoint.host is not None and endpoint.port is not None
+        return await asyncio.open_connection(
+            endpoint.host,
+            endpoint.port,
+            limit=limit,
+        )
+    return await _open_windows_named_pipe_connection(endpoint, limit=limit)
+
+
+async def _open_windows_named_pipe_connection(
+    endpoint: GatewayEndpoint,
+    *,
+    limit: int,
+) -> tuple[asyncio.StreamReader, asyncio.StreamWriter]:
+    if os.name != "nt":
+        raise OSError("Windows named-pipe transport is unavailable")
+    loop = asyncio.get_running_loop()
+    create_pipe_connection = getattr(loop, "create_pipe_connection", None)
+    if create_pipe_connection is None:
+        raise OSError("the active event loop does not support Windows named pipes")
+    reader = asyncio.StreamReader(limit=limit)
+    protocol = asyncio.StreamReaderProtocol(reader)
+    transport, _ = await create_pipe_connection(
+        lambda: protocol,
+        endpoint.native_named_pipe_path,
+    )
+    writer = asyncio.StreamWriter(transport, protocol, reader, loop)
+    return reader, writer
+
+
+def _validated_named_pipe_uri(uri: str) -> str:
+    if not isinstance(uri, str) or not uri.startswith(_NPIPE_URI_PREFIX):
+        raise ValueError("gateway named-pipe URI is invalid")
+    name = uri.removeprefix(_NPIPE_URI_PREFIX)
+    segments = name.split("/")
+    if (
+        not name
+        or len(name.encode()) > 240
+        or any(
+            segment in {"", ".", ".."}
+            or _SAFE_NPIPE_SEGMENT.fullmatch(segment) is None
+            for segment in segments
+        )
+    ):
+        raise ValueError("gateway named-pipe URI is invalid")
+    return uri
 
 
 def _validated_id(field: str, value: str) -> str:

@@ -176,14 +176,108 @@ def test_interior_corruption_is_fatal_read_only_and_other_runs_are_scanned(tmp_p
     assert cleaned == ["run-2"]
 
 
-def test_terminal_runs_are_never_recovered(tmp_path: Path) -> None:
+def test_intentionally_retained_failed_run_is_not_automatically_recovered(
+    tmp_path: Path,
+) -> None:
     benchmark_roots = roots(tmp_path)
     store = interrupted_run(benchmark_roots)
     manifest = store.read_envelope("run-1", ArtifactId.RUN_MANIFEST)
     manifest["state"] = "failed"
+    manifest["failure"] = {
+        "code": "campaign_failed",
+        "message": "retained for diagnosis",
+        "infrastructure": True,
+    }
     store.replace_snapshot("run-1", ArtifactId.RUN_MANIFEST, manifest)
     called: list[str] = []
     result = RecoveryScanner(benchmark_roots, called.append).scan()
     assert result.execution_available
     assert result.recovered_run_ids == ()
     assert called == []
+    assert (benchmark_roots.runs / "run-1").exists()
+    assert (benchmark_roots.runtime / "run-1").exists()
+
+
+@pytest.mark.parametrize(
+    ("state", "failure_code"),
+    [
+        ("completed", None),
+        ("cancelled", None),
+        ("failed", "artifact_finalization_failed"),
+    ],
+)
+def test_terminal_run_with_cleanup_expected_removes_only_exact_owned_residue(
+    tmp_path: Path, state: str, failure_code: str | None
+) -> None:
+    benchmark_roots = roots(tmp_path)
+    store = interrupted_run(benchmark_roots, state=state, owned_roles=("runs",))
+    if failure_code is not None:
+        manifest = store.read_envelope("run-1", ArtifactId.RUN_MANIFEST)
+        manifest["failure"] = {
+            "code": failure_code,
+            "message": "terminal workspace removal was interrupted",
+            "infrastructure": True,
+        }
+        store.replace_snapshot("run-1", ArtifactId.RUN_MANIFEST, manifest)
+    unrelated = benchmark_roots.runs / "unrelated-run"
+    unrelated.mkdir()
+    OwnershipLedger(benchmark_roots).register(
+        unrelated,
+        OwnedPathMarker(role="runs", identity={"run_id": "unrelated-run"}),
+    )
+    manifest_path = store.run_path("run-1") / "run-manifest.json"
+    manifest_before = manifest_path.read_bytes()
+    called: list[str] = []
+
+    result = RecoveryScanner(benchmark_roots, called.append).scan()
+
+    assert result.execution_available
+    assert result.recovered_run_ids == ("run-1",)
+    assert called == ["run-1"]
+    assert not (benchmark_roots.runs / "run-1").exists()
+    assert unrelated.is_dir()
+    assert manifest_path.read_bytes() == manifest_before
+
+
+def test_terminal_residue_marker_mismatch_blocks_recovery_without_mutation(
+    tmp_path: Path,
+) -> None:
+    benchmark_roots = roots(tmp_path)
+    store = interrupted_run(
+        benchmark_roots, state="completed", owned_roles=("runs",)
+    )
+    marker = benchmark_roots.runs / "run-1" / ".ownership.json"
+    marker.write_text(marker.read_text().replace('"run-1"', '"other-run"'))
+    manifest_path = store.run_path("run-1") / "run-manifest.json"
+    manifest_before = manifest_path.read_bytes()
+    called: list[str] = []
+
+    result = RecoveryScanner(benchmark_roots, called.append).scan()
+
+    assert not result.execution_available
+    assert result.recovered_run_ids == ()
+    assert len(result.issues) == 1
+    assert called == []
+    assert (benchmark_roots.runs / "run-1").is_dir()
+    assert manifest_path.read_bytes() == manifest_before
+
+
+def test_explicit_cleanup_removes_owned_workspace_from_terminal_failed_run(
+    tmp_path: Path,
+) -> None:
+    benchmark_roots = roots(tmp_path)
+    store = interrupted_run(
+        benchmark_roots, state="failed", owned_roles=("runs",)
+    )
+    manifest_path = store.run_path("run-1") / "run-manifest.json"
+    manifest_before = manifest_path.read_bytes()
+    called: list[str] = []
+
+    cleaned = RecoveryScanner(
+        benchmark_roots, called.append
+    ).cleanup_terminal_run("run-1")
+
+    assert cleaned
+    assert called == ["run-1"]
+    assert not (benchmark_roots.runs / "run-1").exists()
+    assert manifest_path.read_bytes() == manifest_before

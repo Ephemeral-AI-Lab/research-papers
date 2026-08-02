@@ -22,6 +22,9 @@ from benchmark_lab.transport import TimedGatewayResponse
 
 ROOT = Path(__file__).resolve().parents[3]
 GOLDEN = ROOT / "tests/fixtures/golden/rust/quick-smoke-completed"
+FROZEN_SQUASH_EVIDENCE = (
+    ROOT / "tests/fixtures/golden/artifacts/operation-evidence-v1-squash.json"
+)
 
 
 def _roots(tmp_path: Path) -> BenchmarkRoots:
@@ -128,14 +131,13 @@ def test_squash_evidence_preserves_the_frozen_public_shape() -> None:
     }
 
     evidence = _operation_evidence(cell, [], context)["evidence"]
-    golden_file = next(
-        path
-        for path in (GOLDEN / "cells").rglob("operation-evidence-*.json")
-        if json.loads(path.read_text())["data"]["operation"] == "squash_layerstack"
-    )
-    frozen = json.loads(golden_file.read_text())["data"]["evidence"]
+    frozen_envelope = json.loads(FROZEN_SQUASH_EVIDENCE.read_text())
+    assert frozen_envelope["schema_name"] == "eos_benchmark_operation_evidence"
+    assert frozen_envelope["schema_version"] == 1
+    assert frozen_envelope["data"]["operation"] == "squash_layerstack"
+    frozen = frozen_envelope["data"]["evidence"]
 
-    assert set(evidence) == set(frozen)
+    assert evidence == frozen
     assert evidence["observed_replaced_layer_count"] == 2
     assert evidence["reclaimed_bytes"] == {"availability": "available", "value": 24}
     assert evidence["manifest_reduced"] is True

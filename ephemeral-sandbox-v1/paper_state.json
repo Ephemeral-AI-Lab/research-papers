@@ -1,45 +1,68 @@
 {
   "schema_version": "ai-research-writing/paper-state-v1",
   "mode": "full-paper",
-  "stage": "drafting",
+  "stage": "final-review",
   "target_venue": "arXiv cs.OS",
   "main_tex": "main.tex",
   "bibliography": "references.bib",
   "required_artifacts": [
+    "ARTIFACTS.md",
     "BUILD.md",
+    "REPRODUCIBILITY.md",
+    "REVIEWER_GUIDE.md",
+    "SUBMISSION.md",
+    "submission_readiness.md",
     "plan/terminology.md",
+    "plan/source_revalidation.md",
+    "plan/reverse_outline_pw4_pw7.md",
+    "plan/reviewer_report.md",
+    "plan/pw4-pw7-package-manifest.md",
     "figures/figure_plan.md",
+    "figures/concept-figure-review.md",
+    "literature/paper_inventory.md",
+    "literature/related_work_matrix.md",
+    "literature/positioning.md",
     "complexity_and_evolution.md",
     "experiment_inventory.md",
     "experiments/environment_setup.md",
+    "experiments/exp1-v1.1-protocol-amendment.md",
     "experiments/expected_tables.md",
-    "experiments/experiment_log.md"
+    "experiments/experiment_log.md",
+    "experiments/analysis/exp1-final-handoff.md",
+    "experiments/analysis/exp1-gate0-7-final-report.md",
+    "experiments/analysis/final-v11-019fb86c-tables-a/numeric-evidence.json",
+    "numeric_evidence.json",
+    "sections/generated_results_tables.tex",
+    "sections/results_numeric_bindings.md",
+    "citation_requests.json",
+    "citation_lock.json"
   ],
   "blockers": [
-    "The annotated paper-v1-freeze source tag is missing; baseline source links remain provisional.",
-    "experiment_inventory.md now contains a focused RQ3 practical-performance draft, but it is not protocol-locked and does not replace the broader RQ1-RQ5 evaluation charter.",
-    "Final isolation, publication/fault, performance, resource, and useful-work measurements are absent.",
-    "Author names and affiliations are unresolved.",
-    "Publication attribution remains best-effort after data commit rather than transactionally coupled to publication.",
-    "Explicit versus implicit protected-drop behavior still requires maintainer confirmation.",
-    "Lease/substitution behavior across daemon restart still requires fault testing.",
-    "The source-derived cost model has not been validated over layer depth, live leases, upperdir structure, changed paths/bytes, writer queueing, merge shape, or retained history.",
-    "The current text-merge byte gate does not independently bound retained diff-trace memory; adversarial CPU/RSS evidence or a stricter implementation bound is required.",
-    "LayerStack 2.0 remains future work; its integrated A/B/C results are absent and its pinned stock Windows Docker Desktop/WSL 2 reflink feasibility cell failed.",
-    "Claim Plane requires a complete sentence-level novelty audit."
+    "Paper owner must supply confirmed author names, affiliations, intended category/venue, and any required disclosure text before external submission."
   ],
   "build": {
     "status": "passed",
     "command": "latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex",
     "pdf": "main.pdf",
-    "external_inputs": [],
-    "input_sha256": "414eef7f33ae33849df5ac2305606499d01871d43d1aa00a692ef1a9b5feaf16",
-    "pdf_sha256": "ba4963d3d5f6352e1829946290265671599432e9984e301d5626de7316435327",
-    "exit_code": 0,
-    "log": "plan\\pw1-build.log",
-    "log_sha256": "719696c0aa0efb9fce4796efaab3cce5b27dd17563c4b60d7f4951b539aa7f30",
-    "tool_version": "Initial Win CP for (console input, console output, system): (CP437, CP65001, CP1252)",
+    "external_inputs": [
+      {
+        "name": "Eligible EXP1 archive content tree",
+        "source": "experiments/runs/019fb86c-096e-7589-a0a4-a6d6ef5d7f8b",
+        "archive_sha256": "606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986"
+      },
+      {
+        "name": "Frozen EXP1 Table-A output tree",
+        "source": "experiments/analysis/final-v11-019fb86c-tables-a",
+        "archive_sha256": "27b53ee5acc049899b4e5821f8d92b14488c7d08ed076ba379af4799c765ad04"
+      }
+    ],
+    "input_sha256": "6f1675a8021bf6acc982d9b7dc9f6c4d5755832ca937334c6212eb15b867b6a7",
+    "pdf_sha256": "6ffb429c6acb0f27af6dc493cd3fcc43a1710a22cba17fb669a11129ad06e8b2",
     "attestation": "executed",
-    "ran_at": "2026-07-30T00:48:19.855325+00:00"
+    "exit_code": 0,
+    "log": "plan\\pw4-pw7-build-attestation.log",
+    "log_sha256": "cffe435373442861725c7ca42e572c0a33ea029f02d1031fa38ba731745157c1",
+    "tool_version": "Initial Win CP for (console input, console output, system): (CP437, CP65001, CP1252)",
+    "ran_at": "2026-08-02T05:28:00.336951+00:00"
   }
 }

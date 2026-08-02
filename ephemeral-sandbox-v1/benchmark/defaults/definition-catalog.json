@@ -2,6 +2,13 @@
   "schema_version": 2,
   "families": [
     {
+      "id": "sandbox_lifecycle",
+      "label": "Sandbox Lifecycle",
+      "help": "Fresh sandbox creation through the public manager operation over a deterministic benchmark-owned base mount.",
+      "research_question": "What is the native Windows CLI time to create one ready sandbox over the fixed paper workspace?",
+      "measured_boundary": "A fresh benchmark-owned fixture exists before the timer; the measured manager CLI subprocess creates one sandbox and returns its ready record."
+    },
+    {
       "id": "command",
       "label": "Command",
       "help": "Bounded, compile-time command cases executed through the public runtime operation.",
@@ -18,7 +25,7 @@
     {
       "id": "workspace_lifecycle",
       "label": "Workspace Lifecycle",
-      "help": "Concurrent explicit no_op session creation through the exact internal test adapter.",
+      "help": "Concurrent explicit no_op session creation through the public runtime operation.",
       "research_question": "How do workspace scale, network profile, and concurrent session count affect time to ready?",
       "measured_boundary": "A prepared sandbox and fixture precede the barrier; the measured operation creates C independent sessions and observes readiness."
     },
@@ -157,12 +164,12 @@
     },
     {
       "id": "upperdir_bytes",
-      "semantic_revision": 1,
+      "semantic_revision": 2,
       "unit": "bytes",
-      "scope": "layerstack",
+      "scope": "workspace",
       "kind": "gauge",
       "availability": "explicit_unavailable",
-      "aggregation": "maximum",
+      "aggregation": "delta",
       "direction": "lower_is_preferred"
     },
     {
@@ -209,6 +216,20 @@
       },
       {
         "schema_version": 1,
+        "id": "paper-100m",
+        "version": 1,
+        "label": "Paper 100 MiB, depth 100",
+        "help": "Paper stress profile with 4,000 files, exactly 100 MiB of deterministic logical content, and maximum depth 100.",
+        "generator_version": 1,
+        "standard": true,
+        "fixture": {
+          "file_count": 4000,
+          "logical_bytes": 104857600,
+          "maximum_depth": 100
+        }
+      },
+      {
+        "schema_version": 1,
         "id": "small",
         "version": 1,
         "label": "Small",
@@ -224,6 +245,83 @@
     ]
   },
   "operations": [
+    {
+      "id": "create_sandbox",
+      "family": "sandbox_lifecycle",
+      "label": "Create sandbox",
+      "help": "Creates exactly one sandbox with the public manager CLI over a fresh benchmark-owned paper fixture.",
+      "measured_boundary": "The fixture is materialized before the trial; elapsed time spans native CLI process creation through validated JSON for a ready sandbox.",
+      "count_semantics_help": "Each trial issues exactly one create_sandbox product request.",
+      "semantic_revision": 1,
+      "factor_schema_revision": 1,
+      "count_semantics": {
+        "kind": "single_request"
+      },
+      "execution_shape": "single_request",
+      "isolation": "fresh_sandbox_per_trial",
+      "cleanup": "destroy_sandbox_and_verify_registry",
+      "product_access": {
+        "kind": "public_gateway",
+        "action": "create_sandbox"
+      },
+      "supported_cohorts": [
+        "direct_client",
+        "product_cli"
+      ],
+      "security_class": "public_system_lifecycle",
+      "factors": [
+        {
+          "id": "workspace_profile",
+          "label": "Workspace profile",
+          "help": "Deterministic materialized base mount presented to the sandbox manager.",
+          "value_kind": "choice",
+          "unit": null,
+          "constraint": {
+            "kind": "profile_catalog",
+            "catalog": "workspace_profiles"
+          },
+          "comparison": "scientific_invariant"
+        },
+        {
+          "id": "network_profile",
+          "label": "Network profile",
+          "help": "Controlled network profile for the sandbox lifecycle cell.",
+          "value_kind": "choice",
+          "unit": null,
+          "constraint": {
+            "kind": "choices",
+            "values": [
+              "shared"
+            ]
+          },
+          "comparison": "scientific_invariant"
+        }
+      ],
+      "checks": [
+        {
+          "id": "sandbox_ready",
+          "label": "Sandbox ready",
+          "help": "The returned and inspected sandbox records agree and report ready state.",
+          "semantic_revision": 1,
+          "evidence_limit": 8
+        },
+        {
+          "id": "sandbox_workspace_identity",
+          "label": "Workspace identity",
+          "help": "The product record resolves to the benchmark-owned fixture selected for the cell.",
+          "semantic_revision": 1,
+          "evidence_limit": 8
+        }
+      ],
+      "phases": [],
+      "comparison": {
+        "semantic_revision": 1,
+        "factors": [
+          "workspace_profile",
+          "network_profile"
+        ]
+      }
+    },
     {
       "id": "exec_command",
       "family": "command",
@@ -245,7 +343,8 @@
         "action": "exec_command"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "bounded_shell",
       "factors": [
@@ -360,7 +459,8 @@
         "action": "file_read"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "public_read_only",
       "factors": [
@@ -465,7 +565,8 @@
         "action": "file_write"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "public_mutation",
       "factors": [
@@ -570,7 +671,8 @@
         "action": "file_edit"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "public_mutation",
       "factors": [
@@ -706,7 +808,8 @@
         "action": "file_blame"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "public_read_only",
       "factors": [
@@ -786,7 +889,7 @@
       "id": "create_workspace",
       "family": "workspace_lifecycle",
       "label": "Create workspace",
-      "help": "Benchmarks the exact allowlisted create_workspace_session test adapter for explicit no_op sessions; it is not a public operation.",
+      "help": "Benchmarks the public runtime CLI create_workspace_session operation for explicit no_op sessions.",
       "measured_boundary": "C independent session-creation requests start together after one sandbox and fixture are prepared; readiness is measured, while residual cleanup is not.",
       "count_semantics_help": "Workspace count C is the number of independent product requests in one measured trial.",
       "semantic_revision": 1,
@@ -799,13 +902,14 @@
       "isolation": "prepared_sandbox_per_cell",
       "cleanup": "destroy_sessions_and_verify_baseline",
       "product_access": {
-        "kind": "internal_workspace",
-        "action": "create_no_op_session"
+        "kind": "public_gateway",
+        "action": "create_workspace_session"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
-      "security_class": "internal_workspace_lifecycle",
+      "security_class": "public_workspace_lifecycle",
       "factors": [
         {
           "id": "workspace_count",
@@ -900,7 +1004,8 @@
         "action": "squash_layerstacks"
       },
       "supported_cohorts": [
-        "direct_client"
+        "direct_client",
+        "product_cli"
       ],
       "security_class": "destructive_manager_mutation",
       "factors": [

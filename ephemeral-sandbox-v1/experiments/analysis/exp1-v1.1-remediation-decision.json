@@ -1,0 +1,298 @@
+{
+  "schema_version": 1,
+  "decision_id": "exp1-v1.1-windows-endpoint-pressure-remediation",
+  "created_at_utc": "2026-07-31T07:37:02.435Z",
+  "status": "superseded_unexecuted_by_authorized_local_ipc_treatment",
+  "supersession": {
+    "authorized_at_utc": "2026-07-31T07:59:50.209Z",
+    "selected_treatment": "windows_named_pipe_local_ipc",
+    "active_protocol": "ephemeral-sandbox-v1-practical-performance-v1.1",
+    "active_protocol_amendment": "experiments/exp1-v1.1-protocol-amendment.md",
+    "host_network_mutation_performed": false,
+    "historical_record_retained": true
+  },
+  "scope": {
+    "failed_protocol": "ephemeral-sandbox-v1-practical-performance-v1.0",
+    "proposed_protocol": "ephemeral-sandbox-v1-practical-performance-v1.1",
+    "failed_run_id": "019fb6e5-c00b-7b02-8a3c-d76bd1346eb4",
+    "failed_archive_content_tree_sha256": "sha256:7efa643b12aba09f0ba5ecfbed5b5692a166a5c12931490402d3992d92f3ae6a",
+    "proposal_is_performance_evidence": false,
+    "v1_0_rerun_authorized": false,
+    "host_or_source_mutation_performed": false,
+    "live_probe_performed": false
+  },
+  "direct_failure_evidence": {
+    "failed_request_id": "trial-242749a59d59cc16-measured-000034.observe.snapshot.1.boundary.0",
+    "failed_invocation_sha256": "sha256:3e188c6e284c0f65e2a909df854ac18a5f550ea1daffb86f2eb3d02ebc26ab0f",
+    "winsock_error": {
+      "symbol": "WSAEADDRINUSE",
+      "code": 10048
+    },
+    "system_event": {
+      "event_id": 4227,
+      "record_id": 88385,
+      "created_at_utc": "2026-07-31T06:50:09.9652511Z",
+      "primary_capture_path": "experiments/analysis/exp1-final-system-event-4227.json",
+      "primary_capture_sha256": "sha256:b6eac476b6ecf8c20de529be5c5ca8de297874ae9273c65a4baaf6ffc34ac89d"
+    },
+    "claim_boundary": "The evidence proves one local endpoint-reuse failure under high-rate connection churn. It does not prove simultaneous occupancy of every dynamic port or an exact universal failure threshold."
+  },
+  "connection_forensics": {
+    "tcp_attempts_identified": 7993,
+    "committed_cli_metadata_records": 7992,
+    "orphan_completed_cgroup_projection": 1,
+    "trace_span_seconds": "589.946",
+    "average_attempts_per_second": "13.549",
+    "roles": {
+      "manager": 328,
+      "runtime": 3829,
+      "observability": 3836
+    },
+    "operations": {
+      "create_sandbox": 110,
+      "destroy_sandbox": 110,
+      "inspect_sandbox": 102,
+      "list_sandboxes": 6,
+      "create_workspace_session": 208,
+      "destroy_workspace_session": 208,
+      "exec_command": 1224,
+      "file_read": 1567,
+      "file_write": 622,
+      "cgroup": 1918,
+      "snapshot": 1918
+    },
+    "failure_centered_windows": [
+      {
+        "seconds": 10,
+        "attempts": 186,
+        "attempts_per_second": "18.600"
+      },
+      {
+        "seconds": 30,
+        "attempts": 657,
+        "attempts_per_second": "21.900"
+      },
+      {
+        "seconds": 60,
+        "attempts": 1349,
+        "attempts_per_second": "22.483"
+      },
+      {
+        "seconds": 120,
+        "attempts": 3145,
+        "attempts_per_second": "26.208"
+      },
+      {
+        "seconds": 240,
+        "attempts": 6760,
+        "attempts_per_second": "28.167"
+      }
+    ],
+    "maximum_rolling_windows": [
+      {
+        "seconds": 10,
+        "attempts_per_second": "43.700"
+      },
+      {
+        "seconds": 30,
+        "attempts_per_second": "42.767"
+      },
+      {
+        "seconds": 60,
+        "attempts_per_second": "41.667"
+      },
+      {
+        "seconds": 120,
+        "attempts_per_second": "33.100"
+      },
+      {
+        "seconds": 240,
+        "attempts_per_second": "28.404"
+      }
+    ],
+    "resource_sampling": {
+      "mandatory_connections": 3626,
+      "periodic_connections": 210,
+      "mandatory_fraction_of_observability_percent": "94.53",
+      "periodic_fraction_of_all_attempts_percent": "2.63",
+      "persisted_metric_batches": 1810,
+      "mandatory_metric_batches": 1705,
+      "periodic_metric_batches": 105,
+      "missing_mandatory_batch": "the failed post-response snapshot boundary",
+      "baseline_repoll_connections": 214,
+      "complete_overlapping_cgroup_snapshot_pairs": 1917,
+      "incomplete_pair": "the failed snapshot plus one valid orphan cgroup response"
+    },
+    "observed_gateway_endpoints": [
+      {
+        "endpoint": "127.0.0.1:53160",
+        "committed_connections": 2878,
+        "duration_seconds": "113.651400",
+        "family": "command"
+      },
+      {
+        "endpoint": "127.0.0.1:60545",
+        "committed_connections": 4398,
+        "duration_seconds": "153.901352",
+        "family": "files",
+        "failed_endpoint": true
+      },
+      {
+        "endpoint": "127.0.0.1:54620",
+        "committed_connections": 716,
+        "duration_seconds": "321.535579",
+        "family": "sandbox_lifecycle"
+      }
+    ],
+    "accepted_pilot_structural_projection": {
+      "method": "Scale each pilot cell's trial-scoped CLI count from seven trials to 102 trials. Periodic and freshness-poll counts make this a diagnostic structural estimate, not an exact final count.",
+      "projected_trial_scoped_connections": 26392,
+      "projected_by_family": {
+        "files": 20578,
+        "command": 2856,
+        "workspace_lifecycle": 2244,
+        "sandbox_lifecycle": 714
+      },
+      "largest_projected_single_cell_connections": 4532,
+      "largest_projected_single_cell": "file_edit, concurrency 5, 262144-byte file",
+      "interpretation": "One gateway per cell would reduce family-level concentration, but its worst unexecuted cell still projects slightly above the 4398 committed connections observed at the failed endpoint. Per-cell rotation alone is therefore not accepted as a sufficient remedy without a stronger same-endpoint qualification."
+    }
+  },
+  "frozen_source_mechanism": {
+    "product_commit": "0392b299ecaf3a75c8b6d04ed94d5a15593ca6a3",
+    "paper_commit": "eb10c26d1bfd632772baf1bc331c985d0231f52d",
+    "client_source": {
+      "path": "crates/sandbox-operations/client/src/client.rs",
+      "sha256": "sha256:61ed900ae92a6911649390966b7dc47aec9eff98898f1942305c77ef4740edcc",
+      "behavior": "GatewayClient::send_with_logs creates one fresh tokio TcpStream::connect for every request and shuts down its write side after the request line."
+    },
+    "gateway_source": {
+      "path": "crates/sandbox-gateway/src/gateway/connection.rs",
+      "sha256": "sha256:0cd590e9e3bc3db0c3c4eb0cd878bda44b7085487f3a91c5a514604b49be8a8b",
+      "behavior": "The gateway reads one request line, emits one response stream/final response, and shuts down the connection."
+    },
+    "sampler_source": {
+      "path": "benchmark/backend/benchmark_lab/resource_sampling.py",
+      "sha256": "sha256:c051089fa2730e00962aebcf26d2be0777e6c5e00df25867fb95a933222a07b3",
+      "behavior": "Every product resource collection starts cgroup and snapshot CLI calls concurrently; mandatory baseline/final boundaries cannot be removed."
+    }
+  },
+  "current_windows_tcp_state": {
+    "captured_read_only": true,
+    "host": "DESKTOP-OLP1ADS",
+    "windows_build": 26200,
+    "ipv4_dynamic_tcp_start_port": 49152,
+    "ipv4_dynamic_tcp_port_count": 16384,
+    "ipv6_dynamic_tcp_start_port": 49152,
+    "ipv6_dynamic_tcp_port_count": 16384,
+    "tcp_profiles_auto_reuse_start_port": 0,
+    "tcp_profiles_auto_reuse_port_count": 0,
+    "tcp_timed_wait_delay_registry": "not_configured_default",
+    "max_user_port_registry": "not_configured_default",
+    "transport_filter_query": "access_denied_in_current_non_elevated_session"
+  },
+  "candidate_assessment": [
+    {
+      "candidate": "temporary_active_store_ipv4_dynamic_range_expansion",
+      "rank_for_completing_exp1": 1,
+      "decision": "recommended_pending_authorization_and_qualification",
+      "proposed_active_range": {
+        "start_port": 1025,
+        "port_count": 64511,
+        "end_port": 65535,
+        "persistence": "active_store_only_until_reboot"
+      },
+      "advantages": [
+        "Preserves one fresh native CLI subprocess and one TCP connection inside every primary latency measurement.",
+        "Requires no product, operation, metric, trial-count, exclusion, or table-schema change.",
+        "Expands the disclosed pool from 16384 to 64511 ports for this boot."
+      ],
+      "risks": [
+        "Requires an elevated host-wide network setting mutation.",
+        "Changes the qualified environment and therefore requires protocol v1.1, fresh qualification, a new freeze, and explicit disclosure.",
+        "Is a bounded experiment workaround rather than the product's long-term connection-pooling fix.",
+        "Success is not guaranteed without a same-rate, same-endpoint qualification."
+      ],
+      "exact_elevated_command_not_run": "netsh interface ipv4 set dynamicportrange protocol=tcp startport=1025 numberofports=64511 store=active",
+      "exact_elevated_rollback_not_run": "netsh interface ipv4 set dynamicportrange protocol=tcp startport=49152 numberofports=16384 store=active"
+    },
+    {
+      "candidate": "one_gateway_execution_block_per_cell",
+      "rank_for_completing_exp1": 2,
+      "decision": "insufficient_alone_without_stronger_qualification",
+      "advantages": [
+        "Paper-local planning change; no product or host setting mutation.",
+        "Preserves one-shot CLI timing and all primary operation definitions."
+      ],
+      "risks": [
+        "Changes untimed gateway lifecycle and warm-state disclosure.",
+        "The accepted-pilot structural estimate has a 4532-connection worst cell, slightly above the failed endpoint's 4398 committed connections.",
+        "The five-sample pilot itself cannot exercise final-scale endpoint pressure."
+      ]
+    },
+    {
+      "candidate": "combine_cgroup_and_snapshot_in_one_observability_request",
+      "rank_for_completing_exp1": 3,
+      "decision": "engineering_option_not_sufficiently_validated",
+      "observed_reduction": {
+        "connections": 1918,
+        "percent_of_all_attempts": "24.00",
+        "failure_centered_240_second_attempts_before": 6760,
+        "failure_centered_240_second_attempts_after_structural_estimate": 5250
+      },
+      "risks": [
+        "Requires product operation/schema changes and a new package/treatment.",
+        "Does not establish a recurrence-safe connection level.",
+        "Changes the resource-evidence implementation."
+      ]
+    },
+    {
+      "candidate": "persistent_or_multiplexed_cli_gateway_transport",
+      "rank_for_completing_exp1": 4,
+      "decision": "preferred_long_term_product_fix_but_separate_treatment",
+      "risks": [
+        "Both the gateway and CLI protocol need redesign because the frozen sides are one-request-per-connection.",
+        "Using persistence for measured calls would remove fresh process/transport work from the frozen primary-latency definition.",
+        "Requires separate product qualification and scientific treatment."
+      ]
+    },
+    {
+      "candidate": "remove_periodic_sampling_or_retry_failed_connections",
+      "decision": "rejected",
+      "reason": "Only 210 attempts, 2.63 percent, were periodic; the failed call was mandatory. Retries and reduced sampling violate frozen correctness/resource decisions and can bias results."
+    },
+    {
+      "candidate": "shorten_tcp_time_wait_or_enable_so_reuseaddr",
+      "decision": "rejected",
+      "reason": "TIME_WAIT registry mutation is host-wide and changes safety behavior; Microsoft warns ordinary applications away from SO_REUSEADDR because behavior can be nondeterministic and vulnerable to port hijacking."
+    }
+  ],
+  "proposed_v1_1_qualification_and_execution_sequence": [
+    "Obtain explicit author authorization for protocol v1.1, the temporary elevated active-store IPv4 range mutation, the qualification soak, a fresh smoke/pilot, a new freeze, and exactly one new final.",
+    "Capture active/persistent IPv4 and IPv6 dynamic ranges, excluded port ranges, TCP profiles, transport filters, relevant registry values, event-log cursor, product/paper Git state, and protected baseline before mutation.",
+    "Apply only the proposed IPv4 active-store range; verify 1025 plus 64511 without changing IPv6, TIME_WAIT, auto-reuse, firewall, routing, Docker, or protected resources.",
+    "After prior endpoint states quiesce, run an ineligible same-endpoint strict native-CLI churn qualifier for at least 700 seconds and at least 20000 successful connections at no less than the failed run's 28.167 attempts-per-second 240-second sustained rate. Capture BOUND/TIME_WAIT counts and Event 4227/4231 cursors. Any transport failure or new event fails qualification.",
+    "Clean up the qualifier, allow endpoint state to quiesce, verify the protected baseline, and repeat the complete 19-cell smoke and five-sample pilot with no automatic retries.",
+    "Require smoke/pilot correctness and cleanup, a fresh no-more-than-1400-second projection, deterministic exploratory regeneration, and an anomaly review before protocol/source/environment v1.1 freeze.",
+    "Freeze all prior identities plus exact active IPv4 range and qualifier provenance in a new paper commit/environment record. Preserve the failed v1.0 archive and do not compare or pool its partial values.",
+    "After a final read-only preflight, run exactly one newly authorized v1.1 final. Restore the active IPv4 range after immutable archival and cleanup even if the run fails.",
+    "Only a complete eligible v1.1 corpus may generate deterministic tables, numeric-evidence v2 records, and RQ3 numeric wording."
+  ],
+  "authorization_blocker": {
+    "status": "superseded_not_applicable",
+    "reason": "The proposed host-wide TCP change was not selected and was never applied.",
+    "single_external_decision": "none; active local-IPC work proceeds under experiments/exp1-v1.1-protocol-amendment.md",
+    "current_session_can_apply_setting": false,
+    "observed_privilege_evidence": "Get-NetTransportFilter returned Windows access denied; no setting mutation was attempted."
+  },
+  "primary_references": [
+    "https://learn.microsoft.com/en-us/troubleshoot/windows-client/networking/tcp-ip-port-exhaustion-troubleshooting",
+    "https://learn.microsoft.com/en-us/troubleshoot/sql/database-engine/connect/intermittent-periodic-network-issue",
+    "https://learn.microsoft.com/en-us/troubleshoot/windows-server/networking/default-dynamic-port-range-tcpip-chang",
+    "https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/netsh-interface",
+    "https://learn.microsoft.com/en-us/powershell/module/nettcpip/set-nettcpsetting",
+    "https://learn.microsoft.com/en-us/windows/win32/fwp/wmi/nettcpipprov/msft-nettcpsetting",
+    "https://learn.microsoft.com/en-us/windows/win32/winsock/windows-sockets-error-codes-2",
+    "https://learn.microsoft.com/en-us/windows/win32/winsock/using-so-reuseaddr-and-so-exclusiveaddruse"
+  ]
+}

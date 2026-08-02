@@ -1,6 +1,6 @@
 schema_version: 1
 id: paper-good-pass
-version: 1
+version: 2
 plan:
   schema_version: 1
   name: paper-good-pass
@@ -11,7 +11,7 @@ plan:
   seed: 20260712
   environment:
     image: ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf
-    client_cohort: direct_client
+    client_cohort: product_cli
   protocol:
     order: randomized_blocks
     resource_interval_ms: 100
@@ -22,6 +22,12 @@ plan:
       default: 120000
       squash_layerstack: 120000
   operations:
+    - operation: create_sandbox
+      configuration:
+        enabled: true
+        factors:
+          workspace_profile: {role: controlled, values: [paper-100m]}
+          network_profile: {role: controlled, values: [shared]}
     - operation: exec_command
       configuration:
         enabled: true

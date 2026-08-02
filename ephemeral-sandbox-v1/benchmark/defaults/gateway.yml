@@ -2,7 +2,10 @@ daemon:
   server:
     socket_path: /eos/runtime/daemon/runtime.sock
     pid_path: /eos/runtime/daemon/runtime.pid
-    max_worker_threads: 32
+    worker_threads: 2
+    max_blocking_threads: 8
+    blocking_thread_keep_alive_s: 5
+    max_concurrent_connections: 64
 
 runtime:
   workspace:

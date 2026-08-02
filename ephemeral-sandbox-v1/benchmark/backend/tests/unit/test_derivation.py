@@ -2,7 +2,7 @@ import copy
 import json
 from pathlib import Path
 
-from benchmark_lab.derivation import build_report
+from benchmark_lab.derivation import _aggregate_resource, build_report
 from benchmark_lab.resource_sampling import resource_metric_source
 
 
@@ -198,6 +198,61 @@ def test_derives_all_registered_metrics_lifecycle_and_resource_semantics() -> No
         }
     ]
     assert [item["identity"]["id"] for item in result["metrics"]] == sorted(metrics)
+
+
+def test_resource_delta_allows_signed_gauge_but_rejects_counter_reset() -> None:
+    readings = [
+        {"value": {"availability": "available", "value": 25.0}},
+        {"value": {"availability": "available", "value": 10.0}},
+    ]
+
+    assert _aggregate_resource(readings, "delta", "gauge") == (-15.0, None)
+    assert _aggregate_resource(readings, "delta", "monotonic_counter") == (
+        None,
+        "monotonic counter reset during the trial window",
+    )
+
+
+def test_product_cli_report_names_the_cli_timing_and_evidence_boundary() -> None:
+    plan = _plan_for("file_read")
+    cell = plan["cells"][0]
+    definitions = _artifact("definition-snapshot.json")
+    trial_id = "trial-product-cli"
+    observations = [_trial(cell, trial_id, 1_000), _request(cell, trial_id, 900)]
+    observations.extend(_checks(definitions, cell, trial_id))
+    environment = _artifact("environment-metadata.json")
+    environment["client_cohort"] = "product_cli"
+    environment["treatment"].update(
+        {
+            "manager_cli_binary_hash": "sha256:manager",
+            "runtime_cli_binary_hash": "sha256:runtime",
+            "observability_cli_binary_hash": "sha256:observability",
+        }
+    )
+
+    report = build_report(
+        run_id="unit-product-cli",
+        state="completed",
+        plan=plan,
+        definitions=definitions,
+        definition_snapshot_sha256="sha256:fixture-definition-snapshot",
+        environment=environment,
+        observations=observations,
+        started_at="2026-01-01T00:00:00Z",
+        ended_at="2026-01-01T00:00:01Z",
+    )
+    metrics = {
+        item["identity"]["id"]: item["identity"] for item in report.cells[0]["metrics"]
+    }
+
+    assert metrics["request_latency_ns"]["source"] == (
+        "product_cli_subprocess_monotonic_spawn_to_validated_json"
+    )
+    assert report.methods["primary_timing_boundary"]["client_cohort"] == "product_cli"
+    assert report.methods["cli_evidence"]["directory"] == "cli-subprocesses"
+    assert report.methods["executable_identities"]["runtime_cli_binary_hash"] == (
+        "sha256:runtime"
+    )
 
 
 def test_completed_report_fails_when_a_registered_check_is_missing() -> None:

@@ -60,6 +60,72 @@ def test_expansion_is_deterministic_and_counts_requests() -> None:
     assert first["estimates"]["issued_operation_request_count"] == 96
 
 
+def test_seeded_family_block_order_is_persisted_and_reproducible() -> None:
+    preset = load_preset(ROOT / "presets/paper-good-pass.yml")
+    profiles = load_workspace_profiles(ROOT / "defaults/workspace-profiles")
+    environment = RuntimeEnvironment(
+        "C:\\benchmark-fixture\\test-repository", None, None, None
+    )
+    first = expand_plan(
+        preset.plan,
+        environment=environment,
+        profiles=profiles,
+        catalog_operations=_catalog_operations(),
+    )
+    repeated = expand_plan(
+        preset.plan,
+        environment=environment,
+        profiles=profiles,
+        catalog_operations=_catalog_operations(),
+    )
+
+    assert first["execution_blocks"] == repeated["execution_blocks"]
+    assert [
+        cell_id
+        for block in first["execution_blocks"]
+        for cell_id in block["cell_ids"]
+    ] == [cell["cell_id"] for cell in first["cells"]]
+    cells = {cell["cell_id"]: cell for cell in first["cells"]}
+    assert all(
+        all(cells[cell_id]["family_id"] == block["family_id"] for cell_id in block["cell_ids"])
+        for block in first["execution_blocks"]
+    )
+
+
+@pytest.mark.parametrize(
+    ("preset_name", "expected_batches", "expected_requests"),
+    [
+        ("paper-env-smoke.yml", 19, 55),
+        ("paper-pilot.yml", 133, 385),
+        ("paper-good-pass.yml", 1938, 5610),
+    ],
+)
+def test_exp1_presets_preserve_frozen_matrix_and_exact_counts(
+    preset_name: str, expected_batches: int, expected_requests: int
+) -> None:
+    preset = load_preset(ROOT / "presets" / preset_name)
+    plan = expand_plan(
+        preset.plan,
+        environment=RuntimeEnvironment(
+            "C:\\benchmark-fixture\\test-repository", None, None, None
+        ),
+        profiles=load_workspace_profiles(ROOT / "defaults/workspace-profiles"),
+        catalog_operations=_catalog_operations(),
+    )
+
+    assert plan["runnable"] is True
+    assert plan["effective_environment"]["client_cohort"] == "product_cli"
+    assert plan["estimates"]["cell_count"] == 19
+    assert plan["estimates"]["trial_batch_count"] == expected_batches
+    assert (
+        plan["estimates"]["issued_operation_request_count"] == expected_requests
+    )
+    assert {
+        cell["operation"]["cell"].get("workspace_profile")
+        for cell in plan["cells"]
+    } == {"paper-100m"}
+
+
 def test_unknown_profile_prevents_run() -> None:
     preset = load_preset(ROOT / "presets/quick-smoke.yml")
     preset.plan.operations[0].configuration.factors["workspace_profile"].values = ["missing"]

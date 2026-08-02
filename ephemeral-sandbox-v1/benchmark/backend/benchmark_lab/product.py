@@ -10,10 +10,12 @@ from pydantic import Field, ValidationError
 from .models import StrictModel
 from .observability import (
     CgroupView,
+    DaemonView,
     LayerstackView,
     SnapshotView,
     TraceView,
     parse_cgroup,
+    parse_daemon,
     parse_layerstack,
     parse_snapshot,
     parse_trace,
@@ -40,13 +42,29 @@ class SharedBase(StrictModel):
     readonly: bool
 
 
+class ResourceProfile(StrictModel):
+    name: str = Field(min_length=1)
+    nano_cpus: int = Field(gt=0)
+    memory_high_bytes: int = Field(gt=0)
+    memory_max_bytes: int = Field(gt=0)
+    pids_max: int = Field(gt=0)
+    workload_memory_high_bytes: int = Field(gt=0)
+    workload_memory_max_bytes: int = Field(gt=0)
+    workload_pids_max: int = Field(gt=0)
+    control_plane_pids_reserve: int = Field(ge=0)
+    daemon_runtime_profile: str = Field(min_length=1)
+    separate_workload_cgroup: bool
+
+
 class SandboxRecord(StrictModel):
     id: str
     workspace_root: str
     state: str
+    activity_revision: int = Field(ge=0)
     daemon: DaemonEndpoint | None
     daemon_http: DaemonEndpoint | None
     shared_base: SharedBase | None
+    resource_profile: ResourceProfile
 
 
 class ProductAccess:
@@ -90,6 +108,40 @@ class ProductAccess:
         args: dict[str, Any] = {"cmd": command, "timeout_ms": timeout_ms, "yield_time_ms": timeout_ms}
         return await self._sandbox_request("exec_command", sandbox_id, session_id, args, timeout_ms, request_id)
 
+    async def create_workspace_session(
+        self,
+        sandbox_id: str,
+        *,
+        network_profile: str,
+        timeout_ms: int,
+        request_id: str,
+    ) -> TimedGatewayResponse:
+        return await self._sandbox_request(
+            "create_workspace_session",
+            sandbox_id,
+            None,
+            {"network_profile": network_profile},
+            timeout_ms,
+            request_id,
+        )
+
+    async def destroy_workspace_session(
+        self,
+        sandbox_id: str,
+        *,
+        session_id: str,
+        timeout_ms: int,
+        request_id: str,
+    ) -> TimedGatewayResponse:
+        return await self._sandbox_request(
+            "destroy_workspace_session",
+            sandbox_id,
+            None,
+            {"workspace_session_id": _identity(session_id)},
+            timeout_ms,
+            request_id,
+        )
+
     async def file_read(self, sandbox_id: str, *, session_id: str | None, path: str, offset: int, limit: int, timeout_ms: int, request_id: str) -> TimedGatewayResponse:
         return await self._sandbox_request("file_read", sandbox_id, session_id, {"path": _product_path(path), "offset": offset, "limit": limit}, timeout_ms, request_id)
 
@@ -130,6 +182,10 @@ class ProductAccess:
     async def observe_snapshot(self, sandbox_id: str, *, request_id: str) -> SnapshotView:
         response = await self._observe("snapshot", sandbox_id, {}, request_id)
         return parse_snapshot(response.value, sandbox_id)
+
+    async def observe_daemon(self, sandbox_id: str, *, request_id: str) -> DaemonView:
+        response = await self._observe("daemon", sandbox_id, {}, request_id)
+        return parse_daemon(response.value)
 
     async def observe_layerstack(self, sandbox_id: str, *, request_id: str) -> LayerstackView:
         response = await self._observe("layerstack", sandbox_id, {}, request_id)

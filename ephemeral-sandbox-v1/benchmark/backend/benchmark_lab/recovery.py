@@ -7,7 +7,7 @@ from pathlib import Path
 from .artifacts import ArtifactError, ArtifactId, ArtifactStore, read_envelope_path
 from .models import OwnedPathMarker
 from .paths import BenchmarkRoots
-from .safety import OwnershipError, OwnershipLedger
+from .safety import OwnershipLedger
 
 
 TERMINAL_STATES = {"completed", "failed", "cancelled"}
@@ -59,6 +59,17 @@ class RecoveryScanner:
     def recover_run(self, run_id: str) -> bool:
         return self._recover_if_needed(self._store.run_path(run_id))
 
+    def cleanup_terminal_run(self, run_id: str) -> bool:
+        path = self._store.run_path(run_id)
+        manifest = read_envelope_path(
+            path / "run-manifest.json", ArtifactId.RUN_MANIFEST
+        )
+        if manifest.get("run_id") != run_id:
+            raise ArtifactError("manifest does not prove the result directory identity")
+        if manifest.get("state") not in TERMINAL_STATES:
+            raise ArtifactError("explicit terminal cleanup requires a terminal run")
+        return self._cleanup_owned_paths(run_id)
+
     def _recover_if_needed(self, path: Path) -> bool:
         if path.is_symlink() or not path.is_dir():
             raise ArtifactError(f"unsafe result entry: {path}")
@@ -73,6 +84,13 @@ class RecoveryScanner:
         if not isinstance(state, str):
             raise ArtifactError("manifest state is missing")
         if state in TERMINAL_STATES:
+            failure = manifest.get("failure")
+            if state in {"completed", "cancelled"} or (
+                state == "failed"
+                and isinstance(failure, dict)
+                and failure.get("code") == "artifact_finalization_failed"
+            ):
+                return self._cleanup_owned_paths(run_id)
             return False
 
         journals = {
@@ -81,26 +99,7 @@ class RecoveryScanner:
             )
             for artifact_id in (ArtifactId.EVENTS, ArtifactId.OBSERVATIONS)
         }
-        ledger = OwnershipLedger(self._roots)
-        owned = []
-        for role in ("runs", "runtime"):
-            marker = OwnedPathMarker(role=role, identity={"run_id": run_id})
-            target = getattr(self._roots, role) / run_id
-            # A crash can happen before either disposable directory is created,
-            # or after one has already been removed.  Absence is safe; presence
-            # must still carry the exact run marker before cleanup is attempted.
-            if target.exists() or target.is_symlink():
-                ledger.adopt(target, marker)
-                owned.append((target, marker))
-
-        self._cleanup(run_id)
-        for target, marker in owned:
-            # The resource-specific cleanup may itself remove an owned runtime
-            # directory after proving its process identity. Absence is then the
-            # successful postcondition; any remaining directory must still be
-            # removed through the ledger and exact marker.
-            if target.exists() or target.is_symlink():
-                ledger.remove(target, marker)
+        self._cleanup_owned_paths(run_id, always_cleanup=True)
         for artifact_id, journal in journals.items():
             if journal.partial_tail_line is not None:
                 self._store.quarantine_partial_tail(run_id, artifact_id)
@@ -139,3 +138,30 @@ class RecoveryScanner:
             schema_version=manifest_envelope_version,
         )
         return True
+
+    def _cleanup_owned_paths(
+        self, run_id: str, *, always_cleanup: bool = False
+    ) -> bool:
+        ledger = OwnershipLedger(self._roots)
+        owned = []
+        for role in ("runs", "runtime"):
+            marker = OwnedPathMarker(role=role, identity={"run_id": run_id})
+            target = getattr(self._roots, role) / run_id
+            # A crash can happen before either disposable directory is created,
+            # or after one has already been removed. Absence is safe; presence
+            # must still carry the exact run marker before cleanup is attempted.
+            if target.exists() or target.is_symlink():
+                ledger.adopt(target, marker)
+                owned.append((target, marker))
+
+        if not owned and not always_cleanup:
+            return False
+        self._cleanup(run_id)
+        for target, marker in owned:
+            # The resource-specific cleanup may itself remove an owned runtime
+            # directory after proving its process identity. Absence is then the
+            # successful postcondition; any remaining directory must still be
+            # removed through the ledger and exact marker.
+            if target.exists() or target.is_symlink():
+                ledger.remove(target, marker)
+        return bool(owned)

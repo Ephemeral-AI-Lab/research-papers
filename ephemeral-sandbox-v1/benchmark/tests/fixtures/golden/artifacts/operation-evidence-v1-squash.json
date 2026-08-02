@@ -1,0 +1,231 @@
+{
+  "schema_name": "eos_benchmark_operation_evidence",
+  "schema_version": 1,
+  "data": {
+    "operation": "squash_layerstack",
+    "evidence": {
+      "requested_live_sessions": 1,
+      "observed_migrated_sessions": 1,
+      "observed_non_migrated_sessions": 0,
+      "dispositions": {
+        "migrated": 1,
+        "identity": 0,
+        "leased": 0,
+        "faulty": 0,
+        "session_gone": 0
+      },
+      "effective_remount_parallelism": 4,
+      "observed_squashed_block_count": 1,
+      "observed_replaced_layer_count": 2,
+      "source_layer_ids": [
+        "L1",
+        "L2"
+      ],
+      "retained_source_layer_ids": [],
+      "source_layer_allocations": [
+        {
+          "layer_id": "L1",
+          "logical_bytes": {
+            "availability": "available",
+            "value": 4
+          },
+          "allocated_bytes": {
+            "availability": "available",
+            "value": 8
+          }
+        },
+        {
+          "layer_id": "L2",
+          "logical_bytes": {
+            "availability": "available",
+            "value": 5
+          },
+          "allocated_bytes": {
+            "availability": "available",
+            "value": 16
+          }
+        }
+      ],
+      "reclaimed_bytes": {
+        "availability": "available",
+        "value": 24
+      },
+      "s0_baseline": {
+        "monotonic_offset_ns": {
+          "availability": "available",
+          "value": 10
+        },
+        "sampled": false,
+        "manifest_version": {
+          "availability": "available",
+          "value": 2
+        },
+        "root_hash": {
+          "availability": "available",
+          "value": "before"
+        },
+        "active_layer_count": {
+          "availability": "available",
+          "value": 2
+        },
+        "active_lease_count": {
+          "availability": "available",
+          "value": 1
+        },
+        "active_logical_bytes": {
+          "availability": "available",
+          "value": 9
+        },
+        "active_allocated_bytes": {
+          "availability": "available",
+          "value": 24
+        },
+        "storage_logical_bytes": {
+          "availability": "available",
+          "value": 109
+        },
+        "storage_allocated_bytes": {
+          "availability": "available",
+          "value": 224
+        },
+        "staging_entry_count": {
+          "availability": "available",
+          "value": 0
+        }
+      },
+      "s1_sampled_peak": {
+        "monotonic_offset_ns": {
+          "availability": "available",
+          "value": 10
+        },
+        "sampled": true,
+        "manifest_version": {
+          "availability": "available",
+          "value": 2
+        },
+        "root_hash": {
+          "availability": "available",
+          "value": "before"
+        },
+        "active_layer_count": {
+          "availability": "available",
+          "value": 2
+        },
+        "active_lease_count": {
+          "availability": "available",
+          "value": 1
+        },
+        "active_logical_bytes": {
+          "availability": "available",
+          "value": 9
+        },
+        "active_allocated_bytes": {
+          "availability": "available",
+          "value": 24
+        },
+        "storage_logical_bytes": {
+          "availability": "available",
+          "value": 109
+        },
+        "storage_allocated_bytes": {
+          "availability": "available",
+          "value": 224
+        },
+        "staging_entry_count": {
+          "availability": "available",
+          "value": 0
+        }
+      },
+      "s2_post_commit": {
+        "monotonic_offset_ns": {
+          "availability": "available",
+          "value": 20
+        },
+        "sampled": false,
+        "manifest_version": {
+          "availability": "available",
+          "value": 3
+        },
+        "root_hash": {
+          "availability": "available",
+          "value": "after"
+        },
+        "active_layer_count": {
+          "availability": "available",
+          "value": 1
+        },
+        "active_lease_count": {
+          "availability": "unavailable",
+          "source": "product_observability.trace",
+          "reason": "active lease count is not emitted at the commit boundary"
+        },
+        "active_logical_bytes": {
+          "availability": "available",
+          "value": 9
+        },
+        "active_allocated_bytes": {
+          "availability": "available",
+          "value": 12
+        },
+        "storage_logical_bytes": {
+          "availability": "available",
+          "value": 109
+        },
+        "storage_allocated_bytes": {
+          "availability": "available",
+          "value": 212
+        },
+        "staging_entry_count": {
+          "availability": "available",
+          "value": 0
+        }
+      },
+      "s3_settled": {
+        "monotonic_offset_ns": {
+          "availability": "available",
+          "value": 30
+        },
+        "sampled": false,
+        "manifest_version": {
+          "availability": "available",
+          "value": 3
+        },
+        "root_hash": {
+          "availability": "available",
+          "value": "after"
+        },
+        "active_layer_count": {
+          "availability": "available",
+          "value": 1
+        },
+        "active_lease_count": {
+          "availability": "available",
+          "value": 1
+        },
+        "active_logical_bytes": {
+          "availability": "available",
+          "value": 9
+        },
+        "active_allocated_bytes": {
+          "availability": "available",
+          "value": 12
+        },
+        "storage_logical_bytes": {
+          "availability": "available",
+          "value": 109
+        },
+        "storage_allocated_bytes": {
+          "availability": "available",
+          "value": 212
+        },
+        "staging_entry_count": {
+          "availability": "available",
+          "value": 0
+        }
+      },
+      "manifest_reduced": true,
+      "content_equivalent": true,
+      "usable_session_count": 1
+    }
+  }
+}

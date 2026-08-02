@@ -7,9 +7,11 @@ import httpx
 import pytest
 
 from benchmark_lab.api import create_app
-from benchmark_lab.artifacts import ArtifactId, ArtifactStore
+from benchmark_lab.artifacts import ArtifactStore
+from benchmark_lab.models import OwnedPathMarker
 from benchmark_lab.paths import BenchmarkRoots
 from benchmark_lab.runner import CampaignRunner
+from benchmark_lab.safety import OwnershipLedger
 from benchmark_lab.service import CampaignService, _ActiveRun
 
 
@@ -65,7 +67,7 @@ async def test_api_security_and_definition_contract(tmp_path: Path) -> None:
 
         definitions = (await client.get("/api/v1/definitions")).json()
         assert definitions["schema_version"] == 1
-        assert len(definitions["catalog"]["operations"]) == 7
+        assert len(definitions["catalog"]["operations"]) == 8
         assert {item["configuration_base"]["scope"] for item in definitions["defaults"]} == {
             "all", "command", "files", "workspace", "layerstack"
         }
@@ -193,3 +195,51 @@ async def test_event_sink_never_blocks_campaign_on_slow_browser(tmp_path: Path) 
     await sink({"sequence": 1, "data": {"kind": "log"}})
     await sink({"sequence": 2, "data": {"kind": "log"}})
     assert service._subscribers["run"] == set()
+
+
+@pytest.mark.asyncio
+async def test_recover_and_cleanup_remove_owned_terminal_workspace_only(
+    tmp_path: Path,
+) -> None:
+    service = CampaignService(_roots(tmp_path))
+    _copy_run(service.store)
+    result_path = service.store.run_path(HISTORICAL_RUN_ID)
+    manifest_before = (result_path / "run-manifest.json").read_bytes()
+    report_before = (result_path / "report.json").read_bytes()
+    unrelated = service.roots.runs / "unrelated-run"
+    unrelated.mkdir()
+    OwnershipLedger(service.roots).register(
+        unrelated,
+        OwnedPathMarker(role="runs", identity={"run_id": "unrelated-run"}),
+    )
+
+    def create_terminal_residue() -> Path:
+        target = service.roots.runs / HISTORICAL_RUN_ID
+        target.mkdir()
+        OwnershipLedger(service.roots).register(
+            target,
+            OwnedPathMarker(role="runs", identity={"run_id": HISTORICAL_RUN_ID}),
+        )
+        return target
+
+    terminal_residue = create_terminal_residue()
+    recovered = await service.recover()
+
+    assert recovered["execution_available"]
+    assert recovered["recovered_run_ids"] == [HISTORICAL_RUN_ID]
+    assert not terminal_residue.exists()
+    assert unrelated.is_dir()
+
+    terminal_residue = create_terminal_residue()
+    cleaned = await service.cleanup(HISTORICAL_RUN_ID)
+
+    assert cleaned == {
+        "schema_version": 1,
+        "run_id": HISTORICAL_RUN_ID,
+        "cleaned": True,
+        "terminalized": False,
+    }
+    assert not terminal_residue.exists()
+    assert unrelated.is_dir()
+    assert (result_path / "run-manifest.json").read_bytes() == manifest_before
+    assert (result_path / "report.json").read_bytes() == report_before

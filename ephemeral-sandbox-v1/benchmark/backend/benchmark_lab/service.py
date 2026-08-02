@@ -7,6 +7,7 @@ import hashlib
 import json
 import secrets
 import shutil
+import subprocess
 import time
 import uuid
 from dataclasses import dataclass
@@ -17,7 +18,7 @@ import yaml
 from pydantic import ValidationError
 
 from .artifacts import ArtifactError, ArtifactId, ArtifactStore
-from .catalog import CatalogError, export_catalog
+from .catalog import CatalogError, export_catalog, probe_released_cli_operations
 from .comparison import compare_runs
 from .gateway import recover_stale_gateway
 from .planning import (
@@ -96,9 +97,15 @@ class CampaignService:
             result = export_catalog(self.roots)
             self._catalog_operations = result.catalog.operation_names()
             self._catalog_error = None
-        except CatalogError as error:
-            self._catalog_operations = None
-            self._catalog_error = str(error)
+        except CatalogError as export_error:
+            try:
+                self._catalog_operations = probe_released_cli_operations(self.roots)
+                self._catalog_error = None
+            except (CatalogError, OSError, subprocess.SubprocessError) as probe_error:
+                self._catalog_operations = None
+                self._catalog_error = (
+                    f"{export_error}; released CLI probe failed: {probe_error}"
+                )
 
     @property
     def catalog_error(self) -> str | None:
@@ -515,9 +522,14 @@ class CampaignService:
         # unless the requested run is the only nonterminal result.
         manifest = self.store.read_envelope(run_id, ArtifactId.RUN_MANIFEST)
         if manifest["state"] in TERMINAL_STATES:
-            runtime = self.roots.runtime / run_id
-            if runtime.exists() or runtime.is_symlink():
-                await recover_stale_gateway(self.roots, run_id)
+
+            def cleanup_gateway(_: str) -> None:
+                runtime = self.roots.runtime / run_id
+                if runtime.exists() or runtime.is_symlink():
+                    asyncio.run(recover_stale_gateway(self.roots, run_id))
+
+            scanner = RecoveryScanner(self.roots, cleanup_gateway)
+            await asyncio.to_thread(scanner.cleanup_terminal_run, run_id)
             return {"schema_version": 1, "run_id": run_id, "cleaned": True, "terminalized": False}
 
         def cleanup_gateway(_: str) -> None:

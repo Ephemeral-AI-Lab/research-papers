@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import Field, ValidationError, model_validator
+from pydantic import ConfigDict, Field, ValidationError, model_validator
 
 from .models import StrictModel
 
@@ -36,10 +36,17 @@ class CgroupSample(StrictModel):
 class CgroupView(StrictModel):
     view: Literal["cgroup"]
     scope: Literal["sandbox"]
-    series: list[CgroupSample] = Field(min_length=1, max_length=4096)
+    availability: Literal["available", "partial"]
+    errors: list[str]
+    topology: dict[str, Any]
+    series: list[CgroupSample] = Field(max_length=4096)
 
     @model_validator(mode="after")
     def validate_series(self) -> "CgroupView":
+        if (self.availability == "available") != (not self.errors):
+            raise ValueError("cgroup availability and errors disagree")
+        if not self.series and self.availability != "partial":
+            raise ValueError("available cgroup view has no samples")
         previous: CgroupSample | None = None
         for sample in self.series:
             expected_interval = None if previous is None else sample.ts - previous.ts
@@ -66,34 +73,61 @@ class CgroupView(StrictModel):
         return self
 
 
-class SnapshotMetrics(StrictModel):
+class SnapshotSandboxMetrics(StrictModel):
+    metrics_source: Literal["sandbox_cgroup"]
+    cgroup_path: str = Field(min_length=1)
     cpu_usec: int | None = Field(default=None, ge=0)
     mem_cur: int | None = Field(default=None, ge=0)
     mem_max: int | None = Field(default=None, ge=0)
     mem_max_unlimited: bool | None = None
-    cgroup_available: bool | None = None
+    cgroup_available: bool
     cgroup_error: str | None = None
-    disk_bytes: int | None = Field(default=None, ge=0)
-    disk_allocated_bytes: int | None = Field(default=None, ge=0)
-    files: int | None = Field(default=None, ge=0)
-    disk_truncated: bool | None = None
+    io_rbytes: int | None = Field(default=None, ge=0)
+    io_wbytes: int | None = Field(default=None, ge=0)
+    pids_cur: int | None = Field(default=None, ge=0)
     record_truncated_bytes: int | None = Field(default=None, alias="_truncated", ge=0)
 
 
-class SnapshotDeltas(StrictModel):
+class SnapshotWorkspaceMetrics(StrictModel):
+    disk_bytes: int | None = Field(default=None, ge=0)
+    disk_allocated_bytes: int | None = Field(default=None, ge=0)
+    files: int | None = Field(default=None, ge=0)
+    disk_truncated: bool
+    record_truncated_bytes: int | None = Field(default=None, alias="_truncated", ge=0)
+
+
+class SnapshotSandboxDeltas(StrictModel):
     cpu_usec: int | None = Field(default=None, ge=0)
+    io_rbytes: int | None = Field(default=None, ge=0)
+    io_wbytes: int | None = Field(default=None, ge=0)
 
 
-class SnapshotSample(StrictModel):
+class SnapshotWorkspaceDeltas(StrictModel):
+    pass
+
+
+class SnapshotSandboxSample(StrictModel):
     ts: int = Field(ge=0)
     sample_delta_ms: int | None = None
-    metrics: SnapshotMetrics
-    deltas: SnapshotDeltas
+    metrics: SnapshotSandboxMetrics
+    deltas: SnapshotSandboxDeltas
 
 
-class SnapshotResources(StrictModel):
-    latest: SnapshotSample | None
-    history: list[SnapshotSample]
+class SnapshotWorkspaceSample(StrictModel):
+    ts: int = Field(ge=0)
+    sample_delta_ms: int | None = None
+    metrics: SnapshotWorkspaceMetrics
+    deltas: SnapshotWorkspaceDeltas
+
+
+class SnapshotSandboxResources(StrictModel):
+    latest: SnapshotSandboxSample | None
+    history: list[SnapshotSandboxSample]
+
+
+class SnapshotWorkspaceResources(StrictModel):
+    latest: SnapshotWorkspaceSample | None
+    history: list[SnapshotWorkspaceSample]
 
 
 class SnapshotLayers(StrictModel):
@@ -110,11 +144,12 @@ class NamespaceExecution(StrictModel):
 class SnapshotWorkspace(StrictModel):
     workspace_id: str = Field(min_length=1)
     lifecycle_state: Literal["active"]
+    finalization_state: Literal["active"]
     network_profile: str = Field(min_length=1)
     finalize_policy: str = Field(min_length=1)
     layers: SnapshotLayers
     namespace_fd_count: int | None = Field(ge=0)
-    resources: SnapshotResources
+    resources: SnapshotWorkspaceResources
     active_namespace_executions: list[NamespaceExecution]
 
 
@@ -127,9 +162,16 @@ class SnapshotStack(StrictModel):
     active_leases: int = Field(ge=0)
 
 
+class SnapshotEventStore(StrictModel):
+    dropped_storage: int = Field(ge=0)
+    dropped_oversized: int = Field(ge=0)
+    truncated_records: int = Field(ge=0)
+
+
 class SnapshotDaemon(StrictModel):
     daemon_pid: int = Field(gt=0)
     runtime_dir: str = Field(min_length=1)
+    event_store: SnapshotEventStore
 
 
 class SnapshotView(StrictModel):
@@ -139,7 +181,7 @@ class SnapshotView(StrictModel):
     sampled_at_unix_ms: int = Field(ge=0)
     errors: list[str]
     daemon: SnapshotDaemon
-    resources: SnapshotResources
+    resources: SnapshotSandboxResources
     workspaces: list[SnapshotWorkspace] = Field(max_length=4096)
     stack: SnapshotStack | None
 
@@ -230,6 +272,22 @@ class TraceView(StrictModel):
     spans: list[TraceNode]
 
 
+class DaemonProcessMetrics(StrictModel):
+    model_config = ConfigDict(extra="allow", strict=True)
+
+    available: bool
+    pid: int = Field(ge=0)
+    resident_memory_bytes: int | None = Field(ge=0)
+    peak_resident_memory_bytes: int | None = Field(ge=0)
+    cpu_time_us: int | None = Field(ge=0)
+
+
+class DaemonView(StrictModel):
+    view: Literal["daemon"]
+    scope: Literal["sandbox"]
+    daemon: DaemonProcessMetrics
+
+
 def parse_cgroup(value: Any) -> CgroupView:
     return _parse(CgroupView, value, "cgroup")
 
@@ -274,6 +332,18 @@ def parse_trace(value: Any, request_id: str) -> TraceView:
     for root in result.spans:
         visit(root, None)
     return result
+
+
+def parse_daemon(value: Any) -> DaemonView:
+    return _parse(DaemonView, value, "daemon")
+
+
+def daemon_from_cgroup(value: CgroupView) -> DaemonProcessMetrics:
+    return _parse(
+        DaemonProcessMetrics,
+        value.topology.get("daemon"),
+        "cgroup topology daemon",
+    )
 
 
 def _parse(model: type[StrictModel], value: Any, label: str) -> Any:

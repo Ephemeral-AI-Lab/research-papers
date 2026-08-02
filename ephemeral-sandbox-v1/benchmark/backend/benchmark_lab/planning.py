@@ -42,7 +42,7 @@ class ConfigurationBase(StrictModel):
 
 class PlanEnvironment(StrictModel):
     image: str = Field(min_length=1, max_length=512)
-    client_cohort: Literal["direct_client"]
+    client_cohort: Literal["direct_client", "product_cli"]
 
 
 class TrialCount(StrictModel):
@@ -108,6 +108,7 @@ class RuntimeEnvironment:
 
 
 _FAMILIES = {
+    "create_sandbox": "sandbox_lifecycle",
     "exec_command": "command",
     "file_read": "files",
     "file_write": "files",
@@ -116,15 +117,32 @@ _FAMILIES = {
     "create_workspace": "workspace_lifecycle",
     "squash_layerstack": "layer_stack",
 }
-_FAMILY_ORDER = ("command", "files", "workspace_lifecycle", "layer_stack")
-_OPERATION_ORDER = ("exec_command", "file_read", "file_write", "file_edit", "file_blame", "create_workspace", "squash_layerstack")
+_FAMILY_ORDER = (
+    "sandbox_lifecycle",
+    "command",
+    "files",
+    "workspace_lifecycle",
+    "layer_stack",
+)
+_OPERATION_ORDER = (
+    "create_sandbox",
+    "exec_command",
+    "file_read",
+    "file_write",
+    "file_edit",
+    "file_blame",
+    "create_workspace",
+    "squash_layerstack",
+)
 _FAMILY_SEEDS = {
+    "sandbox_lifecycle": 0x53414E44424F5800,
     "command": 0x434F4D4D414E4401,
     "files": 0x46494C4553000002,
     "workspace_lifecycle": 0x574F524B53504303,
     "layer_stack": 0x4C41594552535404,
 }
 _ACCESS = {
+    "create_sandbox": ("public_gateway", "create_sandbox"),
     "exec_command": ("public_gateway", "exec_command"),
     "file_read": ("public_gateway", "file_read"),
     "file_write": ("public_gateway", "file_write"),
@@ -134,6 +152,7 @@ _ACCESS = {
     "squash_layerstack": ("public_gateway", "squash_layerstacks"),
 }
 _COUNT = {
+    "create_sandbox": {"kind": "single_request"},
     "exec_command": {"kind": "concurrent_requests", "factor": "concurrent_requests"},
     "file_read": {"kind": "concurrent_requests", "factor": "concurrent_requests"},
     "file_write": {"kind": "concurrent_requests", "factor": "concurrent_requests"},
@@ -143,6 +162,7 @@ _COUNT = {
     "squash_layerstack": {"kind": "single_request_with_prepared_load", "load_factor": "live_sessions"},
 }
 _CLEANUP = {
+    "create_sandbox": "destroy_sandbox_and_verify_registry",
     "exec_command": "resolve_from_isolation",
     "file_read": "verify_fixture_unchanged",
     "file_write": "resolve_from_isolation",
@@ -152,6 +172,7 @@ _CLEANUP = {
     "squash_layerstack": "destroy_topology_and_verify_baseline",
 }
 _EXPECTED_FACTORS = {
+    "create_sandbox": {"workspace_profile", "network_profile"},
     "exec_command": {"concurrent_requests", "workspace_profile", "session_mode", "command_case"},
     "file_read": {"concurrent_requests", "returned_bytes", "source", "target_mode"},
     "file_write": {"concurrent_requests", "content_bytes", "destination", "target_mode"},
@@ -193,6 +214,7 @@ _BASE_CATALOG_OPERATIONS = {
     "create_sandbox", "destroy_sandbox", "inspect_sandbox", "cgroup", "snapshot"
 }
 _OPERATION_CATALOG_OPERATIONS = {
+    "create_sandbox": set(),
     "exec_command": {"exec_command"},
     "file_read": {"file_read"},
     "file_write": {"file_write"},
@@ -255,6 +277,12 @@ def expand_plan(
         for values in itertools.product(*(factors[name]["values"] for name in names)):
             raw = dict(zip(names, values, strict=True))
             cell_body, isolation = _operation_cell(operation_id, raw)
+            if (
+                canonical["name"]
+                in {"paper-env-smoke", "paper-pilot", "paper-good-pass"}
+                and "workspace_profile" not in cell_body
+            ):
+                cell_body["workspace_profile"] = "paper-100m"
             profile_name = cell_body.get("workspace_profile")
             profile = profiles.get(profile_name) if profile_name else None
             if profile_name:
@@ -262,7 +290,11 @@ def expand_plan(
                     findings.append(_finding("error", "unknown_workspace_profile", profile_name, "operations"))
                     continue
                 selected_names.add(profile_name)
-            destructive = operation_id in {"create_workspace", "squash_layerstack"}
+            destructive = operation_id in {
+                "create_sandbox",
+                "create_workspace",
+                "squash_layerstack",
+            }
             trial_kind = "destructive" if destructive else "fast"
             trial_counts = canonical["protocol"]["trial_defaults"][trial_kind]
             timeout_key = "squash_layerstack" if operation_id == "squash_layerstack" else "default"
@@ -280,6 +312,14 @@ def expand_plan(
                 canonical["environment"]["client_cohort"], protocol, profile_material, operation_cell,
             ])
             access_kind, action = _ACCESS[operation_id]
+            if (
+                operation_id == "create_workspace"
+                and canonical["environment"]["client_cohort"] == "product_cli"
+            ):
+                access_kind, action = (
+                    "public_gateway",
+                    "create_workspace_session",
+                )
             identity = {key: value for key, value in cell_body.items() if key not in {"command", "expected_exit_code", "output_limit_bytes", "resolved_isolation"}}
             comparison = {
                 "operation": operation_id,
@@ -308,7 +348,18 @@ def expand_plan(
         "gateway_mode": "isolated",
     }
     lifecycle = {"lifecycle_revision": 1, "failure_revision": 1, "stabilization_revision": 1, "automatic_retries": 0, "one_active_campaign": True, "sequential_families": True}
-    revisions = [{"operation_id": name, "semantic_revision": 1, "factor_schema_revision": 1, "comparison_projection_revision": 1} for name in ("exec_command", "file_read", "file_write", "file_edit", "file_blame", "create_workspace", "squash_layerstack")]
+    revision_names = [
+        "exec_command",
+        "file_read",
+        "file_write",
+        "file_edit",
+        "file_blame",
+        "create_workspace",
+        "squash_layerstack",
+    ]
+    if any(cell["operation_id"] == "create_sandbox" for cell in cells):
+        revision_names.insert(0, "create_sandbox")
+    revisions = [{"operation_id": name, "semantic_revision": 1, "factor_schema_revision": 1, "comparison_projection_revision": 1} for name in revision_names]
     hash_environment = {key: value for key, value in effective.items() if key != "free_space_bytes"}
     plan_hash = _sha_json({"schema_version": 1, "plan_hash_revision": 2, "definition_schema_version": 2, "canonical_plan": canonical, "effective_environment": hash_environment, "fixed_lifecycle_policy": lifecycle, "definition_revisions": revisions, "selected_workspace_profiles": selected, "cells": cells, "execution_blocks": blocks})
     trial_batches = sum(cell["protocol"]["warmups"] + cell["protocol"]["measured_trials"] for cell in cells)
@@ -324,6 +375,18 @@ def _validate_plan(
     catalog_operations: frozenset[str] | set[str] | None,
 ) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
+    if (
+        plan["name"] in {"paper-env-smoke", "paper-pilot", "paper-good-pass"}
+        and plan["environment"]["client_cohort"] != "product_cli"
+    ):
+        findings.append(
+            _finding(
+                "error",
+                "paper_plan_requires_product_cli",
+                "paper plans must select product_cli",
+                "environment.client_cohort",
+            )
+        )
     image = plan["environment"]["image"]
     if (
         any(character.isspace() or ord(character) < 32 for character in image)
@@ -453,7 +516,10 @@ def _value_key(value: Any) -> str:
 
 def _operation_cell(operation: str, raw: dict[str, Any]) -> tuple[dict[str, Any], str]:
     body = copy.deepcopy(raw)
-    if operation == "exec_command":
+    if operation == "create_sandbox":
+        isolation = "fresh_sandbox_per_trial"
+        body["resolved_isolation"] = isolation
+    elif operation == "exec_command":
         commands = {
             "noop": ("true", 0),
             "output64_kib": ("head -c 65536 /dev/zero | tr '\\000' x", 0),
@@ -482,6 +548,14 @@ def _operation_cell(operation: str, raw: dict[str, Any]) -> tuple[dict[str, Any]
 
 
 def _order_cells(cells: list[dict[str, Any]], seed: int) -> list[dict[str, Any]]:
+    """Persist one seeded cell permutation per sequential family block.
+
+    The runner exhausts each cell's warmup and measured repetitions before
+    advancing to the next cell in this recorded order. This is the benchmark's
+    existing interpretation of ``randomized_blocks``; repetition-level
+    re-randomization would change prepared-sandbox lifetimes and requires an
+    explicit protocol decision.
+    """
     ordered: list[dict[str, Any]] = []
     blocks: list[dict[str, Any]] = []
     for family in _FAMILY_ORDER:
@@ -497,7 +571,7 @@ def _order_cells(cells: list[dict[str, Any]], seed: int) -> list[dict[str, Any]]
         for index, (width, group) in enumerate(groups):
             _shuffle(group, seed ^ _FAMILY_SEEDS[family] ^ (width or 0))
             cell_ids = [cell["cell_id"] for cell in group]
-            rust_family = {"command": "Command", "files": "Files", "workspace_lifecycle": "WorkspaceLifecycle", "layer_stack": "LayerStack"}[family]
+            rust_family = {"sandbox_lifecycle": "SandboxLifecycle", "command": "Command", "files": "Files", "workspace_lifecycle": "WorkspaceLifecycle", "layer_stack": "LayerStack"}[family]
             blocks.append({"block_id": _sha(f"v1:{rust_family}:{':'.join(cell_ids)}".encode()), "family_id": family, "cell_ids": cell_ids, "restart_reason": f"layerstack_remount_parallelism_changed:{width}" if index else None})
             ordered.extend(group)
     cells[:] = ordered

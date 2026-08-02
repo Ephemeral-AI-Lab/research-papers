@@ -1,3 +1,19 @@
 \section{Conclusion}
 \label{sec:conclusion}
-\emph{Draft.}
+
+Ephemeral Sandbox defines a bounded runtime publication protocol for coding
+agents: leased LayerStack history provides a private executable workspace;
+capture turns its filesystem effects into a candidate delta; validation and
+bounded reconciliation decide whether that delta may advance the active head;
+and the durable data transition is separated from later lifecycle work. This
+contract provides a precise place to discuss private execution and controlled
+integration without treating either as a substitute for planning, verification,
+or general multi-agent coordination.
+
+The frozen local treatment supplies reproducible observations for the pinned
+implementation and fixture, but it is not a comparison or a team-productivity
+result. Semantic merge correctness, process-state rollback, security,
+cross-platform behavior, recovery under faults, and workload-dependent useful
+work remain outside the demonstrated boundary. These limits are not incidental:
+they define the evidence required before stronger claims about collaborative
+agent systems would be warranted.

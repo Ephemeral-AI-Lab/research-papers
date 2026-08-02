@@ -1,3 +1,78 @@
 \section{Workspace Execution}
 \label{sec:workspace-execution}
-\emph{Draft.}
+
+Workspace creation begins by acquiring a snapshot lease, not by reading an
+unprotected copy of the current head.  The lease records the selected manifest
+and its resolved ordered layer paths; the workspace handle carries that
+snapshot together with session-unique runtime directories.  Only after this
+view has been fixed does the runtime open the executable workspace.  A later
+publication may advance the active manifest, but it does not change the
+manifest or layer ordering observed through the live session's lease.  This is
+the concrete mechanism behind the stable-view invariant in
+Section~\ref{sec:system-model}, without importing serializable snapshot
+isolation.
+
+On the supported Linux path, the runtime projects the leased LayerStack with
+OverlayFS.  The manifest's layers become read-only lower directories in
+newest-first precedence order, while the session receives a unique upper
+directory and work directory.  The resulting mount therefore reads through
+shared history but records regular writes, copied-up files, and deletion or
+opacity metadata only in the private upper tree.  Lower layers are shared
+runtime state; the upper/work pair is session-private state.  This mechanism
+is Linux- and OverlayFS-centered in the audited source snapshot: the non-Linux mount
+path reports the operation as unsupported, and the paper makes no universal
+cross-platform execution claim.
+
+Each workspace also has a long-lived namespace-holder process.  The holder
+creates and keeps open the session's user, mount, and PID namespaces and, when
+selected, its network namespace.  The daemon retains file descriptors for
+these namespaces rather than moving its own control process into them.  For
+each command, a short-lived runner joins the recorded user, mount, PID, and
+optional network namespaces in the runtime's required order and launches the
+command against the already mounted workspace.  This holder/runner split lets
+successive commands enter the same filesystem and process-namespace context
+while the daemon remains outside the command namespaces.  It is an
+implementation isolation boundary, not a proof that hostile code cannot
+escape or interfere through every host resource.
+
+A sessionless \texttt{exec\_command} uses the \emph{implicit session} path.
+The operation service creates a workspace with the shared-network profile and
+a publish-then-destroy finalization policy, admits the requested command, and
+tracks it in the session's command ledger.  Publication is eligible only after
+the active-command set becomes empty and the ledger reaches its drained
+terminal state; it is therefore tied to command completion, not merely to
+returning an initial command handle or response.  The finalizer then attempts
+the capture, publication, and destruction phases described below.  This
+automatic lifecycle is specific to sessionless command execution.
+
+An \emph{explicit session} instead keeps one leased view, namespace holder,
+mount, and private upper/work pair across multiple calls.  Commands admitted
+with its session identifier and file operations directed to that session
+observe the same live overlay, so later operations can consume earlier private
+writes before anything reaches the active head.  The explicit session uses a
+no-op automatic finalization policy: its caller deliberately requests
+publication or destruction.  Publication admission fails while commands are
+still active, preventing capture from racing an admitted command through the
+normal service path.
+
+File and network qualifiers matter to this account.  A session-scoped read,
+write, or edit operates on the live mounted workspace and therefore on the
+private overlay.  A sessionless read instead projects the latest published
+LayerStack, while a sessionless write or edit directly amends the current head
+with a one-layer operation under the LayerStack writer lock; neither
+sessionless file path creates an implicit workspace session.  Likewise,
+shared networking joins the host network namespace while retaining separate
+user, mount, and PID namespaces, whereas the isolated profile creates a
+separate network namespace and its configured connectivity.  Shared
+networking is consequently not an egress-containment guarantee, and selectable
+network isolation is not evidence of universal denial policy.
+
+Workspace creation has several externally fallible steps---lease acquisition,
+directory allocation, holder startup, namespace access, overlay mounting, and
+optional network setup.  The service attempts to roll back resources created
+before a failed admission, while a successfully admitted session retains its
+lease and private tree until its lifecycle reaches cleanup.  Neither path
+captures command registers, memory, sockets, or an arbitrary process tree for
+later rollback.  Publication begins only from the filesystem delta left in the
+complete private upper directory; the next section follows that delta from
+capture to the active head.

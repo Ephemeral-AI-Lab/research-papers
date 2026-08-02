@@ -161,5 +161,6 @@ No inconsistency in `claim_evidence_map.md` or `plan/terminology.md` was exposed
 
 ## Final outcome and remaining scientific risk
 
-- Outcome: in progress.
+- Outcome: complete. Both sections satisfy the bounded content requirements; the recorder-generated build and every declared quality, citation, structure, link, JSON, claim, whitespace, hash, and source-baseline check passed.
+- Build: `latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex`, exit 0; input SHA-256 `8a9d0f97487ccf937efd82eb6a5726b2c7c8b5e3e31be1434945826a00731708`; PDF SHA-256 `ba4963d3d5f6352e1829946290265671599432e9984e301d5626de7316435327`; build-log SHA-256 `719696c0aa0efb9fce4796efaab3cce5b27dd17563c4b60d7f4951b539aa7f30`.
 - Remaining scientific risk: source links remain provisional until `paper-v1-freeze`; no frozen evaluation establishes isolation strength, publication fault behavior, scaling, resource behavior, useful work, or a concurrency ceiling; publication attribution is best-effort after data commit; protected-drop policy and daemon-restart lease/substitution behavior remain unresolved.

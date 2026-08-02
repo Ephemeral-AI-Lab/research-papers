@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "artifact_kind": "post_run_primary_system_event_capture",
+  "capture": {
+    "captured_at_utc": "2026-07-31T07:16:34.8242109Z",
+    "source": "Windows System event log",
+    "retrieval": "Get-WinEvent filtered to System/Tcpip event 4227 from 2026-07-31T06:50:00Z through 2026-07-31T06:50:20Z, then exact RecordId 88385",
+    "read_only": true,
+    "immutable_run_archive_modified": false
+  },
+  "event": {
+    "id": 4227,
+    "record_id": 88385,
+    "provider_name": "Tcpip",
+    "log_name": "System",
+    "level": 3,
+    "level_display_name": "Warning",
+    "time_created_utc": "2026-07-31T06:50:09.9652511Z",
+    "machine_name": "DESKTOP-OLP1ADS",
+    "message": "TCP/IP failed to establish an outgoing connection because the selected local endpoint was recently used to connect to the same remote endpoint. This error typically occurs when outgoing connections are opened and closed at a high rate, causing all available local ports to be used and forcing TCP/IP to reuse a local port for an outgoing connection. To minimize the risk of data corruption, the TCP/IP standard requires a minimum time period to elapse between successive connections from a given local endpoint to a given remote endpoint.",
+    "message_sha256": "sha256:535f882dfc5e90d98a9ffb429ef7a2c3d5eeb45d71892b54eb0af2bb1bc548dc",
+    "xml": "<Event xmlns='http://schemas.microsoft.com/win/2004/08/events/event'><System><Provider Name='Tcpip'/><EventID Qualifiers='32768'>4227</EventID><Version>0</Version><Level>3</Level><Task>0</Task><Opcode>0</Opcode><Keywords>0x80000000000000</Keywords><TimeCreated SystemTime='2026-07-31T06:50:09.9652511Z'/><EventRecordID>88385</EventRecordID><Correlation/><Execution ProcessID='4' ThreadID='43296'/><Channel>System</Channel><Computer>DESKTOP-OLP1ADS</Computer><Security/></System><EventData><Data></Data><Binary>00000000010000000000000083100080000000000000000000000000000000000000000000000000</Binary></EventData></Event>",
+    "xml_sha256": "sha256:864d02daffa7ea1c6030f520ccbe7983279229ea8f6ff0e2a5d468bc0a134c34"
+  },
+  "interpretation_boundary": {
+    "directly_supported": "The host TCP/IP provider recorded an outgoing connection failure at the final-run failure instant because the selected local endpoint had recently been used for the same remote endpoint; the message identifies high-rate connection open/close churn as the typical cause.",
+    "not_proven": [
+      "All 16384 dynamic ports were simultaneously occupied.",
+      "A universal Windows connection ceiling exists at the observed invocation count.",
+      "The event alone identifies every socket or process contributing to endpoint pressure."
+    ]
+  }
+}

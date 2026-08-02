@@ -1,273 +1,295 @@
-# Fast environment setup and first-step verification
+# Environment qualification
 
-**Status:** Final-host verification pending  
-**Protocol:** [`../experiment_inventory.md`](../experiment_inventory.md)  
-**Preflight:** [`scripts/verify_environment.sh`](scripts/verify_environment.sh)
+**Status:** base environment qualified; v1.1 IPC qualification passed on 2026-07-31
 
-## Principle
+**Scope:** environment correctness only; no performance experiment
 
-The measurement host consumes prebuilt artifacts. It is not a build machine.
-The experiment begins by verifying the environment, not by compiling the
-product, building a container image, installing web assets, or repairing the
-host.
+**Current qualifier:** [`scripts/qualify_windows_docker_environment.ps1`](scripts/qualify_windows_docker_environment.ps1)
 
-The warm, network-free preflight target is 60 seconds or less. A failure stops
-the experiment and is repaired outside the measurement window.
+## Active EXP1 v1.1 treatment
 
-## One selected environment
+The base host, Docker, image, limits, fixture, and native CLI boundary remain
+as qualified below. The active experiment treatment is amended by
+[`exp1-v1.1-protocol-amendment.md`](exp1-v1.1-protocol-amendment.md):
 
-| Setting | Required value |
+- product `main` candidate
+  `5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8`;
+- staged package
+  `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-exp1-5c48dae1`;
+- native Windows named-pipe transport using
+  `npipe://./pipe/<unique-name>`;
+- canonical `--gateway-endpoint` CLI option;
+- one isolated endpoint per gateway execution block, with no retry, TCP
+  fallback, or host network mutation.
+
+The exact package hashes and preregistered 25,000-invocation gate are in the
+amendment. The TCP examples and v0.1.4 package identities below are retained
+only as the historical v1.0 environment record; they are not commands or
+inputs for v1.1.
+
+The v1.1 qualifier passed all workload, identity, event-log, owned-TCP,
+resource-growth, and cleanup gates. Its retained archive is
+`experiments\diagnostics\exp1-v11-ipc-qualification-718cf58dace44dba83bed54601854bc9.zip`,
+SHA-256
+`2c4f87dc5bb123157f76e6be58b769bafef8943aba36ee8e9202601b50e62a02`.
+The archive is qualification-only and supplies no manuscript performance
+value.
+
+## Historical v1.0 environment record (do not execute for v1.1)
+
+Everything below this heading records the accepted v1.0 base-environment
+qualification. It remains evidence for the unchanged host, Docker, image, and
+native-CLI boundary, but its v0.1.4 package, loopback endpoint, and commands are
+not active v1.1 inputs. Use the amendment and the active-treatment block above
+for v1.1.
+
+### Historical v1.0 selected environment
+
+The selected host is the current native Windows workstation. Docker Desktop
+provides the Linux container engine, and the pinned Ubuntu image is the sandbox
+guest. Ubuntu is not the host operating system.
+
+| Setting | Qualified value |
 |---|---|
-| Host | Dedicated Ubuntu Server 24.04 LTS, Linux x86-64 |
-| Capacity | At least 8 vCPU, 16 GiB RAM, 100 GiB local NVMe-backed storage |
-| Filesystem | ext4 for the paper, product, and benchmark-state paths |
-| Cgroup | v2 |
-| Runtime | Docker Engine with a reachable server |
-| Python | CPython 3.13 |
-| Product branch | `main`, clean |
+| Computer | `DESKTOP-OLP1ADS` |
+| Host OS | Native 64-bit Windows, build 26200 |
+| Host capacity | 48 logical CPUs, 137,438,953,472 bytes physical memory |
+| Host filesystem | NTFS for paper, product, package, workspace, and evidence paths |
+| Docker | Docker Desktop client/server 29.0.1 |
+| Docker engine | Linux AMD64, `overlayfs`, cgroup v2 |
+| Product checkout | clean `main` at `b22862550e0a7cb4fe61ce581831e9244cc492b5` |
+| Product release | annotated `v0.1.4`, official Windows AMD64 package |
+| Product path | `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox` |
+| Paper path | `C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1` |
+| Staged package | `C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-v0.1.4` |
+| Workspace base repository | `C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\workspace-base\ephemeral-sandbox-v0.1.4` |
 | Sandbox image | `ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf` |
-| Sandbox profile | `standard`: 1 vCPU, 512 MiB maximum, 256 PIDs |
-| Network | `shared` |
-| Benchmark client | `direct_client` |
-| Workspace | `paper-100m`: 4,000 files, 100 MiB, maximum depth 100 |
+| Client boundary | Native `sandbox-manager-cli.exe`, `sandbox-runtime-cli.exe`, and `sandbox-observability-cli.exe` |
+| Gateway | Native `sandbox-gateway.exe` |
+| Sandbox daemon | Linux x86-64 daemon uploaded into Docker containers |
+| Python | Not required by the environment qualifier |
 
-Use native Linux for final numbers. Windows, WSL 2, and Docker Desktop may be
-used for editing or non-performance checks but are not the selected measurement
-environment.
+This contract supersedes the earlier native-Ubuntu,
+`eos-benchmark-ubuntu24`, ext4, CPython 3.13, SSH, and Linux-transfer-bundle
+assumptions. Those assumptions resulted from confusing the Ubuntu sandbox image
+with the host.
 
-## Required prebuilt layout
+### Historical v1.0 execution boundary
 
-The product checkout must already contain:
+The qualified control flow is:
 
-```text
-ephemeral-sandbox/
-|-- target/release/
-|   |-- sandbox-gateway
-|   `-- sandbox-catalog-export
-`-- dist/
-    |-- sandbox-daemon-linux-amd64
-    `-- git/
-        |-- linux-amd64.tar
-        `-- linux-arm64.tar
+1. native Windows PowerShell launches the released Windows gateway;
+2. the native Windows manager CLI creates and destroys Docker sandboxes;
+3. the native Windows runtime CLI executes commands and file operations;
+4. the native Windows observability CLI requests snapshots;
+5. Docker Desktop runs the pinned Linux AMD64 Ubuntu sandbox image;
+6. the released Linux AMD64 sandbox daemon runs inside each container.
+
+No direct Python gateway client is used. Docker CLI calls in the qualifier are
+limited to engine/image inspection, before/after resource auditing, and removal
+of shared-base volumes carrying the qualifier's unique gateway-instance label.
+Sandbox lifecycle operations themselves use the product manager CLI.
+
+### Historical v1.0 sandbox-creation inputs
+
+The accepted v1.0 qualification used these exact repository-backed inputs:
+
+```powershell
+$package = 'C:\Users\yifan\code\Ephemeral-AI-Lab\ephemeral-sandbox\target\windows-v0.1.4'
+$workspaceBaseRepo = 'C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\workspace-base\ephemeral-sandbox-v0.1.4'
+$image = 'ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf'
+$gatewaySocket = '127.0.0.1:7878'
+
+$gateway = "$package\bin\sandbox-gateway.exe"
+$managerCli = "$package\bin\sandbox-manager-cli.exe"
+$runtimeCli = "$package\bin\sandbox-runtime-cli.exe"
+$observabilityCli = "$package\bin\sandbox-observability-cli.exe"
+$daemon = "$package\dist\sandbox-daemon-linux-amd64"
 ```
 
-The benchmark gateway verifies these paths and refuses symlinks or unsafe,
-non-executable files. Preserve the product source commit alongside the
-prebuilt bundle so the binary hashes can be tied to a revision.
+The workspace base repository is a source-only clean clone:
 
-## Off-clock staging
+- branch `main`;
+- commit `b22862550e0a7cb4fe61ce581831e9244cc492b5`;
+- annotated tag `v0.1.4` resolves to the same commit;
+- Git status clean;
+- no `target` directory.
 
-Complete these actions before the measurement window:
+Use this clone—not the build checkout, paper repository, or
+`Ephemeral-AI-Lab` parent directory—as the value of
+`--workspace-bind-root`. This avoids copying the staged binary package and
+other generated artifacts into the sandbox shared-base cache.
 
-1. Provision the Ubuntu host and Docker Engine.
-2. Copy or unpack the clean product checkout and its prebuilt release bundle.
-3. Copy or clone the paper checkout containing the paper-local benchmark.
-4. Pull the exact image digest once:
+#### Historical v1.0 gateway launch
 
-   ```sh
-   docker pull \
-     ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf
-   ```
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File "$package\bin\start-sandbox-windows-docker-gateway.ps1" `
+  -GatewaySocket $gatewaySocket
 
-5. Create the benchmark environment once:
-
-   ```sh
-   cd /absolute/path/to/research-papers/ephemeral-sandbox-v1
-   python3.13 -m venv .venv
-   . .venv/bin/activate
-   python -m pip install -e "./benchmark[test]"
-   ```
-
-6. Confirm the product and paper revisions are the intended revisions.
-7. Reboot or otherwise quiesce the host after staging if provisioning caused
-   material background activity.
-
-Do not include staging time in benchmark latency. Record it separately if
-reproducibility accounting needs it.
-
-## Forbidden during the measurement window
-
-Do not run:
-
-- `cargo build`, `cargo test`, or release packaging;
-- `docker build`;
-- `npm install`, `npm ci`, or a web build;
-- `apt install`, `pip install`, or `uv sync`;
-- `git pull`, branch switching, rebasing, or source edits;
-- an image pull;
-- unrelated workloads or background CI.
-
-If any prerequisite is missing, stop and repair the staged bundle. Do not let a
-measurement run silently include compilation, installation, or network fetches.
-
-## First step: network-free preflight
-
-From the paper directory:
-
-```sh
-export PRODUCT_ROOT=/absolute/path/to/ephemeral-sandbox
-export PRODUCT_BIN_DIR="$PRODUCT_ROOT/target/release"
-export IMAGE_REFERENCE='ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf'
-
-mkdir -p experiments/runs/PREFLIGHT_RUN_ID
-
-bash experiments/scripts/verify_environment.sh \
-  2>&1 | tee experiments/runs/PREFLIGHT_RUN_ID/environment-preflight.txt
+$gatewayToken = (
+  Get-Content -LiteralPath "$HOME\.ephemeral-sandbox\gateway.token" -Raw
+).Trim()
 ```
 
-The script is read-only except for benchmark-owned `.benchmark-state`
-initialization performed by `sandbox-benchmark validate`. It does not build,
-install, or pull anything.
+#### Historical v1.0 manager-CLI sandbox creation
 
-## Preflight acceptance
+```powershell
+$created = & $managerCli `
+  --gateway-socket $gatewaySocket `
+  --gateway-auth-token $gatewayToken `
+  create_sandbox `
+  --image $image `
+  --workspace-bind-root $workspaceBaseRepo |
+  ConvertFrom-Json
 
-All items must pass:
-
-- [ ] Linux x86-64.
-- [ ] Ubuntu 24.04.
-- [ ] At least 8 logical CPUs.
-- [ ] At least 15 GiB reported usable memory.
-- [ ] ext4 at the paper and product roots.
-- [ ] Cgroup v2 controllers available.
-- [ ] Docker server reachable.
-- [ ] Exact pinned image already present and `linux/amd64`.
-- [ ] Product checkout on clean `main`.
-- [ ] `sandbox-gateway` and `sandbox-catalog-export` are executable.
-- [ ] Linux AMD64 daemon is executable ELF.
-- [ ] Both fixed Git toolchain archives exist and are non-empty.
-- [ ] CPython 3.13 paper virtual environment exists.
-- [ ] `paper-env-smoke` validates against the prebuilt product catalog.
-- [ ] `paper-100m` resolves to 4,000 files, 104,857,600 bytes, depth 100.
-- [ ] Warm preflight completes in 60 seconds or less.
-
-The script prints the product commit, product dirty state, Docker version,
-image identity, binary hashes, fixture hash, plan hash, and elapsed time. Archive
-the complete output.
-
-## Second step: minimal live smoke
-
-Only after preflight passes:
-
-```sh
-. .venv/bin/activate
-
-sandbox-benchmark run \
-  --test-repository-root "$PWD" \
-  --product-root "$PRODUCT_ROOT" \
-  --product-bin-dir "$PRODUCT_BIN_DIR" \
-  --plan paper-env-smoke
+$sandboxId = $created.id
 ```
 
-The smoke preset uses the small fixture so the environment is verified quickly.
-It executes one prepared-session no-op command and one prepared-sandbox session
-creation. Smoke results are exploratory and never enter paper tables.
+The accepted create response must report a nonempty sandbox ID, state `ready`,
+and the workspace root above. All subsequent operations use that sandbox ID:
 
-Accept the live environment only if:
+```powershell
+& $runtimeCli `
+  --gateway-socket $gatewaySocket `
+  --gateway-auth-token $gatewayToken `
+  --sandbox-id $sandboxId `
+  exec_command 'pwd && git rev-parse HEAD && git status --short'
 
-- the campaign completes;
-- operation verification passes;
-- cleanup restores the baseline;
-- no benchmark-owned containers, processes, or runtime paths leak;
-- wall time is at most 3 minutes.
-
-## Warm-state policy
-
-The good pass uses a warm, pre-staged environment:
-
-- image present locally;
-- Python environment already installed;
-- product binaries already placed;
-- fixture cache may be materialized by the exploratory pilot;
-- no manual host page-cache drop;
-- no source or configuration changes between preflight and run.
-
-This policy avoids mixing network, package installation, product compilation,
-and first-time fixture construction into operation measurements. Record the
-policy in Table 1.
-
-## Good-pass command
-
-After the protocol and commits are frozen:
-
-```sh
-bash experiments/scripts/verify_environment.sh \
-  2>&1 | tee experiments/runs/GOOD_PASS_RUN_ID/environment-preflight.txt
-
-. .venv/bin/activate
-
-sandbox-benchmark run \
-  --test-repository-root "$PWD" \
-  --product-root "$PRODUCT_ROOT" \
-  --product-bin-dir "$PRODUCT_BIN_DIR" \
-  --plan paper-good-pass
+& $observabilityCli `
+  --gateway-socket $gatewaySocket `
+  --gateway-auth-token $gatewayToken `
+  snapshot `
+  --sandbox-id $sandboxId
 ```
 
-Do not run the good pass until every Phase 3 instrumentation item in
-[`../experiment_inventory.md`](../experiment_inventory.md) is resolved.
+Destroy the sandbox through the manager CLI:
 
-## Current verification state
+```powershell
+& $managerCli `
+  --gateway-socket $gatewaySocket `
+  --gateway-auth-token $gatewayToken `
+  destroy_sandbox `
+  --sandbox-id $sandboxId
+```
 
-Verified on 2026-07-30:
+The strict environment qualifier intentionally uses two tiny isolated fixture
+workspaces under its artifact directory instead of the full base repository.
+Those fixtures validate the environment and CLI boundary. The source-only base
+repository above is the canonical workspace for repo-backed sandbox creation
+after qualification.
 
-- the registry exposes the selected Linux AMD64 Ubuntu manifest digest;
-- Docker Desktop 29.0.1 exposes a Linux AMD64 engine with cgroup v2 and the
-  `overlayfs` storage driver;
-- the exact pinned image is present locally and reports `linux/amd64`;
-- a disposable-container probe enforced the planned 1 vCPU, 512 MiB, and
-  256-PID limits;
-- a disposable privileged probe mounted, copied up, wrote through, and
-  unmounted nested OverlayFS when given a separate `tmpfs` backing store;
-- a container-to-Windows bind-mount write/read round trip passed;
-- the paper-local profile loads as 4,000 files, 100 MiB, depth 100;
-- the profile's deterministic fixture identity is
-  `sha256:9484b132c8a35afd18bc37383759d0fe6d45dd4700b42a99336aed535e651cc7`;
-- the two depth-bound tests pass under Python 3.13.
+### Historical v1.0 pinned release package
 
-Not verified:
+Official archive:
 
-- the selected final Ubuntu host;
-- local presence of the pinned image on that host;
-- final product binaries and hashes;
-- ext4, cgroup, and Docker readiness on that host;
-- a live smoke or measured campaign.
+`C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\v0.1.4-windows-release-input\ephemeral-sandbox-windows-amd64.zip`
 
-The current Windows workstation remains a development and capability-check
-environment, not the selected measurement host. Docker Desktop now works, but
-the checkout is on a WSL `9p` mount, the WSL distribution is Ubuntu 26.04, and
-the prebuilt Linux product bundle is incomplete.
+Archive SHA-256:
 
-### Current workstation Gate 1 score
+`9f2327578c186897578f0d502893d894aed52be27306f43f75afa3205eba9fdb`
 
-After Docker Desktop was started, the 2026-07-30 audit passed 7 of 15 strict
-acceptance items (about 47%), not 70%:
-
-| Gate item | Current workstation |
+| Package artifact | SHA-256 |
 |---|---|
-| Linux x86-64 | Partial: Linux AMD64 is available through Docker Desktop/WSL 2, not the selected native host |
-| Ubuntu 24.04 | Fail: WSL distribution reports Ubuntu 26.04 |
-| At least 8 CPUs | Pass: 48 exposed |
-| At least 15 GiB memory | Pass: approximately 62.8 GiB exposed |
-| ext4 paper/product roots | Fail: Windows checkout is mounted through WSL `9p` |
-| Cgroup v2 | Pass |
-| Docker server | Pass: client/server 29.0.1, Linux AMD64, `overlayfs`, cgroup v2 |
-| Pinned image local | Pass: exact digest, Linux AMD64 |
-| Clean product `main` | Pass |
-| Gateway/catalog binaries | Fail: missing |
-| Daemon and Git archives | Fail: daemon present; both archives missing |
-| Linux CPython 3.13 environment | Fail: WSL Python is 3.14; Python 3.13 exists only in the Windows venv |
-| Product-catalog plan validation | Fail: exporter binary missing |
-| `paper-100m` profile | Pass |
-| Preflight within 60 seconds | Not run because prerequisites fail |
+| `bin\sandbox-gateway.exe` | `3a96bedcfa9857bd3881155d758ec2d969f6265456ec3b2878eb6dbb26dc9368` |
+| `bin\sandbox-manager-cli.exe` | `b43ec520edc2f436adc8aa7e8b2b50680bb9021883fe23d79a85b17afd2e10fe` |
+| `bin\sandbox-runtime-cli.exe` | `df99f2993a7a9e305d33b656fa239b9e11b61a9e2da6e8dfc2f29ae8953067d4` |
+| `bin\sandbox-observability-cli.exe` | `0e0471e52750805570876a6244868764c44e166ec653627b9ebd490176e2fcbe` |
+| `config\windows-amd64.yml` | `0f0efd15e5111851054e0f7c1ce0f3eaebb3b3047c1b9e2322544036f5daf5db` |
+| `dist\sandbox-daemon-linux-amd64` | `2da4395cd835e5325bc3e55b9c2f3b67565ea7c698fce5e086167ec4a2092a39` |
 
-The Docker substrate is now sufficiently validated to support continued
-development: resource controls, the pinned image, nested OverlayFS on an
-appropriate backing store, and bind mounts all passed. A direct nested
-OverlayFS attempt on the container's existing overlay root failed, as expected
-for overlay-on-overlay; therefore the successful `tmpfs`-backed probe does not
-replace a live product smoke using the product's real storage layout.
+The staged package is under ignored `target/`; the product Git checkout
+therefore remains clean.
 
-The benchmark configuration is also validated by profile checks, focused tests,
-planner expansion, Python 3.13 imports, and shell syntax. Confidence that the
-design can run after staging the required Linux bundle is moderate to high.
-Confidence in this workstation as a paper-grade measurement host is still low:
-the strict gate is 7/15, and no end-to-end sandbox has been launched.
+### Historical v1.0 qualification command
+
+The accepted v1.0 qualifier used this command shape with a new, empty artifact
+directory. It must not be reused for the v1.1 IPC gate:
+
+```powershell
+$paper = 'C:\Users\yifan\code\Ephemeral-AI-Lab\research-papers\ephemeral-sandbox-v1'
+$artifact = 'C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\diagnostics\qualification-windows-docker-rerun'
+
+powershell.exe -NoProfile -ExecutionPolicy Bypass `
+  -File "$paper\experiments\scripts\qualify_windows_docker_environment.ps1" `
+  -ArtifactDirectory $artifact
+```
+
+The qualifier performs these strict checks before starting a sandbox:
+
+- native 64-bit Windows host and exact computer name;
+- Windows 11-class build, CPU, memory, NTFS capacity, and free space;
+- clean product `main` at the selected commit;
+- official archive and per-file hashes;
+- x64 PE gateway and CLI binaries plus x86-64 ELF daemon;
+- required manager/runtime/observability CLI catalogs;
+- Docker Desktop server 29.0.1 with Linux AMD64, `overlayfs`, and cgroup v2;
+- exact pinned Ubuntu Linux AMD64 image present locally.
+
+It then runs two independent CLI-controlled batches. Each batch validates:
+
+1. `list_docker_images`;
+2. `create_sandbox`;
+3. `exec_command`;
+4. `file_write`;
+5. `file_read`;
+6. `file_edit`;
+7. a second `file_read`;
+8. observability `snapshot`;
+9. `destroy_sandbox`;
+10. post-destroy `list_sandboxes`.
+
+Acceptance requires:
+
+- 2/2 completed batches with distinct sandbox IDs;
+- 20 successful product-CLI calls;
+- strict response and file-content correctness;
+- empty product-CLI stderr;
+- zero gateway warnings, errors, or panics;
+- no authentication-token leak;
+- unchanged global EOS-owned resource/process baseline;
+- zero containers or volumes owned by the qualifier's gateway instance;
+- completion within 180 seconds.
+
+### Accepted v1.0 base-environment evidence
+
+Accepted artifact directory:
+
+`C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\diagnostics\qualification-windows-docker-20260730-final-6`
+
+Summary:
+
+`windows-docker-cli-env-summary.json`
+
+Archived evidence:
+
+`C:\Users\yifan\code\Ephemeral-AI-Lab\final-host-staging\diagnostics\qualification-windows-docker-20260730-final-6.zip`
+
+Archive SHA-256:
+
+`eea981665b031846677046d4c211e71ad144f8a32507c09058923241d4d0f7f9`
+
+Observed qualification result:
+
+- target `windows_docker_desktop`;
+- client cohort `product_cli`;
+- 2/2 completed batches;
+- 20 validated operations;
+- correctness `pass`;
+- zero warnings and failures;
+- cleanup `pass`;
+- ten seconds elapsed;
+- zero resources remaining for gateway instance
+  `cli-env-windows-20260730T031621Z-34036`.
+
+The elapsed time is an environment-gate observation only. It is not a
+performance result and must not enter a paper table.
+
+### Base-environment verdict from the v1.0 qualifier
+
+**GO:** the selected Windows plus Docker Desktop environment is qualified for
+CLI-controlled sandbox work.
+
+No native Ubuntu host, SSH exposure, Linux handoff bundle, CPython 3.13
+environment, pilot, or performance run is required to close this environment
+task.

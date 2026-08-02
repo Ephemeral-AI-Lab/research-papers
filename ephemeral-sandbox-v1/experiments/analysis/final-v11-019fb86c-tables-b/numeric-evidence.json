@@ -1,0 +1,2606 @@
+{
+  "entries": [
+    {
+      "aggregate": "identity",
+      "note": "table1.cpu.logical_processors; upstream=environment-preflight.txt#{\"pointer\":\"/recorded_run_environment/host/logical_processors\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.cpu.logical_processors"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 48.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.memory_bytes; upstream=environment-preflight.txt#{\"pointer\":\"/recorded_run_environment/host/total_memory_bytes\"}; units=bytes->bytes; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.memory_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 137438953472.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.sandbox_limits.memory_bytes; upstream=environment-preflight.txt#{\"pointer\":\"/sandbox_limits/memory_bytes\"}; units=bytes->MiB; aggregation=identity {\"divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.sandbox_limits.memory_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 512.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.sandbox_limits.pids_limit; upstream=environment-preflight.txt#{\"pointer\":\"/sandbox_limits/pids_limit\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.sandbox_limits.pids_limit"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 256.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.sandbox_limits.vcpus; upstream=environment-preflight.txt#{\"pointer\":\"/sandbox_limits/vcpus\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.sandbox_limits.vcpus"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.seed; upstream=fixture-manifest.json#{\"pointer\":\"/identity/seed\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.seed"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 20260712.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.trials.measured; upstream=expanded-plan.json#{\"invariant\":\"all equal\",\"pointer\":\"/data/cells/*/protocol/measured_trials\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.trials.measured"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.trials.warmups; upstream=expanded-plan.json#{\"invariant\":\"all equal\",\"pointer\":\"/data/cells/*/protocol/warmups\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.trials.warmups"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 2.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.workspace_fixture.file_count; upstream=fixture-manifest.json#{\"pointer\":\"/identity/fixture/file_count\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.workspace_fixture.file_count"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 4000.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.workspace_fixture.logical_mib; upstream=fixture-manifest.json#{\"pointer\":\"/identity/fixture/logical_bytes\"}; units=bytes->MiB; aggregation=identity {\"divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.workspace_fixture.logical_mib"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table1.workspace_fixture.maximum_depth; upstream=fixture-manifest.json#{\"pointer\":\"/identity/fixture/maximum_depth\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table1.workspace_fixture.maximum_depth"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_sandbox.none.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_sandbox.none.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1659.8107
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_sandbox.none.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_sandbox.none.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1749.7388
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_sandbox.none.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_sandbox.none.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1794.9019450000008
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_sandbox.none.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_sandbox.none.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_sandbox.none.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_sandbox.none.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.6185790825907366
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 32.89655
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 35.6847
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 36.096376
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 30.359842997206
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 109.11905
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 120.107005
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 131.58766000000003
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.create_workspace.none.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.create_workspace.none.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 45.3204753420739
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.exec_command.noop.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.exec_command.noop.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 26.71865
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.exec_command.noop.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.exec_command.noop.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.29143
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.exec_command.noop.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.exec_command.noop.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.996465000000022
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.exec_command.noop.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.exec_command.noop.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table2.exec_command.noop.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table2.exec_command.noop.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 37.28339526491812
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 27.23455
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.937635
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 32.66597900000007
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 36.44471318802348
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 45.44085
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 50.973254999999995
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 56.30326700000011
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.fixture_read.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.fixture_read.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 108.88291336149418
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 26.71865
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.29143
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.996465000000022
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 37.28339526491812
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 45.9976
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 53.281615
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 60.09194300000015
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.exec_command.noop.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.exec_command.noop.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 107.61432697082469
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 48.93455
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 53.328845
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 63.09657600000165
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 20.171524365907672
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 187.35685
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 208.008075
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 294.3917890000002
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.262144.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.262144.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 26.357148435723182
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 38.6474
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 42.61549
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 46.87779200000013
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 25.608367032181523
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 134.61035
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 141.75804
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 146.72477300000017
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_edit.4096.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_edit.4096.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 37.216098524026926
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 20.7811
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 24.366515
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 25.48393800000002
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 47.68014601293585
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 37.78825
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 57.79372999999999
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 60.15640100000002
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.262144.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.262144.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 125.54290904967944
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 11.4248
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 15.772725
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 19.96439500000001
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 84.9999254477021
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 26.575
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 30.591984999999998
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 39.73821200000005
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_read.4096.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_read.4096.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 185.30259988470985
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 45.06585
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 49.94722
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 53.543718
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 22.02875636155663
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 125.9685
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 137.255055
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 147.37442700000005
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.262144.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.262144.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 39.354743449708884
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c1.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c1.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 38.8126
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c1.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c1.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 41.38427999999999
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c1.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c1.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 51.56190400000005
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c1.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c1.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c1.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c1.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 25.551107882015895
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c5.p50_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p50 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.5,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c5.p50_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 108.75565
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c5.p95_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p95 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.95,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c5.p95_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 111.979635
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c5.p99_ms; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce\",\"field\":\"raw_points[].value\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=linear_quantile_p99 {\"interpolation\":\"linear\",\"position\":\"(n-1)*q\",\"probability\":0.99,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c5.p99_ms"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 116.06709000000002
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c5.samples; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce\",\"field\":\"available_n\",\"metric_id\":\"batch_makespan_ns\",\"trial_scope\":\"reportable_measured\"}; units=count->count; aggregation=identity {}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c5.samples"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 100.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table3.file_write.4096.c5.throughput_ops_s; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce\",\"field\":\"raw_points[].value\",\"metric_id\":\"throughput_ops_s\",\"trial_scope\":\"reportable_measured\"}; units=operations_per_second->operations_per_second; aggregation=arithmetic_mean {\"denominator\":100}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table3.file_write.4096.c5.throughput_ops_s"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 45.9991049224615
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 25.5
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0108203125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 30.4712
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 28.171875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c1.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c1.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.00390625
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 34.125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0270703125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 79.50166
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 43.52734375
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.create_workspace.none.c5.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.create_workspace.none.c5.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.01953125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 13.875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.001171875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 35.00335
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 20.03125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c1.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c1.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 13.125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0026171875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 63.07729
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 21.5546875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.exec_command.noop.c5.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.exec_command.noop.c5.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 62.6015625
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1.2505859375
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 148.73234
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 66.71484375
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_edit.262144.c5.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_edit.262144.c5.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1.2578125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 14.47265625
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 38.43103
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 14.9765625
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_read.262144.c5.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_read.262144.c5.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.daemon_rss_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"daemon_rss_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.daemon_rss_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 51.04296875
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.sandbox_block_read_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_read_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.sandbox_block_read_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 0.0
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.sandbox_block_write_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_block_write_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.sandbox_block_write_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1.250625
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.sandbox_cpu_time_ns; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_cpu_time_ns\",\"trial_scope\":\"reportable_measured\"}; units=nanoseconds->milliseconds; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1000000}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.sandbox_cpu_time_ns"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 95.11521
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.sandbox_memory_peak_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"sandbox_memory_peak_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=maximum {\"denominator\":null,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.sandbox_memory_peak_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 54.26953125
+    },
+    {
+      "aggregate": "identity",
+      "note": "table4.file_write.262144.c5.upperdir_bytes; upstream=report.json#{\"artifact\":\"report.json\",\"cell_id\":\"sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa\",\"field\":\"raw_points[].value\",\"metric_id\":\"upperdir_bytes\",\"trial_scope\":\"reportable_measured\"}; units=bytes->MiB; aggregation=arithmetic_mean {\"denominator\":100,\"unit_divisor\":1048576}; eligibility=frozen_final_candidate",
+      "representations": [
+        "raw"
+      ],
+      "selector": {
+        "column": "value",
+        "kind": "csv",
+        "where": {
+          "evidence_id": "table4.file_write.262144.c5.upperdir_bytes"
+        }
+      },
+      "source": "numeric-provenance.csv",
+      "tolerance": 0,
+      "value": 1.2578125
+    }
+  ],
+  "schema_version": "ai-research-writing/numeric-evidence-v2"
+}

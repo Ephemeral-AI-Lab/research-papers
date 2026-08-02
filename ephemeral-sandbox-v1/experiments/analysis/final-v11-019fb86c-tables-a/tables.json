@@ -1,0 +1,841 @@
+{
+  "archive": {
+    "content_tree_sha256": "sha256:606863f2843a7b19f04e27e2ba5b736d544dd143f56f6d3626611cb29bb44986",
+    "disposition": "final",
+    "run_id": "019fb86c-096e-7589-a0a4-a6d6ef5d7f8b"
+  },
+  "eligibility": "frozen_final_candidate",
+  "generator_schema_version": 2,
+  "protocol_version": "v1.1",
+  "schema_version": 2,
+  "tables": {
+    "environment": {
+      "fields": [
+        {
+          "display": "Microsoft Windows 11 ??? build 26200",
+          "field": "Host OS",
+          "selector": {
+            "pointer": "/recorded_run_environment/host"
+          },
+          "source": "environment-preflight.txt",
+          "value": "Microsoft Windows 11 ??? build 26200"
+        },
+        {
+          "display": "linux",
+          "field": "Container engine OS",
+          "selector": {
+            "pointer": "/docker/os_type"
+          },
+          "source": "environment-preflight.txt",
+          "value": "linux"
+        },
+        {
+          "display": "x64",
+          "field": "Architecture",
+          "selector": {
+            "pointer": "/recorded_run_environment/host/architecture"
+          },
+          "source": "environment-preflight.txt",
+          "value": "x64"
+        },
+        {
+          "display": "AMD Ryzen Threadripper 7960X 24-Cores / 48 logical processors",
+          "field": "CPU",
+          "selector": {
+            "pointer": "/recorded_run_environment/host"
+          },
+          "source": "environment-preflight.txt",
+          "value": "AMD Ryzen Threadripper 7960X 24-Cores / 48 logical processors"
+        },
+        {
+          "display": "137,438,953,472 bytes",
+          "field": "Memory",
+          "selector": {
+            "pointer": "/recorded_run_environment/host/total_memory_bytes"
+          },
+          "source": "environment-preflight.txt",
+          "value": 137438953472
+        },
+        {
+          "display": "NTFS",
+          "field": "Storage",
+          "selector": {
+            "pointer": "/recorded_run_environment/host"
+          },
+          "source": "environment-preflight.txt",
+          "value": "NTFS"
+        },
+        {
+          "display": "29.0.1",
+          "field": "Docker Engine",
+          "selector": {
+            "pointer": "/docker/server_version"
+          },
+          "source": "environment-preflight.txt",
+          "value": "29.0.1"
+        },
+        {
+          "display": "2",
+          "field": "Cgroup",
+          "selector": {
+            "pointer": "/docker/cgroup_version"
+          },
+          "source": "environment-preflight.txt",
+          "value": "2"
+        },
+        {
+          "display": "5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8; annotated tag paper-v1.1-freeze",
+          "field": "Product commit/tag",
+          "selector": {
+            "pointer": "/product"
+          },
+          "source": "campaign-manifest.json",
+          "value": {
+            "commit": "5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8",
+            "freeze_tag": {
+              "availability": "available",
+              "name": "paper-v1.1-freeze",
+              "object_type": "tag",
+              "peeled_commit": "5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8",
+              "reference": "refs/tags/paper-v1.1-freeze",
+              "tag_object": "834c84534359f37653fb25ac45304091e82c37a6"
+            }
+          }
+        },
+        {
+          "display": "1680b599129532f72e706b6acb12ef62c63759e2",
+          "field": "Benchmark commit",
+          "selector": {
+            "pointer": "/paper_git/commit"
+          },
+          "source": "campaign-manifest.json",
+          "value": "1680b599129532f72e706b6acb12ef62c63759e2"
+        },
+        {
+          "display": "ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf",
+          "field": "Sandbox image",
+          "selector": {
+            "pointer": "/image/requested"
+          },
+          "source": "campaign-manifest.json",
+          "value": "ubuntu:24.04@sha256:52df9b1ee71626e0088f7d400d5c6b5f7bb916f8f0c82b474289a4ece6cf3faf"
+        },
+        {
+          "display": "1 vCPU / 512 MiB / 256 PIDs",
+          "field": "Sandbox limits",
+          "selector": {
+            "pointer": "/sandbox_limits"
+          },
+          "source": "environment-preflight.txt",
+          "value": "1 vCPU / 512 MiB / 256 PIDs"
+        },
+        {
+          "display": "100 MiB / 4000 files / depth 100",
+          "field": "Workspace",
+          "selector": {
+            "pointer": "/identity/fixture"
+          },
+          "source": "fixture-manifest.json",
+          "value": "100 MiB / 4000 files / depth 100"
+        },
+        {
+          "display": "product_cli",
+          "field": "Client",
+          "selector": {
+            "pointer": "/plan/client_cohort"
+          },
+          "source": "campaign-manifest.json",
+          "value": "product_cli"
+        },
+        {
+          "display": "windows_named_pipe; local_only; per_execution_block",
+          "field": "Gateway transport",
+          "selector": {
+            "pointer": "/data/environment/gateway_transport",
+            "protocol_version": "v1.1"
+          },
+          "source": "run-manifest.json",
+          "value": {
+            "rotation": "per_execution_block",
+            "scope": "local_only",
+            "transport": "windows_named_pipe"
+          }
+        },
+        {
+          "display": "20260712",
+          "field": "Seed",
+          "selector": {
+            "pointer": "/identity/seed"
+          },
+          "source": "fixture-manifest.json",
+          "value": 20260712
+        },
+        {
+          "display": "2 warm-up + 100 measured",
+          "field": "Trials",
+          "selector": {
+            "pointer": "/data/cells/*/protocol"
+          },
+          "source": "expanded-plan.json",
+          "value": "2 warm-up + 100 measured"
+        }
+      ]
+    },
+    "public_cli_operations": {
+      "rows": [
+        {
+          "case": "no-op",
+          "cell_id": "sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5",
+          "concurrency": 1,
+          "key": [
+            "exec_command",
+            "noop",
+            1
+          ],
+          "operation": "Exec no-op",
+          "operation_label": "`exec_command`",
+          "payload_or_file_size": "--",
+          "values": {
+            "p50_ms": 26.71865,
+            "p95_ms": 28.29143,
+            "p99_ms": 28.996465000000022,
+            "samples": 100,
+            "throughput_ops_s": 37.28339526491812
+          }
+        },
+        {
+          "case": "no-op",
+          "cell_id": "sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d",
+          "concurrency": 5,
+          "key": [
+            "exec_command",
+            "noop",
+            5
+          ],
+          "operation": "Exec no-op",
+          "operation_label": "`exec_command`",
+          "payload_or_file_size": "--",
+          "values": {
+            "p50_ms": 45.9976,
+            "p95_ms": 53.281615,
+            "p99_ms": 60.09194300000015,
+            "samples": 100,
+            "throughput_ops_s": 107.61432697082469
+          }
+        },
+        {
+          "case": "fixture read",
+          "cell_id": "sha256:8f45e06d13b98d71a0cc703f215771e8f949417e18593feedf485b08be865cbf",
+          "concurrency": 1,
+          "key": [
+            "exec_command",
+            "fixture_read",
+            1
+          ],
+          "operation": "Exec fixture read (4 KiB)",
+          "operation_label": "`exec_command`",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 27.23455,
+            "p95_ms": 28.937635,
+            "p99_ms": 32.66597900000007,
+            "samples": 100,
+            "throughput_ops_s": 36.44471318802348
+          }
+        },
+        {
+          "case": "fixture read",
+          "cell_id": "sha256:45ca26b8ebec93c4c0f5d17e4e4477a5ab95d63fa24d1dfd0254a40e740e35fb",
+          "concurrency": 5,
+          "key": [
+            "exec_command",
+            "fixture_read",
+            5
+          ],
+          "operation": "Exec fixture read (4 KiB)",
+          "operation_label": "`exec_command`",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 45.44085,
+            "p95_ms": 50.973254999999995,
+            "p99_ms": 56.30326700000011,
+            "samples": 100,
+            "throughput_ops_s": 108.88291336149418
+          }
+        },
+        {
+          "case": "snapshot",
+          "cell_id": "sha256:22e51aa86c53171ed08483202c70fd8275700d0232908737242749a59d59cc16",
+          "concurrency": 1,
+          "key": [
+            "file_read",
+            4096,
+            1
+          ],
+          "operation": "Read snapshot (4 KiB)",
+          "operation_label": "Read",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 11.4248,
+            "p95_ms": 15.772725,
+            "p99_ms": 19.96439500000001,
+            "samples": 100,
+            "throughput_ops_s": 84.9999254477021
+          }
+        },
+        {
+          "case": "snapshot",
+          "cell_id": "sha256:08051500fba8d2e8a3bf66bc2650b93d4bd03042bb85b316916c988c9f38c185",
+          "concurrency": 5,
+          "key": [
+            "file_read",
+            4096,
+            5
+          ],
+          "operation": "Read snapshot (4 KiB)",
+          "operation_label": "Read",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 26.575,
+            "p95_ms": 30.591984999999998,
+            "p99_ms": 39.73821200000005,
+            "samples": 100,
+            "throughput_ops_s": 185.30259988470985
+          }
+        },
+        {
+          "case": "snapshot",
+          "cell_id": "sha256:1d46f2fd658c9ef9840dedba040ab4ac59474ea716140a617837580625ac65b0",
+          "concurrency": 1,
+          "key": [
+            "file_read",
+            262144,
+            1
+          ],
+          "operation": "Read snapshot (256 KiB)",
+          "operation_label": "Read",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 20.7811,
+            "p95_ms": 24.366515,
+            "p99_ms": 25.48393800000002,
+            "samples": 100,
+            "throughput_ops_s": 47.68014601293585
+          }
+        },
+        {
+          "case": "snapshot",
+          "cell_id": "sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603",
+          "concurrency": 5,
+          "key": [
+            "file_read",
+            262144,
+            5
+          ],
+          "operation": "Read snapshot (256 KiB)",
+          "operation_label": "Read",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 37.78825,
+            "p95_ms": 57.79372999999999,
+            "p99_ms": 60.15640100000002,
+            "samples": 100,
+            "throughput_ops_s": 125.54290904967944
+          }
+        },
+        {
+          "case": "session-local",
+          "cell_id": "sha256:8bf5249d7df59689f7b23a7a3764aeda8d82b31170b332dde620f2e81fe11ee6",
+          "concurrency": 1,
+          "key": [
+            "file_write",
+            4096,
+            1
+          ],
+          "operation": "Write session (4 KiB)",
+          "operation_label": "Write",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 38.8126,
+            "p95_ms": 41.38427999999999,
+            "p99_ms": 51.56190400000005,
+            "samples": 100,
+            "throughput_ops_s": 25.551107882015895
+          }
+        },
+        {
+          "case": "session-local",
+          "cell_id": "sha256:b87af3269b33724949335fca092c5b6adb183e4894bff8806b801ac84db783ce",
+          "concurrency": 5,
+          "key": [
+            "file_write",
+            4096,
+            5
+          ],
+          "operation": "Write session (4 KiB)",
+          "operation_label": "Write",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 108.75565,
+            "p95_ms": 111.979635,
+            "p99_ms": 116.06709000000002,
+            "samples": 100,
+            "throughput_ops_s": 45.9991049224615
+          }
+        },
+        {
+          "case": "session-local",
+          "cell_id": "sha256:4b9f88a3ef05291334cd2aa7c5a5248d5c380a6bab530ae7966f132bb3b6fd75",
+          "concurrency": 1,
+          "key": [
+            "file_write",
+            262144,
+            1
+          ],
+          "operation": "Write session (256 KiB)",
+          "operation_label": "Write",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 45.06585,
+            "p95_ms": 49.94722,
+            "p99_ms": 53.543718,
+            "samples": 100,
+            "throughput_ops_s": 22.02875636155663
+          }
+        },
+        {
+          "case": "session-local",
+          "cell_id": "sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa",
+          "concurrency": 5,
+          "key": [
+            "file_write",
+            262144,
+            5
+          ],
+          "operation": "Write session (256 KiB)",
+          "operation_label": "Write",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 125.9685,
+            "p95_ms": 137.255055,
+            "p99_ms": 147.37442700000005,
+            "samples": 100,
+            "throughput_ops_s": 39.354743449708884
+          }
+        },
+        {
+          "case": "one replacement",
+          "cell_id": "sha256:8de2d3ce51e15f97f3c760fe8ffd328a24eb1033c7de7ce88afccca8bf5b565e",
+          "concurrency": 1,
+          "key": [
+            "file_edit",
+            4096,
+            1
+          ],
+          "operation": "Edit replacement (4 KiB)",
+          "operation_label": "Edit",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 38.6474,
+            "p95_ms": 42.61549,
+            "p99_ms": 46.87779200000013,
+            "samples": 100,
+            "throughput_ops_s": 25.608367032181523
+          }
+        },
+        {
+          "case": "one replacement",
+          "cell_id": "sha256:ccfc5b51f0bd7c3b4ea211621c4c95af8a40200ebe886fc2fb7513b0e500726e",
+          "concurrency": 5,
+          "key": [
+            "file_edit",
+            4096,
+            5
+          ],
+          "operation": "Edit replacement (4 KiB)",
+          "operation_label": "Edit",
+          "payload_or_file_size": "4 KiB",
+          "values": {
+            "p50_ms": 134.61035,
+            "p95_ms": 141.75804,
+            "p99_ms": 146.72477300000017,
+            "samples": 100,
+            "throughput_ops_s": 37.216098524026926
+          }
+        },
+        {
+          "case": "one replacement",
+          "cell_id": "sha256:315abad68138d27b23e3e71b10e3d681d495613af62276fe5ec901852dfabb55",
+          "concurrency": 1,
+          "key": [
+            "file_edit",
+            262144,
+            1
+          ],
+          "operation": "Edit replacement (256 KiB)",
+          "operation_label": "Edit",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 48.93455,
+            "p95_ms": 53.328845,
+            "p99_ms": 63.09657600000165,
+            "samples": 100,
+            "throughput_ops_s": 20.171524365907672
+          }
+        },
+        {
+          "case": "one replacement",
+          "cell_id": "sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab",
+          "concurrency": 5,
+          "key": [
+            "file_edit",
+            262144,
+            5
+          ],
+          "operation": "Edit replacement (256 KiB)",
+          "operation_label": "Edit",
+          "payload_or_file_size": "256 KiB",
+          "values": {
+            "p50_ms": 187.35685,
+            "p95_ms": 208.008075,
+            "p99_ms": 294.3917890000002,
+            "samples": 100,
+            "throughput_ops_s": 26.357148435723182
+          }
+        }
+      ]
+    },
+    "resources": {
+      "rows": [
+        {
+          "cell_id": "sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd",
+          "concurrency": 1,
+          "key": [
+            "create_workspace",
+            null,
+            1
+          ],
+          "operation": "Workspace create, 100 MiB/depth 100",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "25.5",
+              "value": 25.5
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "0.011",
+              "value": 0.0108203125
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "30.471",
+              "value": 30.4712
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "28.172",
+              "value": 28.171875
+            },
+            "upperdir_bytes": {
+              "display": "0.004",
+              "value": 0.00390625
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21",
+          "concurrency": 5,
+          "key": [
+            "create_workspace",
+            null,
+            5
+          ],
+          "operation": "Workspace create, 100 MiB/depth 100",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "34.125",
+              "value": 34.125
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "0.027",
+              "value": 0.0270703125
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "79.502",
+              "value": 79.50166
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "43.527",
+              "value": 43.52734375
+            },
+            "upperdir_bytes": {
+              "display": "0.02",
+              "value": 0.01953125
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5",
+          "concurrency": 1,
+          "key": [
+            "exec_command",
+            "noop",
+            1
+          ],
+          "operation": "`exec_command`, no-op",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "13.875",
+              "value": 13.875
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "0.001",
+              "value": 0.001171875
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "35.003",
+              "value": 35.00335
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "20.031",
+              "value": 20.03125
+            },
+            "upperdir_bytes": {
+              "display": "0",
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:328ad82e72b0d80ac2466f6d7b8610fb125d828ea73a4efc98c7bb317beeab6d",
+          "concurrency": 5,
+          "key": [
+            "exec_command",
+            "noop",
+            5
+          ],
+          "operation": "`exec_command`, no-op",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "13.125",
+              "value": 13.125
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "0.003",
+              "value": 0.0026171875
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "63.077",
+              "value": 63.07729
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "21.555",
+              "value": 21.5546875
+            },
+            "upperdir_bytes": {
+              "display": "0",
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:36ce0418b24fc3acb183f7cc8c35d1a66f76dcab3aa1e6050c02a6b99f5f0603",
+          "concurrency": 5,
+          "key": [
+            "file_read",
+            262144,
+            5
+          ],
+          "operation": "Read, 256 KiB",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "14.473",
+              "value": 14.47265625
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "38.431",
+              "value": 38.43103
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "14.977",
+              "value": 14.9765625
+            },
+            "upperdir_bytes": {
+              "display": "0",
+              "value": 0.0
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:bc22c4d681e3996f98d860c08a3bdc58b7cdb1152be031dcd9f213db570e7aaa",
+          "concurrency": 5,
+          "key": [
+            "file_write",
+            262144,
+            5
+          ],
+          "operation": "Write, 256 KiB",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "51.043",
+              "value": 51.04296875
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "1.251",
+              "value": 1.250625
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "95.115",
+              "value": 95.11521
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "54.27",
+              "value": 54.26953125
+            },
+            "upperdir_bytes": {
+              "display": "1.258",
+              "value": 1.2578125
+            }
+          }
+        },
+        {
+          "cell_id": "sha256:ae045e86ae9a922cccd9f5820ba8a29db3155f5c9d8eb81129b6a3de48f7daab",
+          "concurrency": 5,
+          "key": [
+            "file_edit",
+            262144,
+            5
+          ],
+          "operation": "Edit, 256 KiB",
+          "values": {
+            "daemon_rss_bytes": {
+              "display": "62.602",
+              "value": 62.6015625
+            },
+            "sandbox_block_read_bytes": {
+              "display": "0",
+              "value": 0.0
+            },
+            "sandbox_block_write_bytes": {
+              "display": "1.251",
+              "value": 1.2505859375
+            },
+            "sandbox_cpu_time_ns": {
+              "display": "148.732",
+              "value": 148.73234
+            },
+            "sandbox_memory_peak_bytes": {
+              "display": "66.715",
+              "value": 66.71484375
+            },
+            "upperdir_bytes": {
+              "display": "1.258",
+              "value": 1.2578125
+            }
+          }
+        }
+      ]
+    },
+    "startup": {
+      "rows": [
+        {
+          "cell_id": "sha256:d479308c8b3bd02e2d89919bafcd824d9b289bab41d2d40ba1cb4ca3968bf6b2",
+          "concurrency": 1,
+          "key": [
+            "create_sandbox",
+            null,
+            1
+          ],
+          "operation": "Create sandbox",
+          "stage": "Sandbox create + base mount",
+          "values": {
+            "p50_ms": 1659.8107,
+            "p95_ms": 1749.7388,
+            "p99_ms": 1794.9019450000008,
+            "samples": 100,
+            "throughput_ops_s": 0.6185790825907366
+          }
+        },
+        {
+          "cell_id": "sha256:2f8ff3901a35439793e55958d898b63fb9010bc2f1c016a59d688b9b9157f2fd",
+          "concurrency": 1,
+          "key": [
+            "create_workspace",
+            null,
+            1
+          ],
+          "operation": "Create workspace (session)",
+          "stage": "Session create to ready",
+          "values": {
+            "p50_ms": 32.89655,
+            "p95_ms": 35.6847,
+            "p99_ms": 36.096376,
+            "samples": 100,
+            "throughput_ops_s": 30.359842997206
+          }
+        },
+        {
+          "cell_id": "sha256:46dca2a11cd160fb27148faef398b025082c5a87cbdf187c58b26045fac29c21",
+          "concurrency": 5,
+          "key": [
+            "create_workspace",
+            null,
+            5
+          ],
+          "operation": "Create workspace (session)",
+          "stage": "Session create to ready",
+          "values": {
+            "p50_ms": 109.11905,
+            "p95_ms": 120.107005,
+            "p99_ms": 131.58766000000003,
+            "samples": 100,
+            "throughput_ops_s": 45.3204753420739
+          }
+        },
+        {
+          "cell_id": "sha256:49abffc1163b5d9c8d96c8c091f2a31d46f8303444af6d2b9a78ea9a4e92b8f5",
+          "concurrency": 1,
+          "key": [
+            "exec_command",
+            "noop",
+            1
+          ],
+          "operation": "Exec no-op",
+          "stage": "First no-op command",
+          "values": {
+            "p50_ms": 26.71865,
+            "p95_ms": 28.29143,
+            "p99_ms": 28.996465000000022,
+            "samples": 100,
+            "throughput_ops_s": 37.28339526491812
+          }
+        }
+      ]
+    }
+  }
+}

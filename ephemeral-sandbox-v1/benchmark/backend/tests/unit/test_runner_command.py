@@ -1,6 +1,10 @@
 from pathlib import Path
 
-from benchmark_lab.runner import TrialContext, _operation_evidence
+from benchmark_lab.runner import (
+    TrialContext,
+    _expected_command_output,
+    _operation_evidence,
+)
 from benchmark_lab.transport import TimedGatewayResponse
 
 
@@ -39,3 +43,7 @@ def test_command_evidence_preserves_stdout_and_empty_stderr_contract() -> None:
         "stdout": empty,
         "stderr": empty,
     }
+
+
+def test_fixture_read_expected_output_matches_released_line_window() -> None:
+    assert _expected_command_output("fixture_read") == "4096"

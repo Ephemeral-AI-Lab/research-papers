@@ -18,7 +18,7 @@ export type OperationId =
   | "squash_layerstack";
 
 export type ConfigurationScope = "all" | "command" | "files" | "workspace" | "layerstack";
-export type ClientCohort = "direct_client" | "cli_e2e";
+export type ClientCohort = "direct_client" | "product_cli";
 export type FactorRole = "varied" | "controlled";
 export type WorkspaceProfileId = string;
 export type AllowedNetworkProfile = "shared" | "isolated";

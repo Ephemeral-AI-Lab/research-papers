@@ -9,7 +9,13 @@ SOURCE_SUFFIXES = {".py", ".js", ".jsx", ".mjs", ".cjs", ".ts", ".tsx", ".sh", "
 TOOL_PATTERN = re.compile(r"\b(?:ca" r"rgo|ru" r"stc|ru" r"stup|cl" r"ippy|mi" r"ri)\b", re.IGNORECASE)
 PRODUCT_IMPORTS = {"ephemeral_sandbox", "sandbox_gateway", "sandbox_manager", "sandbox_runtime"}
 GENERATED_DIRECTORIES = {
-    ".pytest_cache", "__pycache__", "dist", "node_modules", "playwright-report", "test-results"
+    ".pytest_cache",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "node_modules",
+    "playwright-report",
+    "test-results",
 }
 
 

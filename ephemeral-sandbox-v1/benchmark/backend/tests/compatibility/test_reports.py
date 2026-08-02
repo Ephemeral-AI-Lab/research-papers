@@ -56,7 +56,12 @@ def test_report_bundle_persists_compatible_artifacts_atomically(tmp_path: Path) 
     regenerated = RunCorpus.open(store.run_path(corpus.report.run_id))
     assert regenerated.report == corpus.report
     assert regenerated.summary == corpus.summary
-    assert (regenerated.path / "export.csv").read_bytes() == (source / "export.csv").read_bytes()
+    assert (regenerated.path / "export.csv").read_bytes() == render_csv_export(
+        corpus.report
+    ).encode()
+    assert (regenerated.path / "export.csv").read_text() == (
+        source / "export.csv"
+    ).read_text()
     assert json.loads((regenerated.path / "export.json").read_bytes()) == json.loads(
         (source / "export.json").read_bytes()
     )
