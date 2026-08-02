@@ -27,7 +27,7 @@
 
 ## Gate disposition
 
-**REVIEW_COMPLETE_NOT_SUBMISSION_READY.** The declared review artifacts are
-complete and verified. Author/affiliation/venue/disclosure metadata remains an
-external owner input, and neither a pull-request merge nor external submission
-is performed by this package.
+**FAIL/GATED.** The declared review artifacts are complete and verified, but
+author/affiliation/venue/disclosure metadata remains an external owner input.
+Neither a pull-request merge nor external submission is performed by this
+package.

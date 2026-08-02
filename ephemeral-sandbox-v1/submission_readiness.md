@@ -10,5 +10,7 @@
 | Author and venue metadata | blocked | Paper owner must provide real authors, affiliations, category/venue, and disclosures. |
 | Merge and publication authority | gated | No merge or external submission is authorized by this file. |
 
-**Disposition: REVIEW_COMPLETE_NOT_SUBMISSION_READY.** The remaining blocker
-is external editorial metadata, not an experiment or build failure.
+**Disposition: FAIL/GATED.** The remaining gate is external editorial metadata,
+not an experiment or build failure. This package must not be described as
+submission-ready until that owner input is supplied and the final checks are
+rerun.
