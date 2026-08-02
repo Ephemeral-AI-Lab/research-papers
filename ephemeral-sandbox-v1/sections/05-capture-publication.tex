@@ -13,7 +13,7 @@ capture-time marker; it remains a path and is rejected later because that name
 space is reserved by the layer format.  Invalid layer paths and unsupported
 special files are reported as protected drops rather than silently converted.
 Explicit-session publication rejects any such drop.  The lower-level planner
-has a narrower exception for an unsupported-special-file drop, so the baseline
+has a narrower exception for an unsupported-special-file drop, so the source snapshot
 does not yet justify one uniform protected-drop policy across every
 publication entry point.
 
@@ -114,12 +114,10 @@ garbage collection likewise remain outside the all-or-none data boundary;
 Section~\ref{sec:lifecycle-recovery} defines their failure outcomes.
 
 This path explains how one private filesystem delta can become one durable
-public head at the audited Linux baseline.  It does not establish semantic
-merge correctness, a cross-platform crash proof, or an unlimited transaction
-size, and source inspection remains provisional until the paper snapshot is
-frozen and fault evidence is archived.  Staging remnants, retained sessions,
-lease release, cleanup failure, compaction, and reclamation are lifecycle and
-recovery concerns, which Section~\ref{sec:lifecycle-recovery} treats
-separately.
+public head at the audited Linux source snapshot. It does not establish
+semantic merge correctness, a cross-platform crash proof, or an unlimited
+transaction size. Staging remnants, retained sessions, lease release, cleanup
+failure, compaction, and reclamation are lifecycle and recovery concerns,
+which Section~\ref{sec:lifecycle-recovery} treats separately.
 
 \clearpage

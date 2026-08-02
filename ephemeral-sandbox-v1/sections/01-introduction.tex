@@ -1,3 +1,37 @@
 \section{Introduction}
 \label{sec:introduction}
-\emph{Draft.}
+
+Coding agents increasingly inspect, edit, test, and run software in parallel.
+That parallelism creates a systems problem separate from task planning: several
+workers need executable state without allowing one worker's unfinished
+filesystem effects to become another worker's live premise. Giving every
+worker a copy avoids immediate interference, but it merely postpones the
+question of which changes may become durable, relative to which project state,
+and with which failure outcome.
+
+Ephemeral Sandbox addresses that narrow runtime question. It maintains a
+durable project history as LayerStack layers and gives a command or explicit
+workspace session a leased private view. The private overlay accumulates the
+session's filesystem effects. On publication, the runtime captures those
+effects, checks them against the current active head, applies its bounded
+reconciliation rules, and either publishes one new layer through an
+active-manifest transition or returns a structured rejection. The protocol
+separates this atomic data transition from later attribution, accounting, and
+cleanup work, which may have different failure behavior.
+
+The paper contributes a source-defined account of that composition: the
+private-session and lease model; the capture, validation, reconciliation, and
+publication boundary; lifecycle and recovery outcomes; and a role-separated
+operational interface. It also reports a reproducible local treatment covering
+startup, public-CLI, and selected resource observations. The evaluation is
+deliberately descriptive. It has no competing system, heterogeneous workload
+suite, end-to-end coding-task outcome, fault campaign, or basis for a universal
+concurrency claim.
+
+This scope positions the system between isolated execution environments and
+agent coordination frameworks. It does not introduce copy-on-write
+filesystems, validation after tentative work, three-way merge, or task-intent
+admission. Rather, it specifies how private executable workspace state is
+allowed to become one durable project update under a bounded runtime contract.
+The remainder of the paper states that contract, its limitations, the frozen
+observations, and its relationship to prior systems and coordination work.

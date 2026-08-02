@@ -58,7 +58,7 @@ state.  A live session with active commands is rejected rather than torn down
 through the normal public path.  Once admitted, teardown tracks workspace and
 workload-cgroup completion separately: if one resource is released and another
 fails, the retained cleanup record prevents a later retry from repeating the
-completed raw teardown solely because the other resource remains pending.
+completed raw teardown solely because the other resource remains unreleased.
 Only complete teardown removes the session record, commits workspace
 destruction, releases terminal command state, and allows lease release.  This
 is convergent resource cleanup, not rollback of commands already executed.
@@ -87,7 +87,7 @@ manifest nor another lease still references it.
 
 Daemon shutdown attempts bounded convergence by joining existing teardown
 work, cancelling active commands, finalizing eligible implicit sessions, and
-destroying the remaining sessions.  The baseline source and tests define
+destroying the remaining sessions.  The audited source snapshot and tests define
 these in-process paths, but final Linux fault evidence has not yet established
 their behavior under abrupt daemon restart, partial recovery-artifact writes,
 or every lease-substitution ordering.  The lease and session registries remain

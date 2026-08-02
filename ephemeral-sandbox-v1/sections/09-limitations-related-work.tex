@@ -1,52 +1,86 @@
 \section{Limitations and Related Work}
 \label{sec:limitations-related-work}
 
-\subsection{Cost and Implementation Limits}
+\subsection{Limits of the Present System and Evidence}
 
-Workspace isolation removes one source of interference; it does not solve task
-decomposition, model quality, semantic compatibility, verification, resource
-ownership, or general agent coordination.  v1 also exposes concrete scaling
-risks.  It serializes publication and performs current-head reconciliation plus
-payload hashing, copying, and synchronization inside the writer critical
-section.  It retains a full manifest per live lease, repeatedly probes layered
-history during path validation, and can retain obsolete history while
-long-lived leases protect session views.  Its text merge is byte-limited but
-does not yet have an independently small line/edit-distance trace bound.
-These are source-derived limitations whose practical severity remains to be
-measured.
+The system isolates workspace effects; it does not solve task decomposition,
+model quality, semantic compatibility, verification, service ownership, or
+general agent coordination. Publication is intentionally serialized, and its
+critical path includes active-head reconciliation, eligible text handling,
+payload hashing and copying, synchronization, and manifest replacement.
+Long-lived leases can retain historical layers, while path validation and merge
+work depend on the shape of the changed tree. The implementation's bounded
+text merge is not an independently bounded line- or edit-trace memory
+algorithm. These are design limitations, not measurements of a general
+concurrency ceiling.
 
-The copy-on-write workspace abstraction is not a claim of constant or negligible
-physical storage.  Kernel copy-up, sparse allocation, compression, extent
-sharing, page cache, and filesystem metadata are backend-dependent.  A small
-edit to a large lower file can produce a large logical upper file, and v1
-publication copies the resulting regular-file payload into a new layer.
-Accordingly, the evaluation distinguishes logical from allocated, shared, and
-exclusive bytes.
+The copy-on-write workspace abstraction also does not imply negligible physical
+storage. Copy-up, sparse allocation, compression, extent sharing, page cache,
+and metadata are backend dependent; a small edit can materialize a large
+logical upper file. The frozen evaluation consequently reports only its
+observed resource counters and workspace deltas. It does not establish a
+capacity reservation, a storage-saving claim, a security boundary, or behavior
+on operating systems and filesystems not covered by the campaign.
 
-\subsection{LayerStack 2.0 as a Candidate Evolution}
+LayerStack evolution remains future work. In particular, the paper does not
+claim reflink support, process-state rollback, transactional publication
+attribution, daemon-restart recovery, or semantic merge correctness. A future
+evaluation needs heterogeneous projects, controlled competing systems,
+publication and recovery faults, larger concurrency and history sweeps, and
+end-to-end collaborative coding outcomes.
 
-LayerStack 2.0 is future work, not part of the v1 contribution.  Its migration
-protocol proposes a qualified single-filesystem storage domain and compares a
-copy-based v1 layout, a co-located copy control, and a reflink-required
-candidate.  The target is to reduce byte-transfer and allocated-storage
-amplification without changing image compatibility, blame, squash, remount,
-active execution, crash, memory, daemon-health, or privilege behavior.  A
-reflink is not $O(1)$: clone work depends on filesystem and extent structure,
-and later writes allocate changed extents.
+\subsection{Isolation, Reversibility, and Agent Runtime Substrates}
 
-The completed Windows feasibility evidence is negative and narrowly scoped.
-On the pinned stock Windows Docker Desktop/WSL~2 storage cell, direct
-\texttt{FICLONE} returned \texttt{errno=95}; the integrated Windows candidate
-therefore remained blocked.  A future design requires capability detection and
-a correctness-preserving copy fallback, and this paper makes no Windows
-reflink storage or performance claim.
+Several systems already provide isolated environments for software agents.
+SWE-MiniSandbox develops container-free isolated workspaces for software
+engineering-agent training, while AgentBay exposes hybrid human and agent
+control over sandbox sessions \cite{swe_minisandbox_2026,agentbay_2025}. They
+motivate isolated execution but do not make this paper's runtime-publication
+claim. DeltaBox focuses on change-based sandbox checkpoint and rollback,
+including process state, and Shepherd records reversible agentic execution
+traces for fork and replay \cite{deltabox_2026,shepherd_2026}. Ephemeral
+Sandbox does not implement complete process-state checkpointing, rollback, or
+replay; its claim is restricted to private filesystem workspace state followed
+by controlled durable publication.
 
-Other targets follow directly from the v1 model: shorten the writer critical
-section while preserving all-or-none and crash visibility semantics; share or
-compact immutable manifest state across leases; index revision-keyed path,
-fingerprint, and ignore lookups; and reject merge work through independently
-bounded CPU/memory admission.
+\subsection{Concurrent Coding and Integration}
 
-\subsection{Related Work}
+CAID uses a central manager, isolated workspaces, and executable verification
+to coordinate asynchronous software-engineering agents
+\cite{caid_2026}. CoAgent instead maintains speculative in-place shared-state
+effects under a predetermined order and asks agents to repair affected plans
+\cite{coagent_2026}. Claim Plane treats concurrent change as pre-write intent
+admission and dynamic scope control \cite{claimplane_2026}. These approaches
+address important coordination problems outside this paper's boundary. In
+contrast, Ephemeral Sandbox gives a runtime contract for a private executable
+workspace view and validates its captured delta only when attempting a durable
+publish-or-reject transition; it does not plan tasks, admit semantic intent,
+or repair a shared live workspace.
 
-\emph{Draft pending PW4 and final citation verification.}
+Earlier developer tools also delimit the claim. Palantir detects development
+conflicts arising from parallel code changes, and Crystal detects collaboration
+conflicts and risks before integration \cite{palantir_2012,crystal_2013}.
+Those systems support awareness and diagnosis. The bounded text reconciliation
+here should also not be confused with semantic merge correctness, which is the
+subject of verified three-way program merge work \cite{threewaymerge_2018}.
+Union-mount designs already establish writable-upper/shared-lower namespace
+mechanics, including copy-up and private views over shared work areas.\footnote{J.-S.
+Pendry and M. K. McKusick, ``Union Mounts in 4.4BSD-Lite,'' USENIX Technical
+Conference. \url{https://www.usenix.org/conference/usenix-1995-technical-conference/union-mounts-44bsd-lite}}
+Likewise, validation after tentative work is a foundational optimistic
+concurrency-control pattern \cite{occ_1981}. We therefore do not call the
+lease behavior serializable snapshot isolation; snapshot terminology carries
+stronger semantic obligations \cite{snapshot_isolation_1995}.
+
+\subsection{Evaluation Context}
+
+CooperBench provides collaborative coding tasks for studying coordination
+failures, while TeamBench studies role-separated agent coordination
+\cite{cooperbench_2026,teambench_2026}. SWE-bench supplies executable
+repository-level issue-resolution tasks, and PaperBench provides long-horizon
+research-replication tasks \cite{swebench_2024,paperbench_2025}. These are
+useful candidates for future workloads, but none is a result in this paper.
+AgenticFlict is similarly relevant only as narrowly scoped motivation about
+textual Git-conflict outcomes in its selected dataset
+\cite{agenticflict_2026}; it cannot establish the causal interference rate of
+concurrent tool-call sessions or the benefit of this publication protocol.

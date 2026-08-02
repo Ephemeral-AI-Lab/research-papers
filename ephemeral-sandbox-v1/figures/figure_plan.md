@@ -20,10 +20,10 @@ generator.
 
 | Figure ID | Diagram | Separate prompt | Figure-specific composition | Status |
 |---|---|---|---|---|
-| `fig:system-architecture` | LayerStack and workspace-session architecture | [`fig_system_architecture_prompt.md`](source/fig_system_architecture_prompt.md) | Three semantic bands with parallel private sessions and one publication boundary | Integrated on PDF page 3; PW7 visual repair |
-| `fig:publication-sequence` | Workspace-to-publication sequence | [`fig_publication_sequence_prompt.md`](source/fig_publication_sequence_prompt.md) | Five vertical swimlanes with a highlighted active-manifest commit line | Integrated on PDF page 6; PW7 visual repair |
-| `fig:lifecycle-state-machine` | Workspace-session lifecycle state machine | [`fig_lifecycle_state_machine_prompt.md`](source/fig_lifecycle_state_machine_prompt.md) | Precommit/post-commit state regions with retry and cleanup-failure branches | Integrated and PW3-qualified; exceptional-branch/topology QA in PW7 |
-| `fig:reconciliation-decision` | Current-head reconciliation decision flow | [`fig_reconciliation_decision_prompt.md`](source/fig_reconciliation_decision_prompt.md) | Source/ignored branches, narrow merge gates, and shared whole-candidate terminals | Integrated on PDF page 8; PW7 visual repair |
+| `fig:system-architecture` | LayerStack and workspace-session architecture | [`fig_system_architecture_prompt.md`](source/fig_system_architecture_prompt.md) | Three semantic bands with parallel private sessions and one publication boundary | Final color/grayscale review passed; topology/layout waiver recorded. |
+| `fig:publication-sequence` | Workspace-to-publication sequence | [`fig_publication_sequence_prompt.md`](source/fig_publication_sequence_prompt.md) | Five vertical swimlanes with a highlighted active-manifest commit line | Final color/grayscale review passed; non-swimlane composition waived. |
+| `fig:lifecycle-state-machine` | Workspace-session lifecycle state machine | [`fig_lifecycle_state_machine_prompt.md`](source/fig_lifecycle_state_machine_prompt.md) | Precommit/post-commit state regions with retry and cleanup-failure branches | Final color/grayscale review passed; qualified normal-path abstraction retained. |
+| `fig:reconciliation-decision` | Current-head reconciliation decision flow | [`fig_reconciliation_decision_prompt.md`](source/fig_reconciliation_decision_prompt.md) | Source/ignored branches, narrow merge gates, and shared whole-candidate terminals | Final color/grayscale review passed; portrait layout and style-family variation waived. |
 
 Review and finalization order:
 

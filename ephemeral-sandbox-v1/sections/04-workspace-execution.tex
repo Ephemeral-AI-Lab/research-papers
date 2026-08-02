@@ -19,7 +19,7 @@ directory and work directory.  The resulting mount therefore reads through
 shared history but records regular writes, copied-up files, and deletion or
 opacity metadata only in the private upper tree.  Lower layers are shared
 runtime state; the upper/work pair is session-private state.  This mechanism
-is Linux- and OverlayFS-centered at the audited baseline: the non-Linux mount
+is Linux- and OverlayFS-centered in the audited source snapshot: the non-Linux mount
 path reports the operation as unsupported, and the paper makes no universal
 cross-platform execution claim.
 

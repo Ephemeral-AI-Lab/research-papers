@@ -1,50 +1,28 @@
-# PW3 build check
+# PW4--PW7 build check
 
-**Status:** Passed with executed attestation.
+**Status:** passed, executed attestation.
 
-The declared command is:
+The declared build command completed with exit code zero:
 
 ```text
 latexmk -pdf -interaction=nonstopmode -halt-on-error main.tex
 ```
 
-The skill build recorder executed the declared command successfully at
-`2026-07-30T03:22:41.491473+00:00` using the user-local TinyTeX installation
-at `C:\Users\yifan\AppData\Roaming\TinyTeX`.
+| Field | Recorded value |
+| --- | --- |
+| Attestation time | 2026-08-02T05:28:00.336951+00:00 |
+| PDF | `main.pdf` |
+| PDF SHA-256 | `6ffb429c6acb0f27af6dc493cd3fcc43a1710a22cba17fb669a11129ad06e8b2` |
+| Build-input SHA-256 | `6f1675a8021bf6acc982d9b7dc9f6c4d5755832ca937334c6212eb15b867b6a7` |
+| Attestation log | `plan/pw4-pw7-build-attestation.log` |
+| Attestation-log SHA-256 | `cffe435373442861725c7ca42e572c0a33ea029f02d1031fa38ba731745157c1` |
 
-## Tool versions
+The separate final log scan reports no overfull boxes and no unresolved
+citations or references. Citation-key, citation-lock, numeric-evidence, and
+full-paper quality gates pass. The PDF has 17 pages and was rendered in color
+and grayscale for visual QA; the record and final figure waivers are in
+`figures/concept-figure-review.md`.
 
-- Latexmk 4.88, dated 2026-03-09.
-- pdfTeX 3.141592653-2.6-1.40.29, TeX Live 2026.
-- BibTeX 0.99e, TeX Live 2026.
-
-## Attestation
-
-- Exit code: 0.
-- PDF: `main.pdf`.
-- PDF SHA-256: `bf893a5ac17e396233232b18d552e77ddddfc2bcba50786d457fd58db71604eb`.
-- Input SHA-256: `e31aa83e7db9c45cdf0c3c1f731fe66670fc6641dc20d755704a7673a552e18a`.
-- Build log: `plan/pw3-build.log`.
-- Build-log SHA-256: `39a836a6226fc9b8007dd23fda5deb9e2cd8bf3c453faf17539c9b356871e59f`.
-- Attestation: executed.
-
-The parsed LaTeX log contains zero errors, emergency stops, undefined
-citations, undefined references, missing files, or overfull boxes. It reports
-seven underfull boxes in the two narrow Section 7 tables and one expected
-empty-bibliography warning.
-
-The full-paper quality gate and citation-key checker pass at the current
-`full-paper` / `drafting` state. All ten section inputs appear exactly once
-and in order; the Section 6 and 7 headings and labels are stable; all four
-figure hashes and references pass; all relative Markdown links resolve; PDF
-and log hashes match `paper_state.json`; and Git whitespace checks pass.
-
-The 14-page PDF was rendered in color and grayscale. Figures appear on pages
-3, 6, 8, and 10, the two Section 7 tables remain after their introductions,
-and no clipping, overlap, broken glyph, or page-number defect was found.
-Because `references.bib` remains comment-only, the sparse References page is
-expected.
-
-PW3's manuscript build gate is closed. Figure disparities are explicitly
-deferred to PW7; scientific, author, source-freeze, citation, and evaluation
-blockers remain recorded in `paper_state.json`.
+The local LaTeX wrapper emitted only non-fatal locale and console-code-page
+messages. They do not affect the recorded zero exit code, source digest, or PDF
+digest.

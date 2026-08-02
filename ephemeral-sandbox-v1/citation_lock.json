@@ -1,0 +1,489 @@
+{
+  "schema_version": "ai-research-writing/citation-lock-v1",
+  "request_sha256": "5029a69bc9012311aaa042cfe197b5861c602f848b80a8dd84554935e7facb0f",
+  "records": [
+    {
+      "key": "swe_minisandbox_2026",
+      "identifier": "arxiv:2602.11210",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2602.11210",
+      "checked_at": "2026-08-02T05:08:44.142706+00:00",
+      "metadata": {
+        "title": "SWE-MiniSandbox: Container-Free Reinforcement Learning for Building Software Engineering Agents",
+        "authors": [
+          "Danlong Yuan",
+          "Wei Wu",
+          "Enhan Zhao",
+          "Zhengren Wang",
+          "Xueliang Zhao",
+          "Huishuai Zhang",
+          "Dongyan Zhao"
+        ],
+        "year": 2026,
+        "arxiv_id": "2602.11210",
+        "type": "preprint"
+      },
+      "metadata_sha256": "b0afd7985d642e29d2c1b9d76c972c304d155199a8bf9f170f81f56f342441fc",
+      "claim_support_sha256": "cd01bc6af0e22e12a90b29db47c974b8c3532b369b650f3972b717af17de5d21",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "agentbay_2025",
+      "identifier": "arxiv:2512.04367",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2512.04367",
+      "checked_at": "2026-08-02T05:08:45.877064+00:00",
+      "metadata": {
+        "title": "AgentBay: A Hybrid Interaction Sandbox for Seamless Human-AI Intervention in Agentic Systems",
+        "authors": [
+          "Yun Piao",
+          "Hongbo Min",
+          "Hang Su",
+          "Leilei Zhang",
+          "Lei Wang",
+          "Yue Yin",
+          "Xiao Wu",
+          "Zhejing Xu",
+          "Liwei Qu",
+          "Hang Li",
+          "Xinxin Zeng",
+          "Wei Tian",
+          "Fei Yu",
+          "Xiaowei Li",
+          "Jiayi Jiang",
+          "Tongxu Liu",
+          "Hao Tian",
+          "Yufei Que",
+          "Xiaobing Tu",
+          "Bing Suo",
+          "Yuebing Li",
+          "Xiangting Chen",
+          "Zeen Zhao",
+          "Jiaming Tang",
+          "Wei Huang",
+          "Xuguang Li",
+          "Jing Zhao",
+          "Jin Li",
+          "Jie Shen",
+          "Jinkui Ren",
+          "Xiantao Zhang"
+        ],
+        "year": 2025,
+        "arxiv_id": "2512.04367",
+        "type": "preprint"
+      },
+      "metadata_sha256": "90a25f817006a62691aa2747110fd25764f2508d87b63579b7ab2ef89561800a",
+      "claim_support_sha256": "0dfaa81ba8d187a1a5638f6fed7659e5e78fb1e56d351a2c84766e19933ff9ed",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "deltabox_2026",
+      "identifier": "arxiv:2605.22781",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2605.22781",
+      "checked_at": "2026-08-02T05:08:47.051113+00:00",
+      "metadata": {
+        "title": "DeltaBox: Scaling Stateful AI Agents with Millisecond-Level Sandbox Checkpoint/Rollback",
+        "authors": [
+          "Yunpeng Dong",
+          "Jingkai He",
+          "Shiqi Liu",
+          "Yuze Hou",
+          "Dong Du",
+          "Zhonghu Xu",
+          "Si Yu",
+          "Baochuan Yang",
+          "Yubin Xia",
+          "Haibo Chen"
+        ],
+        "year": 2026,
+        "arxiv_id": "2605.22781",
+        "type": "preprint"
+      },
+      "metadata_sha256": "756eb36421b9eb3fd7a0ae1f47b1c0fcfcffc09e6e83ec67a87055fba33a30c5",
+      "claim_support_sha256": "05dc256113e2b7c5726e1314b1c6f31924f755767f428a47157c6989d0b33c36",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "shepherd_2026",
+      "identifier": "arxiv:2605.10913",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2605.10913",
+      "checked_at": "2026-08-02T05:08:48.240303+00:00",
+      "metadata": {
+        "title": "Shepherd: Enabling Programmable Meta-Agents via Reversible Agentic Execution Traces",
+        "authors": [
+          "Simon Yu",
+          "Derek Chong",
+          "Ananjan Nandi",
+          "Dilara Soylu",
+          "Jiuding Sun",
+          "Christopher D Manning",
+          "Weiyan Shi"
+        ],
+        "year": 2026,
+        "arxiv_id": "2605.10913",
+        "type": "preprint"
+      },
+      "metadata_sha256": "750bddd6526be452f540fa7456249fbfecc1f6a6a36b9f5c1457ed1c09488d3a",
+      "claim_support_sha256": "3b6f67ca2479f91614b26fc4cb0827b6c689ed25c28eb4af4c72032cd74f0e60",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "caid_2026",
+      "identifier": "arxiv:2603.21489",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2603.21489",
+      "checked_at": "2026-08-02T05:08:49.225891+00:00",
+      "metadata": {
+        "title": "Effective Strategies for Asynchronous Software Engineering Agents",
+        "authors": [
+          "Jiayi Geng",
+          "Graham Neubig"
+        ],
+        "year": 2026,
+        "arxiv_id": "2603.21489",
+        "type": "preprint"
+      },
+      "metadata_sha256": "779ed2ce28d937276e523c8d4b79df1237417465afbba365c9526398c9063901",
+      "claim_support_sha256": "d64d926345c793643178870ccde09d910ee6ec13f704f26f9400e3aca05804b6",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "coagent_2026",
+      "identifier": "arxiv:2606.15376",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2606.15376",
+      "checked_at": "2026-08-02T05:08:50.392870+00:00",
+      "metadata": {
+        "title": "CoAgent: Concurrency Control for Multi-Agent Systems",
+        "authors": [
+          "Hongtao Lyu",
+          "Dingyan Zhang",
+          "Mingyu Wu",
+          "Xingda Wei",
+          "Haibo Chen"
+        ],
+        "year": 2026,
+        "arxiv_id": "2606.15376",
+        "type": "preprint"
+      },
+      "metadata_sha256": "0b90714028413d3e7a05dd50361c88011741403943dbc4d92a6d9072f9155e37",
+      "claim_support_sha256": "7b74920a4de2436d488af500dd41f352eb4690a1f07cb0c1bfd8d0e91892812a",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "claimplane_2026",
+      "identifier": "arxiv:2607.21909",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2607.21909",
+      "checked_at": "2026-08-02T05:08:51.520148+00:00",
+      "metadata": {
+        "title": "Claim Plane: Enforceable Change Intents and Dynamic Scope for Parallel Coding Agents",
+        "authors": [
+          "Maxim Nikolaev"
+        ],
+        "year": 2026,
+        "arxiv_id": "2607.21909",
+        "type": "preprint"
+      },
+      "metadata_sha256": "509ad70806c21cca3e87dfe4fc1565d260f116eea851adbfaec515e4f443b52b",
+      "claim_support_sha256": "b4a4614815d051b10f5c8cee6f0bd7a596ec2b1d6efe3239699bd52f469f8db6",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "palantir_2012",
+      "identifier": "doi:10.1109/TSE.2011.64",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1109%2FTSE.2011.64",
+      "checked_at": "2026-08-02T05:08:52.666125+00:00",
+      "metadata": {
+        "title": "Palantir: Early Detection of Development Conflicts Arising from Parallel Code Changes",
+        "authors": [
+          "A. Sarma",
+          "D. F. Redmiles",
+          "A. van der Hoek"
+        ],
+        "year": 2012,
+        "doi": "10.1109/tse.2011.64",
+        "type": "journal-article"
+      },
+      "metadata_sha256": "7cf44d76fed3c80abc38116f4277e833353a5d021a55129fd3c25ef99176d334",
+      "claim_support_sha256": "08c49c0ce3ef99e7259abf3554a822a6bc345f1978a290d0b9ccf61a2add5355",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "crystal_2013",
+      "identifier": "doi:10.1109/TSE.2013.28",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1109%2FTSE.2013.28",
+      "checked_at": "2026-08-02T05:08:53.800139+00:00",
+      "metadata": {
+        "title": "Early Detection of Collaboration Conflicts and Risks",
+        "authors": [
+          "Yuriy Brun",
+          "Reid Holmes",
+          "Michael D. Ernst",
+          "David Notkin"
+        ],
+        "year": 2013,
+        "doi": "10.1109/tse.2013.28",
+        "type": "journal-article"
+      },
+      "metadata_sha256": "7dc1e1d072373eefb76c8c13e279d5b2f797c0f512ca3c360c1c2341ba1640e8",
+      "claim_support_sha256": "d48823a32bc32a4f7b02f756c4dcc9155ce06f98c0eaee6bc5ed6709bcee1c06",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "threewaymerge_2018",
+      "identifier": "doi:10.1145/3276535",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1145%2F3276535",
+      "checked_at": "2026-08-02T05:08:54.963170+00:00",
+      "metadata": {
+        "title": "Verified three-way program merge",
+        "authors": [
+          "Marcelo Sousa",
+          "Isil Dillig",
+          "Shuvendu K. Lahiri"
+        ],
+        "year": 2018,
+        "doi": "10.1145/3276535",
+        "type": "journal-article"
+      },
+      "metadata_sha256": "0d3ed2e208c29cac492e1e26e8ac39ac404525a4bdac10c952ef8defcf709b9b",
+      "claim_support_sha256": "036316e17f07492fe04051987f5b60770d722c7502d50e6b60dae81f5f6ab8ae",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "occ_1981",
+      "identifier": "doi:10.1145/319566.319567",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1145%2F319566.319567",
+      "checked_at": "2026-08-02T05:08:56.107483+00:00",
+      "metadata": {
+        "title": "On optimistic methods for concurrency control",
+        "authors": [
+          "H. T. Kung",
+          "John T. Robinson"
+        ],
+        "year": 1981,
+        "doi": "10.1145/319566.319567",
+        "type": "journal-article"
+      },
+      "metadata_sha256": "2068d14d308175a88e222b38f6e0cf2c20b46b48c8f637b3ce076425ed480bbf",
+      "claim_support_sha256": "705ecb260f1167746c36a2d8477c4e1b428eec6bddee7bcb9b3b0915c6cfad1c",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "snapshot_isolation_1995",
+      "identifier": "doi:10.1145/223784.223785",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1145%2F223784.223785",
+      "checked_at": "2026-08-02T05:08:57.251944+00:00",
+      "metadata": {
+        "title": "A critique of ANSI SQL isolation levels",
+        "authors": [
+          "Hal Berenson",
+          "Phil Bernstein",
+          "Jim Gray",
+          "Jim Melton",
+          "Elizabeth O'Neil",
+          "Patrick O'Neil"
+        ],
+        "year": 1995,
+        "doi": "10.1145/223784.223785",
+        "type": "proceedings-article"
+      },
+      "metadata_sha256": "e8ba388f67baf7343a6dacad33f419d4352fe0522522353791261c773ce7b3fc",
+      "claim_support_sha256": "f371f87496b09d16804c5455a10ee8e83e86ed4e6a047d9430777af38665d085",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "cooperbench_2026",
+      "identifier": "arxiv:2601.13295",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2601.13295",
+      "checked_at": "2026-08-02T05:08:58.426179+00:00",
+      "metadata": {
+        "title": "CooperBench: Why Coding Agents Cannot be Your Teammates Yet",
+        "authors": [
+          "Arpandeep Khatua",
+          "Hao Zhu",
+          "Peter Tran",
+          "Arya Prabhudesai",
+          "Frederic Sadrieh",
+          "Johann K. Lieberwirth",
+          "Xinkai Yu",
+          "Yicheng Fu",
+          "Michael J. Ryan",
+          "Jiaxin Pei",
+          "Diyi Yang"
+        ],
+        "year": 2026,
+        "arxiv_id": "2601.13295",
+        "type": "preprint"
+      },
+      "metadata_sha256": "aa935a9150889c3a639b2000a80dcc489761fd6d189448832238317cb3d861ab",
+      "claim_support_sha256": "b70d8589c7fc8240b58457f285a395cd5d4c60e1c36315f4e8c1ecf136e97b8e",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "agenticflict_2026",
+      "identifier": "doi:10.1145/3805760.3814923",
+      "status": "verified",
+      "provider": "crossref",
+      "request_url": "https://api.crossref.org/works/10.1145%2F3805760.3814923",
+      "checked_at": "2026-08-02T05:09:00.326711+00:00",
+      "metadata": {
+        "title": "AgenticFlict: A Large-Scale Dataset of Merge Conflicts in AI Coding Agent Pull Requests on GitHub",
+        "authors": [
+          "Daniel Ogenrwot",
+          "John Businge"
+        ],
+        "year": 2026,
+        "doi": "10.1145/3805760.3814923",
+        "type": "proceedings-article"
+      },
+      "metadata_sha256": "07b395ac90ed34fea3e0b0a69bff48abe02b5a3efc2bec92b0d3d0f94479c72e",
+      "claim_support_sha256": "c838113a574bd5470056da53fc00a3bb9eeb4d540573a9aa399e9993a3649d8f",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "teambench_2026",
+      "identifier": "arxiv:2605.07073",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2605.07073",
+      "checked_at": "2026-08-02T05:09:01.459991+00:00",
+      "metadata": {
+        "title": "TeamBench: Evaluating Agent Coordination under Enforced Role Separation",
+        "authors": [
+          "Yubin Kim",
+          "Chanwoo Park",
+          "Taehan Kim",
+          "Eugene Park",
+          "Samuel Schmidgall",
+          "Salman Rahman",
+          "Chunjong Park",
+          "Cynthia Breazeal",
+          "Xin Liu",
+          "Hamid Palangi",
+          "Hae Won Park",
+          "Daniel McDuff"
+        ],
+        "year": 2026,
+        "arxiv_id": "2605.07073",
+        "type": "preprint"
+      },
+      "metadata_sha256": "e898a4d5400fe6bc4cf769626376c3df4aaf6d21b16f9783650730118117dd41",
+      "claim_support_sha256": "763d2827ba4ac2b7ce15bed95fdf72aa0cda3f271dff77d35b371fa101aed986",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "swebench_2024",
+      "identifier": "arxiv:2310.06770",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2310.06770",
+      "checked_at": "2026-08-02T05:09:02.490988+00:00",
+      "metadata": {
+        "title": "SWE-bench: Can Language Models Resolve Real-World GitHub Issues?",
+        "authors": [
+          "Carlos E. Jimenez",
+          "John Yang",
+          "Alexander Wettig",
+          "Shunyu Yao",
+          "Kexin Pei",
+          "Ofir Press",
+          "Karthik Narasimhan"
+        ],
+        "year": 2023,
+        "arxiv_id": "2310.06770",
+        "type": "preprint"
+      },
+      "metadata_sha256": "6e5af16c31da21b3108f7a19ded4b85b70b49607e5516029882b862614a91b79",
+      "claim_support_sha256": "6c9a13e4f79fe8cc6c83ce667fee469353e28891c66e3fc212d508ca548b36e3",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    },
+    {
+      "key": "paperbench_2025",
+      "identifier": "arxiv:2504.01848",
+      "status": "verified",
+      "provider": "arxiv",
+      "request_url": "https://export.arxiv.org/api/query?id_list=2504.01848",
+      "checked_at": "2026-08-02T05:09:03.869088+00:00",
+      "metadata": {
+        "title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+        "authors": [
+          "Giulio Starace",
+          "Oliver Jaffe",
+          "Dane Sherburn",
+          "James Aung",
+          "Jun Shern Chan",
+          "Leon Maksin",
+          "Rachel Dias",
+          "Evan Mays",
+          "Benjamin Kinsella",
+          "Wyatt Thompson",
+          "Johannes Heidecke",
+          "Amelia Glaese",
+          "Tejal Patwardhan"
+        ],
+        "year": 2025,
+        "arxiv_id": "2504.01848",
+        "type": "preprint"
+      },
+      "metadata_sha256": "1671122a5a16e1f1d44046462e292dc73ecac9245dcfe59f350744465169acb3",
+      "claim_support_sha256": "5a6d52b8e6a5c14a2a69b5f982d89e6156a29c4ff18ad4a5a2c350cd58d986b1",
+      "cross_check": null,
+      "cross_check_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "error": ""
+    }
+  ]
+}

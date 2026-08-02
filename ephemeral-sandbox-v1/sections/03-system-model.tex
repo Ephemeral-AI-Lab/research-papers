@@ -107,7 +107,7 @@ The model requires the following four evidence-bounded properties.
 
   \item Compaction or garbage collection must not reclaim layers still pinned
     by a live lease unless a safe substitute preserves the leased logical
-    view.  The baseline source and lease-aware tests establish the in-process
+    view.  The audited source snapshot and lease-aware tests establish the in-process
     mechanism, but the lease/substitution registries are in memory and their
     behavior across daemon restart still requires fault testing.
 \end{enumerate}

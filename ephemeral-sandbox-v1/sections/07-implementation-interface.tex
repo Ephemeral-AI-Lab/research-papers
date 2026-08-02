@@ -11,18 +11,27 @@ workspace-session, LayerStack, and observability applications.  Low-level
 crates separately own LayerStack storage and leases, workspace lifecycle,
 OverlayFS mounting, namespace execution, namespace processes, and telemetry.
 This separation keeps transport and presentation code from owning publication
-or workspace semantics.
+or workspace semantics. The audited source snapshot is the commit peeled from
+the annotated \texttt{paper-v1.1-freeze} tag; path-level anchors and the
+revalidation record are preserved in the
+\href{https://github.com/Ephemeral-AI-Lab/ephemeral-sandbox/tree/5c48dae10847fb9e46ba2bea7675bcf2f5a6f4c8}{tagged source tree}
+and \path{plan/source_revalidation.md}. This section is source-derived
+interface evidence, not a runtime-correctness or performance result.
 
 \subsection{Role-Separated Operational Contract}
 
-The baseline builds three feature-gated CLI executables and no combined
+The measured source snapshot builds three feature-gated CLI executables and no combined
 client.  The semantic catalog defines operation names, descriptions,
 arguments, visibility, and routing; each CLI projection defines shell paths,
 flags, positionals, usage, and examples.  A bidirectional projection-integrity
 test checks that every public catalog route has exactly one matching projection
 and that no projected operation lacks a public route.  Table~\ref{tab:cli-roles}
-summarizes the provisional baseline contract; the counts must be regenerated
-from the final tagged binaries.
+summarizes the measured contract. Management covers lifecycle, image and
+workspace inspection, compaction, and export. Runtime covers commands,
+standard input/output, files, attribution, and workspace sessions.
+Observability covers snapshots, traces, events, resources, diagnostics, and
+LayerStack inspection. The complete command shapes are recorded in
+\path{cli_contract_matrix.md}.
 
 \begin{table}[H]
 \centering
@@ -40,22 +49,26 @@ snapshots, traces, events, resources, daemon and topology diagnostics, cgroup
 counters, and LayerStack/session views \\
 \hline
 \end{tabular}
-\caption{Role-separated public CLI contract at baseline commit
-\texttt{b228625}.  Counts and exact projections are source-derived interface
-evidence, not runtime-correctness or performance results.}
+\caption{Role-separated public CLI contract at the measured tagged source
+snapshot. Counts and exact projections are source-derived interface evidence,
+not runtime-correctness or performance results.}
 \label{tab:cli-roles}
 \end{table}
 
 The runtime selector becomes the request-envelope sandbox scope rather than a
-duplicated operation argument.  Every client constructs an envelope containing
-an operation, request identifier, scope, and arguments.  The shared builder
-generates a UUIDv4 request identifier by default; only the runtime CLI exposes
-an explicit validated override for correlation across orchestration and
-diagnostics.  Correlation identifies one requested operation, but it does not
+duplicated operation argument. Every client constructs an envelope containing
+an operation, request identifier, scope, and arguments. The shared builder
+generates a UUIDv4 request identifier by default, and all three clients expose
+a validated \texttt{--request-id} override for correlation across
+orchestration and diagnostics. Correlation identifies one requested operation,
+but it does not
 establish causal ownership of every resulting filesystem line.  Gateway
 connection discovery prefers CLI socket/token overrides, then environment
-variables, and finally the default local socket; the client does not discover
-a token file automatically.
+variables, and finally a platform-local default; the client does not discover
+a token file automatically. The canonical \texttt{--gateway-endpoint} accepts
+TCP, Windows named-pipe, and Unix-socket URIs; the visible
+\texttt{--gateway-socket} spelling is an alias. On Windows, the default is a
+local named pipe, while explicit TCP remains a compatibility choice.
 
 Shell behavior is also part of the contract.  Help is human-readable text on
 standard output with exit status 0.  A successful operation writes one JSON
@@ -72,12 +85,12 @@ Help is derived by joining the same semantic catalog with the selected CLI
 projection, so descriptions, declared arguments, defaults, usage, examples,
 and related operations remain mechanically connected.  This does not keep
 external website documentation synchronized: the audited live pages expose
-different operation counts and are not the authority for the paper baseline.
+different operation counts and are not the authority for the paper source snapshot.
 Likewise, catalog/projection/help tests establish an adapter contract; they do
 not prove workspace isolation, publication correctness, or recovery behavior.
 
 Role separation gives an orchestrator smaller, testable operation sets, but it
-is not by itself an authorization or sandbox-security boundary.  The baseline
+is not by itself an authorization or sandbox-security boundary.  The source snapshot
 does not declare coding intent, task dependencies, ownership transfers,
 service or port leases, general resource-budget admission, semantic
 compatibility, integration scheduling, or handoff acceptance.  The clients
@@ -155,11 +168,7 @@ release.  These terms, together with the serialized publication path, are
 mechanism-level hypotheses for the evaluation rather than evidence of a
 particular latency, storage saving, or concurrency ceiling.
 
-The audited execution mechanism is Linux- and OverlayFS-centered, while the
-interface contract is source-derived from the provisional baseline rather than
-an annotated paper freeze.  Final submission therefore requires regeneration
-of the three operation projections and help outputs, archived contract-test
-results and binary digests, and replacement of baseline links with
-\texttt{paper-v1-freeze}.  Until then, the implementation section defines
-responsibility, lifecycle, and cost drivers without making cross-platform,
-security, or measured-efficiency claims.
+The audited execution mechanism is Linux- and OverlayFS-centered. The tagged
+source contract defines responsibility, lifecycle, and cost drivers without
+establishing cross-platform behavior, security, semantic merge correctness, or
+measured efficiency beyond the bounded campaign in Section~\ref{sec:evaluation}.

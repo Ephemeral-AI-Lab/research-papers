@@ -1,0 +1,90 @@
+{
+  "schema_version": "ai-research-writing/citation-requests-v1",
+  "entries": [
+    {
+      "key": "swe_minisandbox_2026",
+      "identifier": "arxiv:2602.11210",
+      "claim_support": [{"claim": "SWE-MiniSandbox presents container-free isolated workspaces for scaling software-engineering agent training.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes kernel-level isolation and a container-free approach.", "source": "references/related_work.md section 1"}]
+    },
+    {
+      "key": "agentbay_2025",
+      "identifier": "arxiv:2512.04367",
+      "claim_support": [{"claim": "AgentBay provides sandbox sessions with hybrid human and agent control across execution environments.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes isolated execution environments and a hybrid control interface.", "source": "references/related_work.md section 1"}]
+    },
+    {
+      "key": "deltabox_2026",
+      "identifier": "arxiv:2605.22781",
+      "claim_support": [{"claim": "DeltaBox studies change-based sandbox checkpoint and rollback, including process-state support.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract distinguishes filesystem and process-state checkpoint/rollback mechanisms.", "source": "references/related_work.md section 2"}]
+    },
+    {
+      "key": "shepherd_2026",
+      "identifier": "arxiv:2605.10913",
+      "claim_support": [{"claim": "Shepherd records agent-environment interactions in a typed execution trace and supports forking and replay.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes a Git-like execution trace and replayable past state.", "source": "references/related_work.md section 2"}]
+    },
+    {
+      "key": "caid_2026",
+      "identifier": "arxiv:2603.21489",
+      "claim_support": [{"claim": "CAID centrally delegates dependency-aware work, executes subtasks in isolated workspaces, and integrates with executable verification.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes centralized asynchronous isolated delegation and structured integration.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "coagent_2026",
+      "identifier": "arxiv:2606.15376",
+      "claim_support": [{"claim": "CoAgent coordinates speculative in-place shared-state effects through a predetermined order and agent repair.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes MTPO, speculative writes, notifications, and repair.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "claimplane_2026",
+      "identifier": "arxiv:2607.21909",
+      "claim_support": [{"claim": "Claim Plane treats concurrent software change as an admission and dynamic-scope control problem.", "relation": "contrast", "status": "verified", "evidence": "Primary abstract describes versioned change intents, atomic admission, and scope promotion.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "palantir_2012",
+      "identifier": "doi:10.1109/TSE.2011.64",
+      "claim_support": [{"claim": "Palantir studies early detection of development conflicts arising from parallel code changes.", "relation": "background", "status": "verified", "evidence": "The DOI record and source inventory identify early conflict detection for parallel code changes.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "crystal_2013",
+      "identifier": "doi:10.1109/TSE.2013.28",
+      "claim_support": [{"claim": "Crystal detects collaboration conflicts and risks before integration.", "relation": "background", "status": "verified", "evidence": "The DOI record and source inventory identify early detection of collaboration conflicts and risks.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "threewaymerge_2018",
+      "identifier": "doi:10.1145/3276535",
+      "claim_support": [{"claim": "Verified Three-Way Program Merge addresses semantic conflict-freedom beyond line-oriented text merging.", "relation": "contrast", "status": "verified", "evidence": "The DOI record and source inventory identify verified semantic program merge.", "source": "references/related_work.md section 3"}]
+    },
+    {
+      "key": "occ_1981",
+      "identifier": "doi:10.1145/319566.319567",
+      "claim_support": [{"claim": "Optimistic concurrency control uses tentative work followed by validation rather than long-held locks.", "relation": "background", "status": "verified", "evidence": "The DOI record identifies the foundational optimistic concurrency-control work.", "source": "references/related_work.md section 4"}]
+    },
+    {
+      "key": "snapshot_isolation_1995",
+      "identifier": "doi:10.1145/223784.223785",
+      "claim_support": [{"claim": "Snapshot-isolation terminology must not be imported as a claim of serializable filesystem semantics.", "relation": "background", "status": "verified", "evidence": "The cited critique is used only as a guardrail on terminology and does not establish system behavior here.", "source": "references/related_work.md section 4"}]
+    },
+    {
+      "key": "cooperbench_2026",
+      "identifier": "arxiv:2601.13295",
+      "claim_support": [{"claim": "CooperBench evaluates coordination among coding agents on collaborative coding tasks.", "relation": "background", "status": "verified", "evidence": "Primary abstract identifies a benchmark for collaborative coding and coordination failures.", "source": "references/related_work.md section 5"}]
+    },
+    {
+      "key": "agenticflict_2026",
+      "identifier": "doi:10.1145/3805760.3814923",
+      "claim_support": [{"claim": "AgenticFlict is used only as narrow motivation about textual Git-conflict outcomes, not as a universal interference rate.", "relation": "background", "status": "verified", "evidence": "The DOI record is scoped in the inventory to a selected simulated-pull-request dataset.", "source": "references/related_work.md section 5"}]
+    },
+    {
+      "key": "teambench_2026",
+      "identifier": "arxiv:2605.07073",
+      "claim_support": [{"claim": "TeamBench evaluates agent coordination under enforced role separation.", "relation": "background", "status": "verified", "evidence": "The primary record is used only for role-separated coordination evaluation context.", "source": "references/related_work.md section 5"}]
+    },
+    {
+      "key": "swebench_2024",
+      "identifier": "arxiv:2310.06770",
+      "claim_support": [{"claim": "SWE-bench provides executable repository-level issue-resolution tasks for software agents.", "relation": "background", "status": "verified", "evidence": "The primary preprint is the source record for the benchmark.", "source": "references/related_work.md section 5"}]
+    },
+    {
+      "key": "paperbench_2025",
+      "identifier": "arxiv:2504.01848",
+      "claim_support": [{"claim": "PaperBench supplies long-horizon research-replication tasks but is not an integration-effect benchmark.", "relation": "background", "status": "verified", "evidence": "The primary record is used as workload background with that limitation stated.", "source": "references/related_work.md section 5"}]
+    }
+  ]
+}

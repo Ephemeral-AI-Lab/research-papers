@@ -115,6 +115,38 @@ PW7 may repair these items or explicitly accept an item with a recorded
 submission-stage waiver. The current author waiver permits drafting-stage use
 only.
 
+## PW7 submission-stage disposition
+
+Review date: 2026-08-02. The final PDF was rebuilt after PW4--PW7 integration,
+then rendered in color and grayscale at the manuscript's final page size.
+Architecture, publication sequence, reconciliation, and lifecycle figures were
+each inspected in both renderings. All primary labels, arrows, terminal states,
+and captions remain readable; no clipping, overlap, broken glyph, or caption
+mismatch was found. The existing raster files were retained unchanged, so the
+hashes in the inventory above remain the final asset hashes.
+
+The following explicit waivers close the deferred items without changing a
+source-defined or evidence-bearing assertion:
+
+- Architecture: the visual convergence and band-spacing differences are
+  cosmetic. The caption and Section 4 specify the publication boundary, and
+  no route is used as proof of a result.
+- Publication sequence: its phased horizontal composition is readable and
+  preserves private/precommit/accepted/post-commit separation. It is accepted
+  instead of the earlier swimlane preference.
+- Lifecycle: pale dotted post-commit annotations have lower grayscale contrast,
+  but the main states and directed edges remain readable; the caption carries
+  the normal-path and ``published but not closed'' qualifiers.
+- Reconciliation: the portrait layout is legible in the final PDF; captions and
+  prose, rather than color alone, state the whole-candidate reject/no-op rules.
+- Family style: icon density and raster dimensions differ, but the common
+  outline, arrow, and state-color language stays interpretable in grayscale.
+
+No regeneration was warranted: the observed differences are explanatory-layout
+choices, while replacement would risk text/topology drift without improving an
+evidence claim. These figures remain concept-method illustrations rather than
+experimental evidence.
+
 ## PW3 compiled-PDF review
 
 - The successful recorded build preserves the four asset hashes above.
